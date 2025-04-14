@@ -1,9 +1,10 @@
 <div class="flex flex-col items-center justify-center gap-4">
     <h1 class="text-xl font-bold">Sign In</h1>
-    <form class="flex flex-col items-center justify-center gap-4" [formGroup]="form">
+    <pre>{{ user() | json }}</pre>
+    <form class="flex flex-col items-center justify-center gap-4" [formGroup]="form" (ngSubmit)="signIn()">
         <input pInputText type="email" placeholder="Email" formControlName="email" />
         <input pInputText type="password" placeholder="Password" formControlName="password" />
-        <p-button label="Sign In" (onClick)="signIn()"></p-button> 
+        <p-button [disabled]="!form.valid" label="Sign In" type="submit"></p-button> 
     </form>
     <p>Don't have an account? <a class="text-primary font-semibold" href="/auth/register">Register</a></p>
 </div>
