@@ -1,0 +1,58 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /* 
+     * Users Collection
+     * Each document represents a user and is identified by their unique userId.
+     * Users can read and write their own user document.
+     */
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+      /*
+       * Profile Viewers Sub-collection
+       * Contains documents representing users who have viewed the profile.
+       * Only the owner can read their own profile viewers.
+       * Writing is restricted to prevent viewers from adding themselves.
+       */
+      match /profileViewers/{viewerId} {
+        allow read: if request.auth != null && request.auth.uid == userId;
+        allow write: if false; // Prevent any write operations
+      }
+    }
+
+    /*
+     * User Videos Collection
+     * Each document represents a video uploaded by a user.
+     * Authenticated users can read all videos.
+     * Only the owner of the video can write (create, update, delete) their own videos.
+     */
+    match /userVideos/{videoId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+
+    /*
+     * User Metrics Collection
+     * Stores various metrics for each user, identified by a composite ID: {userId}_metricName
+     * Examples:
+     * - {userId}_previewed
+     * - {userId}_downloaded
+     * - {userId}_profileViews
+     * 
+     * Users can read and write only their own metric documents.
+     */
+    match /userMetrics/{metricId} {
+      allow read, write: if request.auth != null 
+                         && request.auth.uid == metricId.split('_')[0];
+    }
+
+    /*
+     * (Optional) Additional Collections or Documents
+     * If you have other collections or documents, define their access rules here.
+     * Ensure that all data paths are secured according to your application's requirements.
+     */
+    
+  }
+}
