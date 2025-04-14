@@ -1,6 +1,6 @@
 <div class="flex flex-col items-center justify-center gap-4">
     <h1 class="text-xl font-bold">Sign In</h1>
-    <pre>{{ user() | json }}</pre>
+
     <form class="flex flex-col items-center justify-center gap-4" [formGroup]="form" (ngSubmit)="signIn()">
         <input pInputText type="email" placeholder="Email" formControlName="email" />
         <input pInputText type="password" placeholder="Password" formControlName="password" />
