@@ -4,11 +4,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ReactiveFormsModule, FormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Credentials } from '../../interfaces/auth.interface';
-import { JsonPipe } from '@angular/common';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-sign-in',
-  imports: [ButtonModule, InputTextModule, ReactiveFormsModule, FormsModule, JsonPipe],
+  imports: [ButtonModule, InputTextModule, ReactiveFormsModule, FormsModule],
   templateUrl: './sign-in.component.html',
   styles: ``
 })

@@ -7,6 +7,11 @@ import { ProfileComponent } from './pages/user/profile/profile.component';
 import { isAuthenticatedGuard } from './shared/guards/auth.guard';
 export const routes: Routes = [
     {
+        path: '',
+        redirectTo: 'my/profile',
+        pathMatch: 'full'
+    },
+    {
         path: 'auth',
         component: LayoutsComponent,
         data:{
