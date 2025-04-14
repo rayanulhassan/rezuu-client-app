@@ -4,6 +4,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ReactiveFormsModule, FormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Credentials } from '../../interfaces/auth.interface';
+import { switchMap } from 'rxjs';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-sign-up',
   imports: [ButtonModule, InputTextModule, ReactiveFormsModule, FormsModule],
@@ -12,7 +15,7 @@ import { Credentials } from '../../interfaces/auth.interface';
 })
 export class SignUpComponent {
   #authService = inject(AuthService);
-    
+  #router = inject(Router);
   form = new FormGroup({
     firstName: new FormControl('', [Validators.required]),
     lastName: new FormControl('', [Validators.required]),
@@ -22,9 +25,11 @@ export class SignUpComponent {
 
   signUp() {
     if(!this.form.valid) return;
-    this.#authService.signUp(this.form.value as Credentials).subscribe({
+    this.#authService.signUp(this.form.value as Credentials).pipe(
+      switchMap(() => this.#authService.login(this.form.value as Credentials))
+    ).subscribe({
       next: () => {
-        console.log('signed up');
+        this.#router.navigate(['/my/profile']);
       },
       error: (error) => {
         console.log(error);
