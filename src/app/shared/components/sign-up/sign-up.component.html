@@ -1,1 +1,10 @@
-<p>sign-up works!</p>
+<div class="flex flex-col items-center justify-center gap-4">
+    <h1 class="text-xl font-bold">Sign Up</h1>
+    <form class="flex flex-col items-center justify-center gap-4" [formGroup]="form">
+        <input pInputText type="email" placeholder="Email" formControlName="email" />
+        <input pInputText type="password" placeholder="Password" formControlName="password" />
+        <input pInputText type="password" placeholder="Confirm Password" formControlName="confirmPassword" />
+        <p-button label="Sign Up" (onClick)="signUp()"></p-button>
+    </form>
+    <p>Already have an account? <a class="text-primary font-semibold" href="/auth/login">Sign In</a></p>
+</div>
