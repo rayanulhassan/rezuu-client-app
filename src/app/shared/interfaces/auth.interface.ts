@@ -3,3 +3,10 @@ export interface Credentials {
   password: string;
 }
 
+export interface RezuuUser {
+  uid: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+

@@ -1,11 +1,139 @@
 <div class="flex flex-col items-center justify-center gap-4">
-    <h1 class="text-xl font-bold">Sign Up</h1>
-    <form class="flex flex-col items-center justify-center gap-4" [formGroup]="form" (ngSubmit)="signUp()">
-        <input pInputText type="text" placeholder="First Name" formControlName="firstName" />
-        <input pInputText type="text" placeholder="Last Name" formControlName="lastName" />
-        <input pInputText type="email" placeholder="Email" formControlName="email" />
-        <input pInputText type="password" placeholder="Password" formControlName="password" />
-        <p-button [disabled]="!form.valid" label="Sign Up" type="submit"></p-button>
-    </form>
-    <p>Already have an account? <a class="text-primary font-semibold" href="/auth/login">Sign In</a></p>
+  <h1 class="text-xl font-bold">Sign Up</h1>
+  <form
+    class="flex flex-col items-center justify-center gap-4"
+    [formGroup]="form"
+    (ngSubmit)="signUp()"
+  >
+    <div class="flex flex-col gap-2">
+      <input
+        pInputText
+        type="text"
+        placeholder="First Name"
+        formControlName="firstName"
+      />
+      @if (form.get('firstName')?.touched && form.get('firstName')?.errors?.['required']) {
+        <small class="text-red-500">
+          First name is required
+        </small>
+      }
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <input
+        pInputText
+        type="text"
+        placeholder="Last Name"
+        formControlName="lastName"
+      />
+      @if (form.get('lastName')?.touched && form.get('lastName')?.errors?.['required']) {
+        <small class="text-red-500">
+          Last name is required
+        </small>
+      }
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <input
+        pInputText
+        type="email"
+        placeholder="Email"
+        formControlName="email"
+      />
+      @if (form.get('email')?.touched && form.get('email')?.errors?.['required']) {
+        <small class="text-red-500">
+          Email is required
+        </small>
+      }
+      @if (form.get('email')?.touched && form.get('email')?.errors?.['email']) {
+        <small class="text-red-500">
+          Please enter a valid email
+        </small>
+      }
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <div class="relative">
+        <input
+          pInputText
+          [type]="showPassword ? 'text' : 'password'"
+          placeholder="Password"
+          formControlName="password"
+        />
+        <span
+          class="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+          (click)="showPassword = !showPassword"
+        >
+          {{ showPassword ? "👁️" : "👁️‍🗨️" }}
+        </span>
+      </div>
+      @if (form.get('password')?.touched && form.get('password')?.errors?.['required']) {
+        <small class="text-red-500">
+          Password is required
+        </small>
+      }
+      @if (form.get('password')?.touched && form.get('password')?.errors?.['minlength']) {
+        <small class="text-red-500">
+          Password must be at least 6 characters
+        </small>
+      }
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <div class="relative">
+        <input
+          pInputText
+          [type]="showConfirmPassword ? 'text' : 'password'"
+          placeholder="Confirm Password"
+          formControlName="confirmPassword"
+        />
+        <span
+          class="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+          (click)="showConfirmPassword = !showConfirmPassword"
+        >
+          {{ showConfirmPassword ? "👁️" : "👁️‍🗨️" }}
+        </span>
+      </div>
+      @if (form.get('confirmPassword')?.touched && form.get('confirmPassword')?.errors?.['required']) {
+        <small class="text-red-500">
+          Please confirm your password
+        </small>
+      }
+      @if (form.errors?.['passwordMismatch'] && form.get('confirmPassword')?.touched) {
+        <small class="text-red-500">
+          Passwords do not match
+        </small>
+      }
+    </div>
+
+    <div class="flex items-center gap-2">
+      <p-checkbox
+        [binary]="true"
+        formControlName="acceptTerms"
+        inputId="acceptTerms"
+      ></p-checkbox>
+      <label for="acceptTerms" class="text-sm">
+        I agree to the
+        <a [routerLink]="['/terms']" class="text-primary">Terms and Conditions</a> and
+        <a [routerLink]="['/eoua']" class="text-primary">End User Agreement</a>
+      </label>
+    </div>
+    @if (form.get('acceptTerms')?.touched && form.get('acceptTerms')?.errors?.['required']) {
+      <small class="text-red-500">
+        You must accept the terms and conditions
+      </small>
+    }
+
+    <p-button
+      [disabled]="!form.valid || isLoading()"
+      label="Sign Up"
+      type="submit"
+      [loading]="isLoading()"
+    >
+    </p-button>
+  </form>
+  <p>
+    Already have an account?
+    <a class="text-primary font-semibold" [routerLink]="['/auth/login']">Sign In</a>
+  </p>
 </div>
