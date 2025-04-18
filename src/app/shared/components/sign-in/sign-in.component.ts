@@ -1,16 +1,28 @@
 import { Component, inject, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { ReactiveFormsModule, FormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormsModule,
+  FormGroup,
+  FormControl,
+  Validators,
+} from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Credentials } from '../../interfaces/auth.interface';
 import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-sign-in',
-  imports: [ButtonModule, InputTextModule, ReactiveFormsModule, FormsModule, RouterLink],
+  imports: [
+    ButtonModule,
+    InputTextModule,
+    ReactiveFormsModule,
+    FormsModule,
+    RouterLink,
+  ],
   templateUrl: './sign-in.component.html',
-  styles: ``
+  styles: ``,
 })
 export class SignInComponent {
   #authService = inject(AuthService);
@@ -20,20 +32,22 @@ export class SignInComponent {
 
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required])
+    password: new FormControl('', [Validators.required]),
   });
 
   signIn() {
-    if(!this.form.valid) return;
+    if (!this.form.valid) return;
     this.isLoading.set(true);
-    
+
     this.#authService.login(this.form.value as Credentials).subscribe({
       next: () => {
-        this.#router.navigate(['/my/profile']);
+        setTimeout(() => {
+          this.#router.navigate(['/my/profile']);
+        }, 100);
       },
       complete: () => {
         this.isLoading.set(false);
-      }
+      },
     });
   }
 }

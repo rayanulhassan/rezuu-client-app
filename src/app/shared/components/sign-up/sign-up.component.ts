@@ -44,7 +44,9 @@ export class SignUpComponent {
       switchMap(() => this.#authService.login(this.form.value as Credentials))
     ).subscribe({
       next: () => {
-        this.#router.navigate(['/my/profile']);
+        setTimeout(() => {
+          this.#router.navigate(['/my/profile']);
+        }, 100);
       },
       error: (error) => {
         console.log(error);
