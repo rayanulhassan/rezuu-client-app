@@ -41,9 +41,7 @@ export class SignInComponent {
 
     this.#authService.login(this.form.value as Credentials).subscribe({
       next: () => {
-        setTimeout(() => {
-          this.#router.navigate(['/my/profile']);
-        }, 100);
+        this.#authService.handlePostAuthNavigation(this.#router, '/my/profile');
       },
       complete: () => {
         this.isLoading.set(false);

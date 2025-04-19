@@ -11,6 +11,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { AUTH, FIRESTORE } from '../../app.config';
 import { addDoc, collection, getDocs, limit, query, where, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { collectionData } from '@angular/fire/firestore';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -25,6 +26,15 @@ export class AuthService {
   // selectors
   user = toSignal(this.user$, { initialValue: null });
 
+  // Common method to handle post-authentication navigation
+  handlePostAuthNavigation(router: Router, navigateTo: string) {
+    const checkUser = setInterval(() => {
+      if (this.user()) {
+        clearInterval(checkUser);
+        router.navigate([navigateTo]);
+      }
+    }, 100);
+  }
 
   constructor() {}
 
