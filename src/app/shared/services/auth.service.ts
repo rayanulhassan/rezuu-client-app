@@ -12,6 +12,7 @@ import { AUTH, FIRESTORE } from '../../app.config';
 import { addDoc, collection, getDocs, limit, query, where, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { collectionData } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+import { signal } from '@angular/core';
 
 
 @Injectable({
@@ -22,21 +23,49 @@ export class AuthService {
   private firestore = inject(FIRESTORE);
 
   private user$ = authState(this.#auth);
+  private isInitialized = signal(false);
 
   // selectors
   user = toSignal(this.user$, { initialValue: null });
 
   // Common method to handle post-authentication navigation
   handlePostAuthNavigation(router: Router, navigateTo: string) {
+    let attempts = 0;
+    const maxAttempts = 50; // 5 seconds max wait time
     const checkUser = setInterval(() => {
+      attempts++;
       if (this.user()) {
         clearInterval(checkUser);
-        router.navigate([navigateTo]);
+        router.navigate([navigateTo]).catch(error => {
+          console.error('Navigation error:', error);
+        });
+      } else if (attempts >= maxAttempts) {
+        clearInterval(checkUser);
+        console.error('Navigation timeout: Auth state not updated in time');
+        router.navigate(['/auth/login']).catch(error => {
+          console.error('Navigation error:', error);
+        });
       }
     }, 100);
   }
 
-  constructor() {}
+  constructor() {
+    // Initialize auth state
+    this.user$.subscribe({
+      next: () => {
+        this.isInitialized.set(true);
+      },
+      error: (error) => {
+        console.error('Auth state initialization error:', error);
+        this.isInitialized.set(true); // Still set initialized to true to prevent infinite waiting
+      }
+    });
+  }
+
+  // Method to check if auth is initialized
+  isAuthInitialized() {
+    return this.isInitialized();
+  }
 
   login(credentials: Credentials) {
     return from(
