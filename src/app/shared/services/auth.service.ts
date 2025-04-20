@@ -140,6 +140,9 @@ export class AuthService {
             certificates: [],
             video: null,
             externalLinks: [],
+            isPayingUser: false,
+            package: null,
+
           })
         );
       }),

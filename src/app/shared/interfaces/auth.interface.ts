@@ -8,5 +8,12 @@ export interface RezuuUser {
   firstName: string;
   lastName: string;
   email: string;
+  profileImage: string | null;
+  resume: string | null;
+  certificates: string[];
+  video: string | null;
+  externalLinks: string[];
+  isPayingUser: boolean;
+  package: string | null;
 }
 
