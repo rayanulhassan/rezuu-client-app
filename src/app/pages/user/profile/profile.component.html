@@ -396,39 +396,103 @@
   </div>
 
   <!-- Video Section -->
-  <!-- <div class="bg-white rounded-lg shadow-sm p-6">
-    <h2 class="text-xl font-semibold mb-6">Experience Video</h2>
+  <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+    <h2 class="text-xl font-semibold mb-6">Videos</h2>
     
-    <div class="bg-gray-900 rounded-lg aspect-video mb-6 flex items-center justify-center">
-      @if(userDoc()?.videoUrl) {
-        <video controls class="w-full h-full rounded-lg">
-          <source [src]="userDoc()?.videoUrl" type="video/mp4">
-        </video>
-      } @else {
-        <div class="text-gray-500">No video uploaded</div>
+    <div class="space-y-6">
+      @if (user()?.videos && (user()?.videos?.length ?? 0) > 0) {
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          @for (video of user()?.videos; track video) {
+            <div class="space-y-4">
+              <div class="relative aspect-video bg-gray-900 rounded-lg overflow-hidden">
+                <video 
+                  [src]="userService.getFullAssetUrl(video.url)"
+                  controls
+                  class="w-full h-full"
+                ></video>
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-trash"
+                  class="p-button-danger p-button-rounded absolute top-2 right-2"
+                  pTooltip="Remove Video"
+                  (click)="onRemoveVideo(video.url)"
+                  [loading]="isRemovingVideo() === video.url"
+                  [disabled]="isRemovingVideo() !== null"
+                ></button>
+              </div>
+              
+              <div class="space-y-4">
+                @if (!isEditingVideoDescription() || videoDescriptions()[video.url] === undefined) {
+                  <div class="space-y-4">
+                    @if (video.description) {
+                      <p class="text-gray-700 whitespace-pre-line">{{ video.description }}</p>
+                    }
+                    <div class="flex justify-end">
+                      <button
+                        pButton
+                        type="button"
+                        label="Update Description"
+                        icon="pi pi-pencil"
+                        class="p-button-secondary"
+                        (click)="onEditVideoDescription(video.url)"
+                      ></button>
+                    </div>
+                  </div>
+                } @else {
+                  <div class="space-y-4">
+                    <textarea 
+                      pTextarea
+                      [rows]="4" 
+                      class="w-full"
+                      [value]="videoDescriptions()[video.url]"
+                      (input)="onVideoDescriptionChange(video.url, $event)"
+                      placeholder="Add a description for this video (optional)"
+                    ></textarea>
+                    <div class="flex justify-end gap-2">
+                      @if (video.description) {
+                        <button 
+                          pButton 
+                          type="button" 
+                          label="Cancel"
+                          class="p-button-secondary"
+                          (click)="onCancelEditVideoDescription(video.url)"
+                        ></button>
+                      }
+                      <button
+                        pButton
+                        type="button"
+                        label="Save Description"
+                        class="p-button-primary"
+                        (click)="onSaveVideoDescription(video.url)"
+                        [loading]="isSavingVideo() === video.url"
+                        [disabled]="isSavingVideo() !== null"
+                      ></button>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      @if (!user()?.videos || (user()?.videos?.length ?? 0) < 2) {
+        <div class="text-center p-6 border-2 border-dashed rounded-lg">
+          <i class="pi pi-video text-4xl text-gray-400 mb-3"></i>
+          <p class="text-gray-500 mb-4">Upload up to 2 videos to showcase your experience</p>
+          <button 
+            pButton
+            type="button"
+            label="Upload Videos"
+            icon="pi pi-upload"
+            class="p-button-secondary"
+            (click)="onVideoUpload()"
+          ></button>
+        </div>
       }
     </div>
-
-    <div class="space-y-4">
-      <button 
-        pButton 
-        type="button" 
-        label="Upload Video"
-        icon="pi pi-video"
-        class="p-button-secondary"
-        (click)="onVideoUpload()"
-      ></button>
-      
-      <div class="flex flex-col">
-        <textarea 
-          pInputTextarea 
-          [rows]="4" 
-          class="w-full"
-          placeholder="Provide a description of your Experience"
-        ></textarea>
-      </div>
-    </div>
-  </div> -->
+  </div>
 
   <!-- Save Changes -->
   <!-- <div class="flex justify-end">

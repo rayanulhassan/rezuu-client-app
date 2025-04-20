@@ -54,6 +54,12 @@ export class ProfileComponent {
   isAddingLink = signal(false);
   isRemovingLink = signal<{ platform: string; url: string } | null>(null);
 
+  // video signals
+  videoDescriptions = signal<{ [key: string]: string }>({});
+  isSavingVideo = signal<string | null>(null);
+  isRemovingVideo = signal<string | null>(null);
+  isEditingVideoDescription = signal<string | null>(null);
+
   // user info form
   userInfoForm = this.fb.group({
     firstName: ['', [Validators.required]],
@@ -115,11 +121,11 @@ export class ProfileComponent {
         allowMultiple: true,
       },
       video: {
-        title: 'Upload Experience Video',
-        description: 'Upload a video about your experience',
+        title: 'Upload Videos',
+        description: 'Upload your videos (max 2)',
         accept: 'video/*',
-        maxFiles: 1,
-        allowMultiple: false,
+        maxFiles: 2,
+        allowMultiple: true,
       },
     };
 
@@ -192,8 +198,11 @@ export class ProfileComponent {
         }
         break;
       case 'video':
-        // TODO: Implement video update
-        console.log('Video uploaded:', files[0]);
+        if (files.length > 0) {
+          const currentVideos = this.user()?.videos || [];
+          const newVideos = files.map(url => ({ url, description: null }));
+          this.userService.updateVideos([...currentVideos, ...newVideos]);
+        }
         break;
     }
 
@@ -267,5 +276,60 @@ export class ProfileComponent {
     } finally {
       this.isRemovingLink.set(null);
     }
+  }
+
+  onEditVideoDescription(videoUrl: string) {
+    this.isEditingVideoDescription.set(videoUrl);
+    const descriptions = this.videoDescriptions();
+    const video = this.user()?.videos?.find(v => v.url === videoUrl);
+    descriptions[videoUrl] = video?.description || '';
+    this.videoDescriptions.set(descriptions);
+  }
+
+  onCancelEditVideoDescription(videoUrl: string) {
+    this.isEditingVideoDescription.set(null);
+    const descriptions = this.videoDescriptions();
+    delete descriptions[videoUrl];
+    this.videoDescriptions.set(descriptions);
+  }
+
+  async onSaveVideoDescription(videoUrl: string) {
+    this.isSavingVideo.set(videoUrl);
+    try {
+      const currentVideos = this.user()?.videos || [];
+      const updatedVideos = currentVideos.map(video => {
+        if (video.url === videoUrl) {
+          return { ...video, description: this.videoDescriptions()[videoUrl] };
+        }
+        return video;
+      });
+      await this.userService.updateVideos(updatedVideos);
+      this.isEditingVideoDescription.set(null);
+    } catch (error) {
+      console.error('Error saving video description:', error);
+    } finally {
+      this.isSavingVideo.set(null);
+    }
+  }
+
+  async onRemoveVideo(videoUrl: string) {
+    this.isRemovingVideo.set(videoUrl);
+    try {
+      await this.userService.removeVideo(videoUrl);
+      const descriptions = this.videoDescriptions();
+      delete descriptions[videoUrl];
+      this.videoDescriptions.set(descriptions);
+    } catch (error) {
+      console.error('Error removing video:', error);
+    } finally {
+      this.isRemovingVideo.set(null);
+    }
+  }
+
+  onVideoDescriptionChange(videoUrl: string, event: Event) {
+    const textarea = event.target as HTMLTextAreaElement;
+    const descriptions = this.videoDescriptions();
+    descriptions[videoUrl] = textarea.value;
+    this.videoDescriptions.set(descriptions);
   }
 }

@@ -253,4 +253,49 @@ export class UserService {
       throw error;
     }
   }
+
+  async updateVideos(videos: { url: string; description: string | null }[]): Promise<void> {
+    const currentUser = this.userDetails();
+    if (!currentUser) {
+      this.#messageService.add({ severity: 'error', summary: 'Error', detail: 'No authenticated user found' });
+      throw new Error('No authenticated user found');
+    }
+
+    const userDocRef = doc(this.#firestore, 'users', currentUser.uid);
+    
+    try {
+      await updateDoc(userDocRef, {
+        videos: videos
+      });
+      this.#messageService.add({ severity: 'success', summary: 'Success', detail: 'Videos updated successfully' });
+    } catch (error) {
+      console.error('Error updating videos:', error);
+      this.#messageService.add({ severity: 'error', summary: 'Error', detail: 'Error updating videos' });
+      throw error;
+    }
+  }
+
+  async removeVideo(videoUrl: string): Promise<void> {
+    const currentUser = this.userDetails();
+    if (!currentUser) {
+      this.#messageService.add({ severity: 'error', summary: 'Error', detail: 'No authenticated user found' });
+      throw new Error('No authenticated user found');
+    }
+
+    const userDocRef = doc(this.#firestore, 'users', currentUser.uid);
+    const currentVideos = currentUser.videos || [];
+    
+    try {
+      const updatedVideos = currentVideos.filter(v => v.url !== videoUrl);
+      
+      await updateDoc(userDocRef, {
+        videos: updatedVideos
+      });
+      this.#messageService.add({ severity: 'success', summary: 'Success', detail: 'Video removed successfully' });
+    } catch (error) {
+      console.error('Error removing video:', error);
+      this.#messageService.add({ severity: 'error', summary: 'Error', detail: 'Error removing video' });
+      throw error;
+    }
+  }
 }

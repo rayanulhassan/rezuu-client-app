@@ -11,7 +11,7 @@ export interface RezuuUser {
   profileImage: string | null;
   resume: string | null;
   certificates: { url: string; name: string }[];
-  video: string | null;
+  videos: { url: string; description: string | null }[];
   externalLinks: { platform: string; url: string }[];
   isPayingUser: boolean;
   package: string | null;
