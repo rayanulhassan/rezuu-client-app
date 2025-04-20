@@ -8,12 +8,10 @@ import { UserService } from '../../../shared/services/user.service';
 import { MessageService } from 'primeng/api';
 import {
   FormBuilder,
-  FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { environment } from '../../../../environments/environment';
 
 type UploadType = 'profile' | 'resume' | 'certificates' | 'video';
 
