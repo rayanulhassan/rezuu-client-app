@@ -7,10 +7,10 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { providePrimeNG } from 'primeng/config';
 import { RezuuPreset } from './rezuu-primeng-preset';
 import { initializeApp } from '@angular/fire/app';
-import { connectAuthEmulator, getAuth } from '@angular/fire/auth';
-import { Firestore, getFirestore,initializeFirestore, connectFirestoreEmulator } from '@angular/fire/firestore';
+import { getAuth } from '@angular/fire/auth';
+import { Firestore, getFirestore } from '@angular/fire/firestore';
 import { environment } from '../environments/environment.development';
-
+import { MessageService } from 'primeng/api';
 
 const app = initializeApp(environment.firebase_config);
 
@@ -46,6 +46,7 @@ export const FIRESTORE = new InjectionToken('Firebase firestore', {
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    MessageService,
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(),

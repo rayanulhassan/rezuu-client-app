@@ -15,5 +15,6 @@ export interface RezuuUser {
   externalLinks: string[];
   isPayingUser: boolean;
   package: string | null;
+  description: string | null;
 }
 

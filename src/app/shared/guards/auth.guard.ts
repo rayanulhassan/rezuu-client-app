@@ -16,7 +16,7 @@ export const isAuthenticatedGuard = (): CanActivateFn => {
           attempts++;
           if (authService.isAuthInitialized()) {
             clearInterval(checkAuth);
-            if (authService.user()) {
+            if (authService.authUser()) {
               resolve(true);
             } else {
               resolve(router.parseUrl('auth/login') as any);
@@ -30,7 +30,7 @@ export const isAuthenticatedGuard = (): CanActivateFn => {
       });
     }
 
-    if (authService.user()) {
+    if (authService.authUser()) {
       return true;
     }
 

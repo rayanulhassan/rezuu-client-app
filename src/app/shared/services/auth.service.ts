@@ -1,13 +1,13 @@
 import { inject, Injectable } from '@angular/core';
-import { from, map, switchMap, catchError, EMPTY, of } from 'rxjs';
-import { Credentials, RezuuUser } from '../interfaces/auth.interface';
+import { from, switchMap, catchError, EMPTY } from 'rxjs';
+import { Credentials } from '../interfaces/auth.interface';
 import {
   signInWithEmailAndPassword,
   signOut,
   createUserWithEmailAndPassword,
 } from 'firebase/auth';
 import { authState } from '@angular/fire/auth';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { AUTH, FIRESTORE } from '../../app.config';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { Router } from '@angular/router';
@@ -24,16 +24,9 @@ export class AuthService {
   private isInitialized = signal(false);
 
   // selectors
-  user = toSignal(this.user$, { initialValue: null });
+  authUser = toSignal(this.user$, { initialValue: null });
 
-  userDetails = toSignal(
-    toObservable(this.user).pipe(
-      switchMap((user) => {
-        if (!user) return of(null);
-        return this.getUser(user.uid);
-      })
-    )
-  );
+
 
   
   // Common method to handle post-authentication navigation
@@ -42,7 +35,7 @@ export class AuthService {
     const maxAttempts = 50; // 5 seconds max wait time
     const checkUser = setInterval(() => {
       attempts++;
-      if (this.user()) {
+      if (this.authUser()) {
         clearInterval(checkUser);
         router.navigate([navigateTo]).catch((error) => {
           console.error('Navigation error:', error);
@@ -135,6 +128,7 @@ export class AuthService {
             email: body.email,
             firstName: body.firstName,
             lastName: body.lastName,
+            description: null,
             profileImage: null,
             resume: null,
             certificates: [],
@@ -178,10 +172,5 @@ export class AuthService {
         return EMPTY;
       })
     );
-  }
-
-  getUser(uid: string) {
-    const userDocRef = doc(this.firestore, 'users', uid);
-    return from(getDoc(userDocRef)).pipe(map((doc) => doc.data() as RezuuUser));
   }
 }
