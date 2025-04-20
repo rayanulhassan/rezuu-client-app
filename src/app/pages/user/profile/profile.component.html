@@ -1,5 +1,21 @@
 <div class="flex flex-col items-center justify-center h-screen">
-    <button pButton type="button" label="Upload Profile Image" (click)="onProfileImageUpload()"></button>
-    Hi, {{ user()?.email }}
-</div><app-files-upload [visible]="uploadModalVisible()" [title]="uploadModalTitle()" [allowMultiple]="uploadModalAllowMultiple()" [accept]="uploadModalAccept()" [maxFiles]="uploadModalMaxFiles()" (onCancel)="modalCancel()" (onFilesUploaded)="modalFilesUploaded()"></app-files-upload>
-
+  <button
+    pButton
+    type="button"
+    label="Upload Profile Image"
+    (click)="onProfileImageUpload()"
+  ></button>
+  Hi, {{ user()?.email }}
+  <pre>{{ userDoc() | json }}</pre>
+</div>
+<app-files-upload
+  [uploadFolderName]="user()?.uid ?? 'undefined'"
+  [visible]="uploadModalVisible()"
+  [title]="uploadModalTitle()"
+  [description]="uploadModalDescription()"
+  [allowMultiple]="uploadModalAllowMultiple()"
+  [accept]="uploadModalAccept()"
+  [maxFiles]="uploadModalMaxFiles()"
+  (onCancel)="onModalCancel()"
+  (onFilesUploaded)="onModalFilesUploaded($event)"
+></app-files-upload>

@@ -1,19 +1,17 @@
 import { inject, Injectable } from '@angular/core';
-import { filter, from, lastValueFrom, map, Observable, retry, switchMap, catchError, throwError, EMPTY } from 'rxjs';
-import { Credentials, RezuuUser } from '../interfaces/auth.interface';
+import { filter, from, map, switchMap, catchError, EMPTY, of, tap } from 'rxjs';
+import { Credentials } from '../interfaces/auth.interface';
 import {
   signInWithEmailAndPassword,
   signOut,
   createUserWithEmailAndPassword,
 } from 'firebase/auth';
 import { authState } from '@angular/fire/auth';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { AUTH, FIRESTORE } from '../../app.config';
-import { addDoc, collection, getDocs, limit, query, where, doc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { collectionData } from '@angular/fire/firestore';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { Router } from '@angular/router';
 import { signal } from '@angular/core';
-
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +26,16 @@ export class AuthService {
   // selectors
   user = toSignal(this.user$, { initialValue: null });
 
+  userDetails = toSignal(
+    toObservable(this.user).pipe(
+      switchMap((user) => {
+        if (!user) return of(null);
+        return this.getUser(user.uid);
+      })
+    )
+  );
+
+  
   // Common method to handle post-authentication navigation
   handlePostAuthNavigation(router: Router, navigateTo: string) {
     let attempts = 0;
@@ -36,13 +44,13 @@ export class AuthService {
       attempts++;
       if (this.user()) {
         clearInterval(checkUser);
-        router.navigate([navigateTo]).catch(error => {
+        router.navigate([navigateTo]).catch((error) => {
           console.error('Navigation error:', error);
         });
       } else if (attempts >= maxAttempts) {
         clearInterval(checkUser);
         console.error('Navigation timeout: Auth state not updated in time');
-        router.navigate(['/auth/login']).catch(error => {
+        router.navigate(['/auth/login']).catch((error) => {
           console.error('Navigation error:', error);
         });
       }
@@ -58,7 +66,7 @@ export class AuthService {
       error: (error) => {
         console.error('Auth state initialization error:', error);
         this.isInitialized.set(true); // Still set initialized to true to prevent infinite waiting
-      }
+      },
     });
   }
 
@@ -77,7 +85,7 @@ export class AuthService {
     ).pipe(
       catchError((error) => {
         let errorMessage = 'An error occurred during sign in.';
-        
+
         switch (error.code) {
           case 'auth/invalid-credential':
             errorMessage = 'Invalid email or password';
@@ -92,7 +100,8 @@ export class AuthService {
             errorMessage = 'Too many failed attempts. Please try again later';
             break;
           case 'auth/network-request-failed':
-            errorMessage = 'Network error. Please check your internet connection';
+            errorMessage =
+              'Network error. Please check your internet connection';
             break;
           default:
             console.error('Sign in error:', error);
@@ -108,14 +117,14 @@ export class AuthService {
     signOut(this.#auth);
   }
 
-
-  signUp(body: {email: string, password: string, firstName: string, lastName: string}) {
+  signUp(body: {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+  }) {
     return from(
-      createUserWithEmailAndPassword(
-        this.#auth,
-        body.email,
-        body.password
-      )
+      createUserWithEmailAndPassword(this.#auth, body.email, body.password)
     ).pipe(
       switchMap((userCredential) => {
         const user = userCredential.user;
@@ -124,28 +133,33 @@ export class AuthService {
           setDoc(userDocRef, {
             email: body.email,
             firstName: body.firstName,
-            lastName: body.lastName
+            lastName: body.lastName,
           })
         );
       }),
       catchError((error) => {
         let errorMessage = 'An error occurred during sign up.';
-        
+
         switch (error.code) {
           case 'auth/email-already-in-use':
-            errorMessage = 'This email is already registered. Please try logging in or use a different email.';
+            errorMessage =
+              'This email is already registered. Please try logging in or use a different email.';
             break;
           case 'auth/invalid-email':
-            errorMessage = 'The email address is invalid. Please enter a valid email.';
+            errorMessage =
+              'The email address is invalid. Please enter a valid email.';
             break;
           case 'auth/operation-not-allowed':
-            errorMessage = 'Email/password accounts are not enabled. Please contact support.';
+            errorMessage =
+              'Email/password accounts are not enabled. Please contact support.';
             break;
           case 'auth/weak-password':
-            errorMessage = 'The password is too weak. Please use a stronger password.';
+            errorMessage =
+              'The password is too weak. Please use a stronger password.';
             break;
           case 'auth/network-request-failed':
-            errorMessage = 'Network error. Please check your internet connection.';
+            errorMessage =
+              'Network error. Please check your internet connection.';
             break;
           default:
             console.error('Signup error:', error);
@@ -155,5 +169,10 @@ export class AuthService {
         return EMPTY;
       })
     );
+  }
+
+  getUser(uid: string) {
+    const userDocRef = doc(this.firestore, 'users', uid);
+    return from(getDoc(userDocRef)).pipe(map((doc) => doc.data()));
   }
 }

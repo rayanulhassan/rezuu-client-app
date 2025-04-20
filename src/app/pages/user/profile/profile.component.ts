@@ -2,17 +2,30 @@ import { Component, inject, signal } from '@angular/core';
 import { AuthService } from '../../../shared/services/auth.service';
 import { FilesUploadComponent } from '../../../shared/components/files-upload/files-upload.component';
 import { ButtonModule } from 'primeng/button';
+import { JsonPipe } from '@angular/common';
+
+interface UploadModalConfig {
+  title: string;
+  description: string;
+  allowMultiple: boolean;
+  accept: string;
+  maxFiles: number;
+  onCancel: () => void;
+  onFilesUploaded: (files: string[]) => void;
+}
+
 @Component({
   selector: 'app-profile',
-  imports: [ButtonModule, FilesUploadComponent],
+  imports: [ButtonModule, FilesUploadComponent, JsonPipe],
   standalone: true,
   templateUrl: './profile.component.html',
-  styles: ``
+  styles: ``,
 })
 export class ProfileComponent {
   #authService = inject(AuthService);
 
   user = this.#authService.user;
+  userDoc = this.#authService.userDetails;
 
   // modal signals
   uploadModalVisible = signal(false);
@@ -21,28 +34,42 @@ export class ProfileComponent {
   uploadModalAllowMultiple = signal(false);
   uploadModalAccept = signal('image/*');
   uploadModalMaxFiles = signal(1);
-  modalCancel!: Function;
-  modalFilesUploaded!: Function;
 
-  onShowUploadModal(title: string, description: string, allowMultiple: boolean = false, accept: string = 'image/*', maxFiles: number = 1, {onCancel, onFilesUploaded}: {onCancel: Function, onFilesUploaded: Function}) {
+  private currentUploadConfig: UploadModalConfig | null = null;
+
+  onShowUploadModal(config: UploadModalConfig) {
+    this.currentUploadConfig = config;
     this.uploadModalVisible.set(true);
-    this.uploadModalTitle.set(title);
-    this.uploadModalDescription.set(description);
-    this.uploadModalAllowMultiple.set(allowMultiple);
-    this.uploadModalAccept.set(accept);
-    this.uploadModalMaxFiles.set(maxFiles);
-    this.modalCancel = onCancel;
-    this.modalFilesUploaded = onFilesUploaded;
+    this.uploadModalTitle.set(config.title);
+    this.uploadModalDescription.set(config.description);
+    this.uploadModalAllowMultiple.set(config.allowMultiple);
+    this.uploadModalAccept.set(config.accept);
+    this.uploadModalMaxFiles.set(config.maxFiles);
+  }
+
+  onModalCancel() {
+    this.uploadModalVisible.set(false);
+    this.currentUploadConfig?.onCancel();
+  }
+
+  onModalFilesUploaded(files: string[]) {
+    this.uploadModalVisible.set(false);
+    this.currentUploadConfig?.onFilesUploaded(files);
   }
 
   onProfileImageUpload() {
-    this.onShowUploadModal('Upload Profile Image', 'Upload a profile image', false, 'image/*', 1, {
+    this.onShowUploadModal({
+      title: 'Upload Profile Image',
+      description: 'Upload a profile image',
+      allowMultiple: false,
+      accept: 'image/*',
+      maxFiles: 1,
       onCancel: () => {
-        this.uploadModalVisible.set(false);
+        console.log('Profile image upload cancelled');
       },
-      onFilesUploaded: (files: any) => {
-        console.log(files);
-        this.uploadModalVisible.set(false);
+      onFilesUploaded: (files: string[]) => {
+        console.log('Profile images uploaded:', files);
+        // Handle profile image upload here
       }
     });
   }

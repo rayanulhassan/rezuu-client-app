@@ -10,5 +10,6 @@ export const environment = {
     },
     production: false,
     useEmulators: true,
+    couldFunctionUrl: 'https://generatepresignedurl-tvzohlad2q-uc.a.run.app',
   };
   

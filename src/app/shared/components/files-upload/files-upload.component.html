@@ -1,14 +1,98 @@
-<p-dialog [header]="title()" [closable]="false" [modal]="true" [visible]="visible()" [style]="{ width: '25rem' }">
+<p-dialog
+  [header]="title()"
+  [closable]="false"
+  [modal]="true"
+  [visible]="visible()"
+  [style]="{ width: '32rem' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="flex flex-col gap-6">
+    @if(description()) {
+    <p class="text-gray-600 text-sm">{{ description() }}</p>
+    }
+
+    <div class="border-2 border-dashed border-gray-200 rounded-lg p-8 text-center hover:border-primary transition-colors duration-200">
+      <ngx-file-drop
+        [directory]="false"
+        [accept]="accept()"
+        [multiple]="allowMultiple()"
+        dropZoneLabel="Drop files here"
+        (onFileDrop)="onFilesDrop($event)"
+      >
+        <ng-template
+          ngx-file-drop-content-tmp
+          let-openFileSelector="openFileSelector"
+        >
+          <div class="flex flex-col items-center gap-3">
+            <i class="pi pi-cloud-upload text-4xl text-gray-400"></i>
+            <p class="text-gray-600">Drag and drop files here</p>
+            <p class="text-sm text-gray-400">or</p>
+            <button 
+              pButton 
+              type="button" 
+              (click)="openFileSelector()"
+              class="p-button-text"
+              [disabled]="isAnyFileUploading"
+            >
+              Browse Files
+            </button>
+          </div>
+        </ng-template>
+      </ngx-file-drop>
+    </div>
+
+    @if(files.length > 0) {
     <div class="flex flex-col gap-4">
-        <div class="flex flex-col gap-2">
-            @if(description()) {
-                <span class="p-text-secondary block mb-8">{{ description() }}</span>
-            }
-           
+      @for (file of files; track file.name; let i = $index) {
+      <div class="flex flex-col gap-2 bg-gray-50 p-4 rounded-lg">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center gap-2">
+            <i class="pi pi-file text-gray-400"></i>
+            <span class="text-sm font-medium">{{ file.name }}</span>
+          </div>
+          <span class="text-sm text-gray-500">{{ file.progress }}%</span>
         </div>
+        
+        @if(file.errorMessage) {
+          <span class="text-sm text-red-500">{{ file.errorMessage }}</span>
+        }
+        
+        <p-progressBar 
+          [value]="file.progress" 
+          [showValue]="false"
+          [styleClass]="file.isValid ? '' : 'p-progressbar-error'"
+        ></p-progressBar>
+        
+        <button 
+          pButton 
+          type="button" 
+          (click)="onFileRemove(i)" 
+          class="p-button-text p-button-sm"
+          [disabled]="file.isUploading || file.uploaded"
+        >
+          <i class="pi pi-times"></i>
+          <span class="ml-2">Remove</span>
+        </button>
+      </div>
+      }
     </div>
+    }
+  </div>
+  
+  <ng-template pTemplate="footer">
     <div class="flex justify-end gap-2">
-        <p-button label="Cancel" severity="secondary" (click)="onCancelClick()" />
-        <p-button label="Upload" (click)="onFilesUpload()" />
+      <p-button 
+        label="Cancel" 
+        severity="secondary" 
+        (click)="onCancelClick()"
+      />
+      <p-button 
+        label="Upload" 
+        (click)="onFilesUpload()" 
+        [disabled]="!canUpload"
+        [loading]="isAnyFileUploading"
+      />
     </div>
+  </ng-template>
 </p-dialog>
