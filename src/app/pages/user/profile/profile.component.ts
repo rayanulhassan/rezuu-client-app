@@ -3,6 +3,7 @@ import { FilesUploadComponent } from '../../../shared/components/files-upload/fi
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
+import { TooltipModule } from 'primeng/tooltip';
 import { UserService } from '../../../shared/services/user.service';
 
 type UploadType = 'profile' | 'resume' | 'certificates' | 'video';
@@ -14,7 +15,8 @@ type UploadType = 'profile' | 'resume' | 'certificates' | 'video';
     ButtonModule, 
     FilesUploadComponent, 
     InputTextModule,
-    TextareaModule
+    TextareaModule,
+    TooltipModule
   ],
   templateUrl: './profile.component.html',
   styles: ``,
@@ -130,8 +132,9 @@ export class ProfileComponent {
         }
         break;
       case 'certificates':
-        // TODO: Implement certificates update
-        console.log('Certificates uploaded:', files);
+        if (files.length > 0) {
+          this.userService.updateCertificates(files);
+        }
         break;
       case 'video':
         // TODO: Implement video update

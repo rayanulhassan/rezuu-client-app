@@ -135,6 +135,60 @@
     </div>
   </div>
 
+  <!-- Certificates Section -->
+  <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+    <h2 class="text-xl font-semibold mb-6">Certificates</h2>
+    
+    <div class="space-y-4">
+      @if (user()?.certificates && (user()?.certificates?.length ?? 0) > 0) {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          @for (certificate of user()?.certificates; track certificate) {
+            <div class="flex items-center justify-between p-4 border rounded-lg">
+              <div class="flex items-center gap-3">
+                <i class="pi pi-file text-2xl text-primary"></i>
+                <span class="font-medium truncate" pTooltip="{{certificate.name}}">{{certificate.name}}</span>
+              </div>
+              <div class="flex gap-2">
+                <a 
+                  [href]="userService.getFullAssetUrl(certificate.url)"
+                  target="_blank"
+                  pButton
+                  type="button"
+                  icon="pi pi-eye"
+                  class="p-button-secondary p-button-rounded"
+                  pTooltip="View Certificate"
+                ></a>
+              </div>
+            </div>
+          }
+        </div>
+        <div class="flex justify-end">
+          <button 
+            pButton
+            type="button"
+            label="Add More Certificates"
+            icon="pi pi-plus"
+            class="p-button-secondary"
+            (click)="onCertificatesUpload()"
+          ></button>
+        </div>
+      } @else {
+        <div class="text-center p-6 border-2 border-dashed rounded-lg">
+          <i class="pi pi-images text-4xl text-gray-400 mb-3"></i>
+          <p class="text-gray-500 mb-4">No certificates uploaded yet</p>
+          <button 
+            pButton
+            type="button"
+            label="Upload Certificates"
+            icon="pi pi-upload"
+            class="p-button-secondary"
+            (click)="onCertificatesUpload()"
+          ></button>
+        </div>
+      }
+    </div>
+  </div>
+
   <!-- Contact Information -->
   <!-- <div class="bg-white rounded-lg shadow-sm p-6">
     <h2 class="text-xl font-semibold mb-6">Contact Information</h2>

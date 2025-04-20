@@ -10,7 +10,7 @@ export interface RezuuUser {
   email: string;
   profileImage: string | null;
   resume: string | null;
-  certificates: string[];
+  certificates: { url: string; name: string }[];
   video: string | null;
   externalLinks: string[];
   isPayingUser: boolean;

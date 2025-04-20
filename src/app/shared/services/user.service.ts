@@ -124,4 +124,36 @@ export class UserService {
       throw error;
     }
   }
+
+  async updateCertificates(certificateUrls: string[]): Promise<void> {
+    const currentUser = this.userDetails();
+    if (!currentUser) {
+      this.#messageService.add({ severity: 'error', summary: 'Error', detail: 'No authenticated user found' });
+      throw new Error('No authenticated user found');
+    }
+
+    // Extract just the asset keys from the full URLs and get file names
+    const certificates = certificateUrls.map(url => {
+      const assetKey = url.replace(environment.bucketUrl, '');
+      // Extract file name from the URL (everything after the last slash)
+      const fileName = assetKey.split('/').pop() || 'Unknown';
+      return {
+        url: assetKey,
+        name: fileName
+      };
+    });
+    
+    const userDocRef = doc(this.#firestore, 'users', currentUser.uid);
+    
+    try {
+      await updateDoc(userDocRef, {
+        certificates: certificates
+      });
+      this.#messageService.add({ severity: 'success', summary: 'Success', detail: 'Certificates updated successfully' });
+    } catch (error) {
+      console.error('Error updating certificates:', error);
+      this.#messageService.add({ severity: 'error', summary: 'Error', detail: 'Error updating certificates' });
+      throw error;
+    }
+  }
 }
