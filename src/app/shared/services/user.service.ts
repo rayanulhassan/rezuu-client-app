@@ -100,4 +100,28 @@ export class UserService {
       throw error;
     }
   }
+
+  async updateResume(resumeUrl: string): Promise<void> {
+    const currentUser = this.userDetails();
+    if (!currentUser) {
+      this.#messageService.add({ severity: 'error', summary: 'Error', detail: 'No authenticated user found' });
+      throw new Error('No authenticated user found');
+    }
+
+    // Extract just the asset key from the full URL
+    const assetKey = resumeUrl.replace(environment.bucketUrl, '');
+    
+    const userDocRef = doc(this.#firestore, 'users', currentUser.uid);
+    
+    try {
+      await updateDoc(userDocRef, {
+        resume: assetKey
+      });
+      this.#messageService.add({ severity: 'success', summary: 'Success', detail: 'Resume updated successfully' });
+    } catch (error) {
+      console.error('Error updating resume:', error);
+      this.#messageService.add({ severity: 'error', summary: 'Error', detail: 'Error updating resume' });
+      throw error;
+    }
+  }
 }

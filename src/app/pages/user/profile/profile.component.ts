@@ -118,7 +118,6 @@ export class ProfileComponent {
   }
 
   onModalFilesUploaded(files: string[]) {
-    
     switch (this.currentUploadType()) {
       case 'profile':
         if (files.length > 0) {
@@ -126,8 +125,9 @@ export class ProfileComponent {
         }
         break;
       case 'resume':
-        // TODO: Implement resume update
-        console.log('Resume uploaded:', files[0]);
+        if (files.length > 0) {
+          this.userService.updateResume(files[0]);
+        }
         break;
       case 'certificates':
         // TODO: Implement certificates update
