@@ -16,5 +16,6 @@ export interface RezuuUser {
   isPayingUser: boolean;
   package: string | null;
   description: string | null;
+  contactNumber: string | null;
 }
 

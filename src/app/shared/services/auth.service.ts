@@ -9,7 +9,7 @@ import {
 import { authState } from '@angular/fire/auth';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AUTH, FIRESTORE } from '../../app.config';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { Router } from '@angular/router';
 import { signal } from '@angular/core';
 
@@ -136,6 +136,7 @@ export class AuthService {
             externalLinks: [],
             isPayingUser: false,
             package: null,
+            contactNumber: null,
 
           })
         );

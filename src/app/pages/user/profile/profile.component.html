@@ -189,6 +189,86 @@
     </div>
   </div>
 
+  <!-- User Information -->
+  <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+    <h2 class="text-xl font-semibold mb-6">Personal Information</h2>
+    
+    <form [formGroup]="userInfoForm" (ngSubmit)="onSaveUserInfo()" class="space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="flex flex-col">
+          <span class="p-float-label">
+            <input 
+              pInputText 
+              id="firstName" 
+              formControlName="firstName"
+              class="w-full"
+              [ngClass]="{'p-invalid': userInfoForm.get('firstName')?.invalid && userInfoForm.get('firstName')?.touched}"
+            />
+            <label for="firstName">First Name</label>
+          </span>
+          @if (userInfoForm.get('firstName')?.invalid && userInfoForm.get('firstName')?.touched) {
+            <small class="text-red-500">First name is required</small>
+          }
+        </div>
+
+        <div class="flex flex-col">
+          <span class="p-float-label">
+            <input 
+              pInputText 
+              id="lastName" 
+              formControlName="lastName"
+              class="w-full"
+              [ngClass]="{'p-invalid': userInfoForm.get('lastName')?.invalid && userInfoForm.get('lastName')?.touched}"
+            />
+            <label for="lastName">Last Name</label>
+          </span>
+          @if (userInfoForm.get('lastName')?.invalid && userInfoForm.get('lastName')?.touched) {
+            <small class="text-red-500">Last name is required</small>
+          }
+        </div>
+      </div>
+
+      <div class="flex flex-col">
+        <span class="p-float-label">
+          <input 
+            pInputText 
+            id="email" 
+            formControlName="email"
+            class="w-full"
+          />
+          <label for="email">Email Address</label>
+        </span>
+      </div>
+
+      <div class="flex flex-col">
+        <span class="p-float-label">
+          <input 
+            pInputText 
+            id="contactNumber" 
+            formControlName="contactNumber"
+            class="w-full"
+            [ngClass]="{'p-invalid': userInfoForm.get('contactNumber')?.invalid && userInfoForm.get('contactNumber')?.touched}"
+          />
+          <label for="contactNumber">Contact Number</label>
+        </span>
+        @if (userInfoForm.get('contactNumber')?.invalid && userInfoForm.get('contactNumber')?.touched) {
+          <small class="text-red-500">Please enter a valid phone number</small>
+        }
+      </div>
+
+      <div class="flex justify-end">
+        <button 
+          pButton 
+          type="submit" 
+          [label]="isSaving() ? 'Saving...' : 'Save Changes'"
+          class="p-button-primary"
+          [disabled]="userInfoForm.invalid || userInfoForm.pristine || isSaving()"
+          [loading]="isSaving()"
+        ></button>
+      </div>
+    </form>
+  </div>
+
   <!-- Contact Information -->
   <!-- <div class="bg-white rounded-lg shadow-sm p-6">
     <h2 class="text-xl font-semibold mb-6">Contact Information</h2>

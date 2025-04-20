@@ -156,4 +156,28 @@ export class UserService {
       throw error;
     }
   }
+
+  async updateUserInfo(data: { firstName: string; lastName: string; contactNumber: string | null; email: string }): Promise<void> {
+    const currentUser = this.userDetails();
+    if (!currentUser) {
+      this.#messageService.add({ severity: 'error', summary: 'Error', detail: 'No authenticated user found' });
+      throw new Error('No authenticated user found');
+    }
+
+    const userDocRef = doc(this.#firestore, 'users', currentUser.uid);
+    
+    try {
+      await updateDoc(userDocRef, {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        contactNumber: data.contactNumber
+      });
+      this.#messageService.add({ severity: 'success', summary: 'Success', detail: 'Profile information updated successfully' });
+    } catch (error) {
+      console.error('Error updating profile information:', error);
+      this.#messageService.add({ severity: 'error', summary: 'Error', detail: 'Error updating profile information' });
+      throw error;
+    }
+  }
 }

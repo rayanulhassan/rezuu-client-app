@@ -5,6 +5,13 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { TooltipModule } from 'primeng/tooltip';
 import { UserService } from '../../../shared/services/user.service';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 type UploadType = 'profile' | 'resume' | 'certificates' | 'video';
 
@@ -12,11 +19,13 @@ type UploadType = 'profile' | 'resume' | 'certificates' | 'video';
   selector: 'app-profile',
   standalone: true,
   imports: [
-    ButtonModule, 
-    FilesUploadComponent, 
+    CommonModule,
+    ButtonModule,
+    FilesUploadComponent,
     InputTextModule,
     TextareaModule,
-    TooltipModule
+    TooltipModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './profile.component.html',
   styles: ``,
@@ -24,6 +33,7 @@ type UploadType = 'profile' | 'resume' | 'certificates' | 'video';
 export class ProfileComponent {
   userService = inject(UserService);
   user = this.userService.userDetails;
+  fb = inject(FormBuilder);
 
   // modal signals
   uploadModalVisible = signal(false);
@@ -38,12 +48,36 @@ export class ProfileComponent {
   description = signal('');
   isEditingDescription = signal(false);
 
+  // loading state
+  isSaving = signal(false);
+
+  // user info form
+  userInfoForm = this.fb.group({
+    firstName: ['', [Validators.required]],
+    lastName: ['', [Validators.required]],
+    contactNumber: ['', [Validators.required]],
+    email: ['', [Validators.required, Validators.email]]
+  });
+
   constructor() {
     // Initialize description from user data
     effect(() => {
       const userData = this.user();
       if (userData?.description) {
         this.description.set(userData.description);
+      }
+    });
+
+    // Initialize user info form
+    effect(() => {
+      const userData = this.user();
+      if (userData) {
+        this.userInfoForm.patchValue({
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          contactNumber: userData.contactNumber || '',
+          email: userData.email,
+        });
       }
     });
   }
@@ -55,29 +89,29 @@ export class ProfileComponent {
         description: 'Upload your profile picture',
         accept: 'image/*',
         maxFiles: 1,
-        allowMultiple: false
+        allowMultiple: false,
       },
       resume: {
         title: 'Upload Resume',
         description: 'Upload your resume',
         accept: '.pdf,.doc,.docx',
         maxFiles: 1,
-        allowMultiple: false
+        allowMultiple: false,
       },
       certificates: {
         title: 'Upload Certificates',
         description: 'Upload your certificates',
         accept: 'image/*,.pdf',
         maxFiles: 5,
-        allowMultiple: true
+        allowMultiple: true,
       },
       video: {
         title: 'Upload Experience Video',
         description: 'Upload a video about your experience',
         accept: 'video/*',
         maxFiles: 1,
-        allowMultiple: false
-      }
+        allowMultiple: false,
+      },
     };
 
     return configs[type];
@@ -141,7 +175,7 @@ export class ProfileComponent {
         console.log('Video uploaded:', files[0]);
         break;
     }
-    
+
     this.uploadModalVisible.set(false);
   }
 
@@ -172,5 +206,23 @@ export class ProfileComponent {
     const userData = this.user();
     this.description.set(userData?.description || '');
     this.isEditingDescription.set(false);
+  }
+
+  async onSaveUserInfo() {
+    if (this.userInfoForm.invalid) return;
+
+    this.isSaving.set(true);
+    try {
+      await this.userService.updateUserInfo({
+        firstName: this.userInfoForm.value.firstName!,
+        lastName: this.userInfoForm.value.lastName!,
+        contactNumber: this.userInfoForm.value.contactNumber || null,
+        email: this.userInfoForm.value.email!
+      });
+    } catch (error) {
+      console.error('Error saving user information:', error);
+    } finally {
+      this.isSaving.set(false);
+    }
   }
 }
