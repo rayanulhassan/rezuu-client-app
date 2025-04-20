@@ -84,6 +84,7 @@
         label="Cancel" 
         (click)="onCancelClick()"
         styleClass="p-button-text"
+        [disabled]="isAnyFileUploading"
       />
       <p-button 
         label="Upload"
