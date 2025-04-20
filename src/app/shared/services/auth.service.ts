@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { filter, from, map, switchMap, catchError, EMPTY, of, tap } from 'rxjs';
+import { from, map, switchMap, catchError, EMPTY, of } from 'rxjs';
 import { Credentials } from '../interfaces/auth.interface';
 import {
   signInWithEmailAndPassword,
@@ -131,9 +131,15 @@ export class AuthService {
         const userDocRef = doc(this.firestore, 'users', user.uid);
         return from(
           setDoc(userDocRef, {
+            uid: user.uid,
             email: body.email,
             firstName: body.firstName,
             lastName: body.lastName,
+            profileImage: '',
+            resume: '',
+            certificates: [],
+            video: '',
+            externalLinks: [],
           })
         );
       }),
