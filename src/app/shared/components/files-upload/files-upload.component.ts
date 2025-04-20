@@ -163,5 +163,11 @@ export class FilesUploadComponent {
       this.files.splice(index, 1);
     }
   }
+
+  onHide() {
+    this.files = [];
+    this.isUploading = false;
+    
+  }
 }
 

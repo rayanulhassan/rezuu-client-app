@@ -61,9 +61,9 @@ export class ProfileComponent {
     this.onShowUploadModal({
       title: 'Upload Profile Image',
       description: 'Upload a profile image',
-      allowMultiple: false,
+      allowMultiple: true,
       accept: 'image/*',
-      maxFiles: 1,
+      maxFiles: 2,
       onCancel: () => {
         console.log('Profile image upload cancelled');
       },

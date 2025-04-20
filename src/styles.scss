@@ -2,3 +2,8 @@
 @import "tailwindcss";
 @plugin "tailwindcss-primeui";
 @import "primeicons/primeicons.css";
+
+
+.ngx-file-drop__drop-zone {
+    border: none !important
+}
