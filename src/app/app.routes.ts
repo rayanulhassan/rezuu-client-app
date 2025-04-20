@@ -4,7 +4,9 @@ import { SignUpComponent } from './shared/components/sign-up/sign-up.component';
 import { SignInComponent } from './shared/components/sign-in/sign-in.component';
 import { AuthComponent } from './pages/auth/auth.component';
 import { ProfileComponent } from './pages/user/profile/profile.component';
+import { PublicProfileComponent } from './pages/user/public-profile/public-profile.component';
 import { isAuthenticatedGuard } from './shared/guards/auth.guard';
+
 export const routes: Routes = [
     {
         path: '',
@@ -47,5 +49,9 @@ export const routes: Routes = [
                 component: ProfileComponent,
             },
         ]
+    },
+    {
+        path: ':uid',
+        component: PublicProfileComponent
     }
 ];

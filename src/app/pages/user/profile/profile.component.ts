@@ -5,6 +5,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { TooltipModule } from 'primeng/tooltip';
 import { UserService } from '../../../shared/services/user.service';
+import { MessageService } from 'primeng/api';
 import {
   FormBuilder,
   FormGroup,
@@ -12,6 +13,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../../environments/environment';
 
 type UploadType = 'profile' | 'resume' | 'certificates' | 'video';
 
@@ -32,6 +34,7 @@ type UploadType = 'profile' | 'resume' | 'certificates' | 'video';
 })
 export class ProfileComponent {
   userService = inject(UserService);
+  messageService = inject(MessageService);
   user = this.userService.userDetails;
   fb = inject(FormBuilder);
 
@@ -74,12 +77,20 @@ export class ProfileComponent {
     url: ['', [Validators.required, Validators.pattern('https?://.+')]]
   });
 
+  // Public profile link
+  publicProfileLink = signal('');
+  isCopying = signal(false);
+
   constructor() {
     // Initialize description from user data
     effect(() => {
       const userData = this.user();
       if (userData?.description) {
         this.description.set(userData.description);
+      }
+      if (userData?.uid) {
+        // Construct the public profile link
+        this.publicProfileLink.set(`${window.location.origin}/${userData.uid}`);
       }
     });
 
@@ -331,5 +342,23 @@ export class ProfileComponent {
     const descriptions = this.videoDescriptions();
     descriptions[videoUrl] = textarea.value;
     this.videoDescriptions.set(descriptions);
+  }
+
+  async copyPublicProfileLink() {
+    try {
+      this.isCopying.set(true);
+      await navigator.clipboard.writeText(this.publicProfileLink())
+    } catch (error) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to copy link to clipboard'
+      });
+    } finally {
+      // Reset the copying state after a short delay
+      setTimeout(() => {
+        this.isCopying.set(false);
+      }, 1000);
+    }
   }
 }

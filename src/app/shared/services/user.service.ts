@@ -3,7 +3,7 @@ import { Observable, switchMap, of } from 'rxjs';
 import { RezuuUser } from '../interfaces/auth.interface';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { FIRESTORE } from '../../app.config';
-import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
+import { doc, onSnapshot, updateDoc, getDoc } from 'firebase/firestore';
 import { AuthService } from './auth.service';
 import { environment } from '../../../environments/environment';
 import { MessageService } from 'primeng/api';
@@ -295,6 +295,22 @@ export class UserService {
     } catch (error) {
       console.error('Error removing video:', error);
       this.#messageService.add({ severity: 'error', summary: 'Error', detail: 'Error removing video' });
+      throw error;
+    }
+  }
+
+  async getUserByUid(uid: string): Promise<RezuuUser | null> {
+    try {
+      const userDocRef = doc(this.#firestore, 'users', uid);
+      const userDoc = await getDoc(userDocRef);
+      
+      if (!userDoc.exists()) {
+        return null;
+      }
+      
+      return userDoc.data() as RezuuUser;
+    } catch (error) {
+      console.error('Error fetching user by UID:', error);
       throw error;
     }
   }
