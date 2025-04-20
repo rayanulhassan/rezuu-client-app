@@ -50,6 +50,9 @@ export class ProfileComponent {
 
   // loading state
   isSaving = signal(false);
+  isRemovingCertificate = signal<string | null>(null);
+  isAddingLink = signal(false);
+  isRemovingLink = signal<{ platform: string; url: string } | null>(null);
 
   // user info form
   userInfoForm = this.fb.group({
@@ -57,6 +60,12 @@ export class ProfileComponent {
     lastName: ['', [Validators.required]],
     contactNumber: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]]
+  });
+
+  // external link form
+  externalLinkForm = this.fb.group({
+    platform: ['', [Validators.required]],
+    url: ['', [Validators.required, Validators.pattern('https?://.+')]]
   });
 
   constructor() {
@@ -144,9 +153,21 @@ export class ProfileComponent {
     this.showUploadModal('video');
   }
 
-  onAddExternalLink() {
-    // TODO: Implement external link functionality
-    console.log('Add external link clicked');
+  async onAddExternalLink() {
+    if (this.externalLinkForm.invalid) return;
+
+    this.isAddingLink.set(true);
+    try {
+      await this.userService.addExternalLink({
+        platform: this.externalLinkForm.value.platform!,
+        url: this.externalLinkForm.value.url!
+      });
+      this.externalLinkForm.reset();
+    } catch (error) {
+      console.error('Error adding external link:', error);
+    } finally {
+      this.isAddingLink.set(false);
+    }
   }
 
   onModalCancel() {
@@ -223,6 +244,28 @@ export class ProfileComponent {
       console.error('Error saving user information:', error);
     } finally {
       this.isSaving.set(false);
+    }
+  }
+
+  async onRemoveCertificate(certificateUrl: string) {
+    this.isRemovingCertificate.set(certificateUrl);
+    try {
+      await this.userService.removeCertificate(certificateUrl);
+    } catch (error) {
+      console.error('Error removing certificate:', error);
+    } finally {
+      this.isRemovingCertificate.set(null);
+    }
+  }
+
+  async onRemoveExternalLink(link: { platform: string; url: string }) {
+    this.isRemovingLink.set(link);
+    try {
+      await this.userService.removeExternalLink(link);
+    } catch (error) {
+      console.error('Error removing external link:', error);
+    } finally {
+      this.isRemovingLink.set(null);
     }
   }
 }

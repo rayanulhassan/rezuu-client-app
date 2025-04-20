@@ -12,7 +12,7 @@ export interface RezuuUser {
   resume: string | null;
   certificates: { url: string; name: string }[];
   video: string | null;
-  externalLinks: string[];
+  externalLinks: { platform: string; url: string }[];
   isPayingUser: boolean;
   package: string | null;
   description: string | null;

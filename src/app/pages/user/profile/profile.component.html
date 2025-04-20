@@ -158,6 +158,16 @@
                   class="p-button-secondary p-button-rounded"
                   pTooltip="View Certificate"
                 ></a>
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-trash"
+                  class="p-button-danger p-button-rounded"
+                  pTooltip="Remove Certificate"
+                  (click)="onRemoveCertificate(certificate.url)"
+                  [loading]="isRemovingCertificate() === certificate.url"
+                  [disabled]="isRemovingCertificate() !== null"
+                ></button>
               </div>
             </div>
           }
@@ -297,18 +307,93 @@
     </div>
   </div> -->
 
-  <!-- External Links -->
-  <!-- <div class="bg-white rounded-lg shadow-sm p-6">
+  <!-- External Links Section -->
+  <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
     <h2 class="text-xl font-semibold mb-6">External Links</h2>
-    <button 
-      pButton 
-      type="button" 
-      label="Add External Link"
-      icon="pi pi-plus"
-      class="p-button-secondary"
-      (click)="onAddExternalLink()"
-    ></button>
-  </div> -->
+    
+    <div class="space-y-4">
+      @if (user()?.externalLinks && (user()?.externalLinks?.length ?? 0) > 0) {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          @for (link of user()?.externalLinks; track link) {
+            <div class="flex items-center justify-between p-4 border rounded-lg">
+              <div class="flex items-center gap-3">
+                <i class="pi pi-link text-2xl text-primary"></i>
+                <span class="font-medium">{{link.platform}}</span>
+              </div>
+              <div class="flex gap-2">
+                <a 
+                  [href]="link.url"
+                  target="_blank"
+                  pButton
+                  type="button"
+                  icon="pi pi-external-link"
+                  class="p-button-secondary p-button-rounded"
+                  pTooltip="Open Link"
+                ></a>
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-trash"
+                  class="p-button-danger p-button-rounded"
+                  pTooltip="Remove Link"
+                  (click)="onRemoveExternalLink(link)"
+                  [loading]="isRemovingLink()?.platform === link.platform && isRemovingLink()?.url === link.url"
+                  [disabled]="isRemovingLink() !== null"
+                ></button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      <form [formGroup]="externalLinkForm" (ngSubmit)="onAddExternalLink()" class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex flex-col">
+            <span class="p-float-label">
+              <input 
+                pInputText 
+                id="platform" 
+                formControlName="platform"
+                class="w-full"
+                [ngClass]="{'p-invalid': externalLinkForm.get('platform')?.invalid && externalLinkForm.get('platform')?.touched}"
+              />
+              <label for="platform">Platform (e.g. LinkedIn, GitHub)</label>
+            </span>
+            @if (externalLinkForm.get('platform')?.invalid && externalLinkForm.get('platform')?.touched) {
+              <small class="text-red-500">Platform is required</small>
+            }
+          </div>
+
+          <div class="flex flex-col">
+            <span class="p-float-label">
+              <input 
+                pInputText 
+                id="url" 
+                formControlName="url"
+                class="w-full"
+                [ngClass]="{'p-invalid': externalLinkForm.get('url')?.invalid && externalLinkForm.get('url')?.touched}"
+              />
+              <label for="url">URL</label>
+            </span>
+            @if (externalLinkForm.get('url')?.invalid && externalLinkForm.get('url')?.touched) {
+              <small class="text-red-500">Please enter a valid URL</small>
+            }
+          </div>
+        </div>
+
+        <div class="flex justify-end">
+          <button 
+            pButton 
+            type="submit" 
+            [label]="isAddingLink() ? 'Adding...' : 'Add Link'"
+            class="p-button-primary"
+            [disabled]="externalLinkForm.invalid || isAddingLink()"
+            [loading]="isAddingLink()"
+          ></button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- Video Section -->
   <!-- <div class="bg-white rounded-lg shadow-sm p-6">

@@ -157,6 +157,31 @@ export class UserService {
     }
   }
 
+  async removeCertificate(certificateUrl: string): Promise<void> {
+    const currentUser = this.userDetails();
+    if (!currentUser) {
+      this.#messageService.add({ severity: 'error', summary: 'Error', detail: 'No authenticated user found' });
+      throw new Error('No authenticated user found');
+    }
+
+    const userDocRef = doc(this.#firestore, 'users', currentUser.uid);
+    const currentCertificates = currentUser.certificates || [];
+    
+    try {
+      // Filter out the certificate to be removed
+      const updatedCertificates = currentCertificates.filter(cert => cert.url !== certificateUrl);
+      
+      await updateDoc(userDocRef, {
+        certificates: updatedCertificates
+      });
+      this.#messageService.add({ severity: 'success', summary: 'Success', detail: 'Certificate removed successfully' });
+    } catch (error) {
+      console.error('Error removing certificate:', error);
+      this.#messageService.add({ severity: 'error', summary: 'Error', detail: 'Error removing certificate' });
+      throw error;
+    }
+  }
+
   async updateUserInfo(data: { firstName: string; lastName: string; contactNumber: string | null; email: string }): Promise<void> {
     const currentUser = this.userDetails();
     if (!currentUser) {
@@ -177,6 +202,54 @@ export class UserService {
     } catch (error) {
       console.error('Error updating profile information:', error);
       this.#messageService.add({ severity: 'error', summary: 'Error', detail: 'Error updating profile information' });
+      throw error;
+    }
+  }
+
+  async addExternalLink(link: { platform: string; url: string }): Promise<void> {
+    const currentUser = this.userDetails();
+    if (!currentUser) {
+      this.#messageService.add({ severity: 'error', summary: 'Error', detail: 'No authenticated user found' });
+      throw new Error('No authenticated user found');
+    }
+
+    const userDocRef = doc(this.#firestore, 'users', currentUser.uid);
+    const currentLinks = currentUser.externalLinks || [];
+    
+    try {
+      await updateDoc(userDocRef, {
+        externalLinks: [...currentLinks, link]
+      });
+      this.#messageService.add({ severity: 'success', summary: 'Success', detail: 'External link added successfully' });
+    } catch (error) {
+      console.error('Error adding external link:', error);
+      this.#messageService.add({ severity: 'error', summary: 'Error', detail: 'Error adding external link' });
+      throw error;
+    }
+  }
+
+  async removeExternalLink(link: { platform: string; url: string }): Promise<void> {
+    const currentUser = this.userDetails();
+    if (!currentUser) {
+      this.#messageService.add({ severity: 'error', summary: 'Error', detail: 'No authenticated user found' });
+      throw new Error('No authenticated user found');
+    }
+
+    const userDocRef = doc(this.#firestore, 'users', currentUser.uid);
+    const currentLinks = (currentUser.externalLinks || []) as { platform: string; url: string }[];
+    
+    try {
+      const updatedLinks = currentLinks.filter(
+        l => l.platform !== link.platform || l.url !== link.url
+      );
+      
+      await updateDoc(userDocRef, {
+        externalLinks: updatedLinks
+      });
+      this.#messageService.add({ severity: 'success', summary: 'Success', detail: 'External link removed successfully' });
+    } catch (error) {
+      console.error('Error removing external link:', error);
+      this.#messageService.add({ severity: 'error', summary: 'Error', detail: 'Error removing external link' });
       throw error;
     }
   }
