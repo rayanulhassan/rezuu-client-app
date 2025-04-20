@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { from, map, switchMap, catchError, EMPTY, of } from 'rxjs';
-import { Credentials } from '../interfaces/auth.interface';
+import { Credentials, RezuuUser } from '../interfaces/auth.interface';
 import {
   signInWithEmailAndPassword,
   signOut,
@@ -135,10 +135,10 @@ export class AuthService {
             email: body.email,
             firstName: body.firstName,
             lastName: body.lastName,
-            profileImage: '',
-            resume: '',
+            profileImage: null,
+            resume: null,
             certificates: [],
-            video: '',
+            video: null,
             externalLinks: [],
           })
         );
@@ -179,6 +179,6 @@ export class AuthService {
 
   getUser(uid: string) {
     const userDocRef = doc(this.firestore, 'users', uid);
-    return from(getDoc(userDocRef)).pipe(map((doc) => doc.data()));
+    return from(getDoc(userDocRef)).pipe(map((doc) => doc.data() as RezuuUser));
   }
 }
