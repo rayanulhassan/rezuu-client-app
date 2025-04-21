@@ -206,6 +206,31 @@ export class UserService {
     }
   }
 
+  async updatePublicProfileStatus(isPublic: boolean): Promise<void> {
+    const currentUser = this.userDetails();
+    if (!currentUser) {
+      this.#messageService.add({ severity: 'error', summary: 'Error', detail: 'No authenticated user found' });
+      throw new Error('No authenticated user found');
+    }
+
+    const userDocRef = doc(this.#firestore, 'users', currentUser.uid);
+    
+    try {
+      await updateDoc(userDocRef, {
+        isPublicProfile: isPublic
+      });
+      this.#messageService.add({ 
+        severity: 'success', 
+        summary: 'Success', 
+        detail: `Profile is now ${isPublic ? 'public' : 'private'}` 
+      });
+    } catch (error) {
+      console.error('Error updating profile visibility:', error);
+      this.#messageService.add({ severity: 'error', summary: 'Error', detail: 'Error updating profile visibility' });
+      throw error;
+    }
+  }
+
   async addExternalLink(link: { platform: string; url: string }): Promise<void> {
     const currentUser = this.userDetails();
     if (!currentUser) {

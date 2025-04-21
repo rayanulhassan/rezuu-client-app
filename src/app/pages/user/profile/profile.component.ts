@@ -4,8 +4,10 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { TooltipModule } from 'primeng/tooltip';
+import { CheckboxModule } from 'primeng/checkbox';
 import { UserService } from '../../../shared/services/user.service';
 import { MessageService } from 'primeng/api';
+import { FormsModule } from '@angular/forms';
 import {
   FormBuilder,
   ReactiveFormsModule,
@@ -26,6 +28,8 @@ type UploadType = 'profile' | 'resume' | 'certificates' | 'video';
     TextareaModule,
     TooltipModule,
     ReactiveFormsModule,
+    CheckboxModule,
+    FormsModule
   ],
   templateUrl: './profile.component.html',
   styles: ``,
@@ -78,6 +82,7 @@ export class ProfileComponent {
   // Public profile link
   publicProfileLink = signal('');
   isCopying = signal(false);
+  isUpdatingPublicProfile = signal(false);
 
   constructor() {
     // Initialize description from user data
@@ -357,6 +362,18 @@ export class ProfileComponent {
       setTimeout(() => {
         this.isCopying.set(false);
       }, 1000);
+    }
+  }
+
+  async onPublicProfileChange(event: any) {
+    const checkbox = event.checked;
+    this.isUpdatingPublicProfile.set(true);
+    try {
+      await this.userService.updatePublicProfileStatus(checkbox);
+    } catch (error) {
+      console.error('Error updating public profile status:', error);
+    } finally {
+      this.isUpdatingPublicProfile.set(false);
     }
   }
 }

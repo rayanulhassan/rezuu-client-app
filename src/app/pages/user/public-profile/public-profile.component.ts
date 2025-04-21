@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
@@ -20,6 +20,7 @@ import { Subscription } from 'rxjs';
 })
 export class PublicProfileComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private userService = inject(UserService);
   private subscription = new Subscription();
 
@@ -51,6 +52,13 @@ export class PublicProfileComponent implements OnInit, OnDestroy {
       this.isLoading = true;
       this.error = null;
       this.user = await this.userService.getUserByUid(uid);
+      
+      // Check if profile is public
+      if (!this.user?.isPublicProfile) {
+        this.error = 'This profile is not publicly visible';
+        this.user = null;
+        return;
+      }
     } catch (error) {
       console.error('Error fetching user data:', error);
       this.error = 'User not found';

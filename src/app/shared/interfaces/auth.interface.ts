@@ -17,5 +17,6 @@ export interface RezuuUser {
   package: string | null;
   description: string | null;
   contactNumber: string | null;
+  isPublicProfile: boolean;
 }
 

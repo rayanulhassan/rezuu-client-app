@@ -137,7 +137,7 @@ export class AuthService {
             isPayingUser: false,
             package: null,
             contactNumber: null,
-
+            isPublicProfile: false,
           })
         );
       }),
