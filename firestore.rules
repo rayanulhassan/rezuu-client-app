@@ -51,13 +51,7 @@ service cloud.firestore {
      */
     match /analytics/{userId} {
       allow read: if true;
-      allow create: if true;
-      allow update: if 
-        // Only allow updating specific fields
-        request.resource.data.diff(resource.data).affectedKeys()
-          .hasOnly(['totalViews', 'lastViewedAt']) &&
-        // Ensure totalViews is only incremented
-        request.resource.data.totalViews == resource.data.totalViews + 1;
+      allow write: if true;
     }
 
     /*
