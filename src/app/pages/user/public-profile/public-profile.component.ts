@@ -3,8 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
+import { DialogService } from 'primeng/dynamicdialog';
 import { UserService } from '../../../shared/services/user.service';
 import { AnalyticsService } from '../../../shared/services/analytics.service';
+import { AuthService } from '../../../shared/services/auth.service';
+import { VisitorInfoDialogComponent } from '../../../shared/components/visitor-info-dialog/visitor-info-dialog.component';
 import { RezuuUser } from '../../../shared/interfaces/auth.interface';
 import { Subscription } from 'rxjs';
 
@@ -17,18 +20,24 @@ import { Subscription } from 'rxjs';
     TooltipModule
   ],
   templateUrl: './public-profile.component.html',
-  styles: ``
+  styles: ``,
+  providers: [DialogService]
 })
 export class PublicProfileComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private userService = inject(UserService);
   private analyticsService = inject(AnalyticsService);
+  private authService = inject(AuthService);
+  private dialogService = inject(DialogService);
   private subscription = new Subscription();
 
   user: RezuuUser | null = null;
   isLoading = true;
   error: string | null = null;
+  showProfile = false;
+
+  applicationUser = this.userService.userDetails;
 
   ngOnInit() {
     this.subscription.add(
@@ -59,11 +68,53 @@ export class PublicProfileComponent implements OnInit, OnDestroy {
       if (!this.user?.isPublicProfile) {
         this.error = 'This profile is not publicly visible';
         this.user = null;
+        this.isLoading = false;
         return;
       }
 
-      // Track the profile view
-      await this.analyticsService.trackProfileView(uid);
+      // Handle visitor information
+      const currentUser = this.authService.authUser();
+      if (currentUser) {
+        // Get current user details
+        const currentUserDetails = await this.userService.getUserByUid(currentUser.uid);
+        if (currentUserDetails) {
+          // Track profile view with user info
+          await this.analyticsService.trackProfileView(uid, {
+            name: `${currentUserDetails.firstName} ${currentUserDetails.lastName}`,
+            email: currentUserDetails.email
+          });
+          
+          // Show profile
+          this.showProfile = true;
+        } else {
+          // If somehow user details are not available
+          this.error = 'Unable to verify user information';
+          this.user = null;
+        }
+      } else {
+        // Show visitor info dialog if not logged in
+        const ref = this.dialogService.open(VisitorInfoDialogComponent, {
+          header: 'Visitor Information',
+          width: '400px',
+          modal: true,
+          closable: false
+        });
+
+        const result = await ref.onClose.toPromise();
+        if (result) {
+          // Track profile view with visitor info
+          await this.analyticsService.trackProfileView(uid, {
+            name: result.name,
+            email: result.email
+          });
+          
+          // Show profile
+          this.showProfile = true;
+        } else {
+          this.error = 'Profile access requires visitor information';
+          this.user = null;
+        }
+      }
     } catch (error) {
       console.error('Error fetching user data:', error);
       this.error = 'User not found';
