@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { UserService } from '../../../shared/services/user.service';
+import { AnalyticsService } from '../../../shared/services/analytics.service';
 import { RezuuUser } from '../../../shared/interfaces/auth.interface';
 import { Subscription } from 'rxjs';
 
@@ -22,6 +23,7 @@ export class PublicProfileComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private userService = inject(UserService);
+  private analyticsService = inject(AnalyticsService);
   private subscription = new Subscription();
 
   user: RezuuUser | null = null;
@@ -59,6 +61,9 @@ export class PublicProfileComponent implements OnInit, OnDestroy {
         this.user = null;
         return;
       }
+
+      // Track the profile view
+      await this.analyticsService.trackProfileView(uid);
     } catch (error) {
       console.error('Error fetching user data:', error);
       this.error = 'User not found';
