@@ -6,7 +6,7 @@ import { AuthComponent } from './pages/auth/auth.component';
 import { ProfileComponent } from './pages/user/profile/profile.component';
 import { PublicProfileComponent } from './pages/user/public-profile/public-profile.component';
 import { isAuthenticatedGuard } from './shared/guards/auth.guard';
-
+import { AnalyticsDashboardComponent } from './pages/user/analytics-dashboard/analytics-dashboard.component';
 export const routes: Routes = [
     {
         path: '',
@@ -47,6 +47,10 @@ export const routes: Routes = [
             {
                 path: 'profile',
                 component: ProfileComponent,
+            },
+            {
+                path: 'analytics',
+                component: AnalyticsDashboardComponent,
             },
         ]
     },
