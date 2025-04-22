@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { FIRESTORE } from '../../app.config';
-import { doc, getDoc, setDoc, updateDoc, increment, serverTimestamp, arrayUnion } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, increment, serverTimestamp, arrayUnion, onSnapshot } from 'firebase/firestore';
 import { AuthService } from './auth.service';
 import { ProfileAnalytics } from '../interfaces/analytics.interface';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +11,30 @@ import { ProfileAnalytics } from '../interfaces/analytics.interface';
 export class AnalyticsService {
   #firestore = inject(FIRESTORE);
   #authService = inject(AuthService);
+
+  watchProfileAnalytics(userId: string): Observable<ProfileAnalytics | null> {
+    return new Observable<ProfileAnalytics | null>(observer => {
+      const analyticsDocRef = doc(this.#firestore, 'analytics', userId);
+      
+      // Set up real-time listener
+      const unsubscribe = onSnapshot(analyticsDocRef, 
+        (doc) => {
+          if (doc.exists()) {
+            observer.next(doc.data() as ProfileAnalytics);
+          } else {
+            observer.next(null);
+          }
+        },
+        (error) => {
+          console.error('Error watching analytics:', error);
+          observer.error(error);
+        }
+      );
+
+      // Clean up listener when unsubscribed
+      return () => unsubscribe();
+    });
+  }
 
   async trackProfileView(viewedUserId: string, visitorInfo?: { name: string; email: string }): Promise<void> {
     const analyticsDocRef = doc(this.#firestore, 'analytics', viewedUserId);

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { CardModule } from 'primeng/card';
@@ -6,6 +6,7 @@ import { AnalyticsService } from '../../../shared/services/analytics.service';
 import { AuthService } from '../../../shared/services/auth.service';
 import { ProfileAnalytics } from '../../../shared/interfaces/analytics.interface';
 import { Timestamp } from 'firebase/firestore';
+import { Subscription } from 'rxjs';
 
 interface VideoAnalytics {
   name: string;
@@ -30,9 +31,10 @@ interface ProfileViewer {
   templateUrl: './analytics-dashboard.component.html',
   styles: ``
 })
-export class AnalyticsDashboardComponent implements OnInit {
+export class AnalyticsDashboardComponent implements OnInit, OnDestroy {
   private analyticsService = inject(AnalyticsService);
   private authService = inject(AuthService);
+  private analyticsSubscription?: Subscription;
 
   analytics: ProfileAnalytics | null = null;
   isLoading = true;
@@ -48,23 +50,36 @@ export class AnalyticsDashboardComponent implements OnInit {
   videoAnalytics: VideoAnalytics[] = [];
   profileViewers: ProfileViewer[] = [];
 
-  async ngOnInit() {
-    try {
-      const currentUser = this.authService.authUser();
-      if (!currentUser) {
-        this.error = 'No authenticated user found';
-        return;
-      }
-
-      this.analytics = await this.analyticsService.getProfileAnalytics(currentUser.uid);
-      if (this.analytics) {
-        this.processAnalytics();
-      }
-    } catch (error) {
-      console.error('Error fetching analytics:', error);
-      this.error = 'Error fetching analytics data';
-    } finally {
+  ngOnInit() {
+    const currentUser = this.authService.authUser();
+    if (!currentUser) {
+      this.error = 'No authenticated user found';
       this.isLoading = false;
+      return;
+    }
+
+    // Subscribe to real-time analytics updates
+    this.analyticsSubscription = this.analyticsService.watchProfileAnalytics(currentUser.uid)
+      .subscribe({
+        next: (analytics) => {
+          this.analytics = analytics;
+          if (analytics) {
+            this.processAnalytics();
+          }
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error fetching analytics:', error);
+          this.error = 'Error fetching analytics data';
+          this.isLoading = false;
+        }
+      });
+  }
+
+  ngOnDestroy() {
+    // Clean up subscription when component is destroyed
+    if (this.analyticsSubscription) {
+      this.analyticsSubscription.unsubscribe();
     }
   }
 
