@@ -52,6 +52,43 @@ export class AnalyticsService {
     }
   }
 
+  async trackVideoView(userId: string, videoUrl: string, videoTitle: string): Promise<void> {
+    const analyticsDocRef = doc(this.#firestore, 'analytics', userId);
+    
+    try {
+      const analyticsDoc = await getDoc(analyticsDocRef);
+      
+      // Encode the video URL to make it a valid Firebase field path
+      const encodedVideoUrl = videoUrl.replace(/[\/\.]/g, '_');
+
+      if (!analyticsDoc.exists()) {
+        // Create new analytics document if it doesn't exist
+        await setDoc(analyticsDocRef, {
+          userId: userId,
+          totalViews: 0,
+          lastViewedAt: serverTimestamp(),
+          visitors: [],
+          videoViews: {
+            [encodedVideoUrl]: {
+              originalUrl: videoUrl,
+              title: videoTitle,
+              totalViews: 1
+            }
+          }
+        });
+      } else {
+        // Update video view statistics
+        await updateDoc(analyticsDocRef, {
+          [`videoViews.${encodedVideoUrl}.totalViews`]: increment(1),
+          [`videoViews.${encodedVideoUrl}.originalUrl`]: videoUrl,
+          [`videoViews.${encodedVideoUrl}.title`]: videoTitle
+        });
+      }
+    } catch (error) {
+      console.error('Error tracking video view:', error);
+    }
+  }
+
   async getProfileAnalytics(userId: string): Promise<ProfileAnalytics | null> {
     try {
       const analyticsDocRef = doc(this.#firestore, 'analytics', userId);

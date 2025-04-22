@@ -176,6 +176,7 @@
                   [src]="getFullAssetUrl(video.url)"
                   controls
                   class="w-full h-full"
+                  (play)="trackVideoView(video)"
                 ></video>
               </div>
               

@@ -127,4 +127,13 @@ export class PublicProfileComponent implements OnInit, OnDestroy {
     if (!assetKey) return undefined;
     return this.userService.getFullAssetUrl(assetKey);
   }
+
+  async trackVideoView(video: { url: string; description: string | null }) {
+    if (!this.user) return;
+    await this.analyticsService.trackVideoView(
+      this.user.uid, 
+      video.url, 
+      video.description || 'Untitled Video'
+    );
+  }
 }
