@@ -14,4 +14,12 @@ export interface ProfileAnalytics {
       totalViews: number;
     };
   };
+  resumeDownloads: number;  // Simple counter for resume downloads
+  certificateDownloads: {
+    [encodedCertificateUrl: string]: {
+      originalUrl: string;  // The original certificate URL
+      name: string;        // The certificate name
+      totalDownloads: number;
+    };
+  };
 }

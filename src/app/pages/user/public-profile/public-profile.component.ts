@@ -136,4 +136,18 @@ export class PublicProfileComponent implements OnInit, OnDestroy {
       video.description || 'Untitled Video'
     );
   }
+
+  async trackResumeDownload() {
+    if (!this.user) return;
+    await this.analyticsService.trackResumeDownload(this.user.uid);
+  }
+
+  async trackCertificateDownload(certificate: { url: string; name: string }) {
+    if (!this.user) return;
+    await this.analyticsService.trackCertificateDownload(
+      this.user.uid, 
+      certificate.url, 
+      certificate.name
+    );
+  }
 }

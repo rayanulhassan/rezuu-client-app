@@ -89,6 +89,72 @@ export class AnalyticsService {
     }
   }
 
+  async trackResumeDownload(userId: string): Promise<void> {
+    const analyticsDocRef = doc(this.#firestore, 'analytics', userId);
+    
+    try {
+      const analyticsDoc = await getDoc(analyticsDocRef);
+
+      if (!analyticsDoc.exists()) {
+        // Create new analytics document if it doesn't exist
+        await setDoc(analyticsDocRef, {
+          userId: userId,
+          totalViews: 0,
+          lastViewedAt: serverTimestamp(),
+          visitors: [],
+          videoViews: {},
+          resumeDownloads: 1
+        });
+      } else {
+        // Update resume download counter
+        await updateDoc(analyticsDocRef, {
+          resumeDownloads: increment(1)
+        });
+      }
+    } catch (error) {
+      console.error('Error tracking resume download:', error);
+    }
+  }
+
+  async trackCertificateDownload(userId: string, certificateUrl: string, certificateName: string): Promise<void> {
+    const analyticsDocRef = doc(this.#firestore, 'analytics', userId);
+    
+    try {
+      const analyticsDoc = await getDoc(analyticsDocRef);
+      
+      // Encode the certificate URL to make it a valid Firebase field path
+      const encodedCertificateUrl = certificateUrl.replace(/[\/\.]/g, '_');
+
+      if (!analyticsDoc.exists()) {
+        // Create new analytics document if it doesn't exist
+        await setDoc(analyticsDocRef, {
+          userId: userId,
+          totalViews: 0,
+          lastViewedAt: serverTimestamp(),
+          visitors: [],
+          videoViews: {},
+          resumeDownloads: 0,
+          certificateDownloads: {
+            [encodedCertificateUrl]: {
+              originalUrl: certificateUrl,
+              name: certificateName,
+              totalDownloads: 1
+            }
+          }
+        });
+      } else {
+        // Update certificate download statistics
+        await updateDoc(analyticsDocRef, {
+          [`certificateDownloads.${encodedCertificateUrl}.totalDownloads`]: increment(1),
+          [`certificateDownloads.${encodedCertificateUrl}.originalUrl`]: certificateUrl,
+          [`certificateDownloads.${encodedCertificateUrl}.name`]: certificateName
+        });
+      }
+    } catch (error) {
+      console.error('Error tracking certificate download:', error);
+    }
+  }
+
   async getProfileAnalytics(userId: string): Promise<ProfileAnalytics | null> {
     try {
       const analyticsDocRef = doc(this.#firestore, 'analytics', userId);

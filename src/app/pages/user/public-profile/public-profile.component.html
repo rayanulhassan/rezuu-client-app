@@ -83,6 +83,7 @@
             icon="pi pi-eye"
             class="p-button-secondary p-button-rounded"
             pTooltip="View Resume"
+            (click)="trackResumeDownload()"
           ></a>
         </div>
       </div>
@@ -120,6 +121,7 @@
                     icon="pi pi-eye"
                     class="p-button-rounded p-button-secondary"
                     pTooltip="View Certificate"
+                    (click)="trackCertificateDownload(certificate)"
                   ></a>
                 </div>
               </div>
