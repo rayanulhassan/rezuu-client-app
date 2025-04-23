@@ -55,6 +55,7 @@ export const appConfig: ApplicationConfig = {
       theme: {
         preset: RezuuPreset,
         options: {
+          darkModeSelector: '.my-app-dark',
           cssLayer: {
             name: 'primeng',
             order: 'theme, base, primeng',
