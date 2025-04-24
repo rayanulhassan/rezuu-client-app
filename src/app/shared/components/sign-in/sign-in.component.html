@@ -33,5 +33,8 @@
         >
         </p-button>
     </form>
-    <p>Don't have an account? <a class="text-primary font-semibold" [routerLink]="['/auth/register']">Register</a></p>
+    <div class="flex flex-col items-center gap-2">
+        <p>Don't have an account? <a class="text-primary font-semibold" [routerLink]="['/auth/register']">Register</a></p>
+        <p>Forgot your password? <a class="text-primary font-semibold" [routerLink]="['/auth/forgot-password']">Reset Password</a></p>
+    </div>
 </div>
