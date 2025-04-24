@@ -9,6 +9,9 @@ import { isAuthenticatedGuard } from './shared/guards/auth.guard';
 import { AnalyticsDashboardComponent } from './pages/user/analytics-dashboard/analytics-dashboard.component';
 import { ForgotPasswordComponent } from './shared/components/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './shared/components/reset-password/reset-password.component';
+import { TermsComponent } from './pages/legal/terms/terms.component';
+import { EouaComponent } from './pages/legal/eoua/eoua.component';
+import { PrivacyComponent } from './pages/legal/privacy/privacy.component';
 
 export const routes: Routes = [
     {
@@ -65,8 +68,32 @@ export const routes: Routes = [
             },
         ]
     },
+    // Legal Pages
+    {
+        path: 'legal',
+        component: LayoutsComponent,
+        data: {
+            layout: 'empty'
+        },
+        children: [ 
+            {
+                path: 'terms',
+                component: TermsComponent
+            },
+            {
+                path: 'eoua',
+                component: EouaComponent
+            },
+            {
+                path: 'privacy',
+                component: PrivacyComponent
+            }
+        ]
+    },
+
     {
         path: ':uid',
         component: PublicProfileComponent
-    }
+    },
+    
 ];
