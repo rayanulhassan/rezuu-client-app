@@ -7,6 +7,9 @@ import { ProfileComponent } from './pages/user/profile/profile.component';
 import { PublicProfileComponent } from './pages/user/public-profile/public-profile.component';
 import { isAuthenticatedGuard } from './shared/guards/auth.guard';
 import { AnalyticsDashboardComponent } from './pages/user/analytics-dashboard/analytics-dashboard.component';
+import { ForgotPasswordComponent } from './shared/components/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './shared/components/reset-password/reset-password.component';
+
 export const routes: Routes = [
     {
         path: '',
@@ -31,6 +34,14 @@ export const routes: Routes = [
                     {
                         path: 'login',
                         component: SignInComponent
+                    },
+                    {
+                        path: 'forgot-password',
+                        component: ForgotPasswordComponent
+                    },
+                    {
+                        path: 'reset-password',
+                        component: ResetPasswordComponent
                     }
                 ]
             },
