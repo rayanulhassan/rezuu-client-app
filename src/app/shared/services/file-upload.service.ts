@@ -15,7 +15,7 @@ export interface UploadProgress {
 export class FileUploadService {
   readonly #http = inject(HttpClient);
 
-  readonly #cloudFunctionUrl = environment.couldFunctionUrl;
+  readonly #cloudFunctionUrl = `${environment.couldFunctionUrl}/generatePresignedUrl`;
 
   getPresignedUrl({
     fileType,

@@ -138,6 +138,11 @@ export class AuthService {
             package: null,
             contactNumber: null,
             isPublicProfile: false,
+            planOptions: {
+              videoSection: 2,
+              whoViewedProfile: false,
+            },
+            stripeCustomerId: null,
           })
         );
       }),

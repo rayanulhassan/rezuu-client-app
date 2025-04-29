@@ -12,6 +12,9 @@ import { ResetPasswordComponent } from './shared/components/reset-password/reset
 import { TermsComponent } from './pages/legal/terms/terms.component';
 import { EouaComponent } from './pages/legal/eoua/eoua.component';
 import { PrivacyComponent } from './pages/legal/privacy/privacy.component';
+import { PricingMenuComponent } from './pages/pricing-menu/pricing-menu.component';
+import { PaymentSuccessComponent } from './pages/payment/payment-success/payment-success.component';
+import { PaymentCancelComponent } from './pages/payment/payment-cancel/payment-cancel.component';
 
 export const routes: Routes = [
     {
@@ -66,6 +69,19 @@ export const routes: Routes = [
                 path: 'analytics',
                 component: AnalyticsDashboardComponent,
             },
+            {
+                path: 'pricing-management',
+                component: PricingMenuComponent,
+            },
+            {
+                path: 'payment/success',
+                component: PaymentSuccessComponent
+            },
+            {
+                path: 'payment/cancel',
+                component: PaymentCancelComponent
+            },
+
         ]
     },
     // Legal Pages

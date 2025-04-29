@@ -18,5 +18,9 @@ export interface RezuuUser {
   description: string | null;
   contactNumber: string | null;
   isPublicProfile: boolean;
+  planOptions: {
+    videoSection: number;
+    whoViewedProfile: boolean;
+  };
+  stripeCustomerId: string | null;
 }
-

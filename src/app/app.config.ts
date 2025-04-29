@@ -11,7 +11,7 @@ import { getAuth } from '@angular/fire/auth';
 import { Firestore, getFirestore } from '@angular/fire/firestore';
 import { environment } from '../environments/environment.development';
 import { MessageService } from 'primeng/api';
-
+import { provideNgxStripe } from 'ngx-stripe';
 const app = initializeApp(environment.firebase_config);
 
 export const AUTH = new InjectionToken('Firebase auth', {
@@ -63,5 +63,8 @@ export const appConfig: ApplicationConfig = {
         },
       },
     }),
+    provideNgxStripe(
+      environment.stripe.publicKey
+    ),
   ],
 };

@@ -1,0 +1,223 @@
+<div class="min-h-screen bg-gray-50 py-10 flex flex-col items-center">
+  <!-- Header -->
+  <div class="text-center mb-8">
+    <h1 class="text-3xl font-bold mb-2">Rezuu Pricing Value Menu</h1>
+    <p class="text-gray-500 max-w-xl mx-auto">
+      Choose the perfect plan for your needs. Only pay for what you use with our
+      flexible pricing.
+    </p>
+  </div>
+
+  <!-- Plan Type Toggle -->
+  <div class="flex justify-center mb-8">
+    <p-selectbutton
+      [options]="pricingPlanOptions"
+      [(ngModel)]="pricingPlan"
+      optionLabel="label"
+      optionValue="value"
+    >
+      <ng-template #item let-item>
+        <div class="flex items-center gap-2">
+          <p>{{ item.label }}</p>
+          @if(item.value === 'yearly') {
+          <span class="text-green-500 text-xs ml-1 p-1 bg-green-50 rounded-full"
+            >Save 20%</span
+          >
+          }
+        </div>
+      </ng-template>
+    </p-selectbutton>
+  </div>
+
+  <!-- Main Content -->
+  <div class="flex flex-col lg:flex-row gap-8 w-full max-w-6xl">
+    <div class="flex-1 flex flex-col gap-6">
+      <!-- Free Profile -->
+      <div class="bg-green-50 border border-green-200 rounded-xl p-6">
+        <div class="flex items-center mb-2">
+          <i class="pi pi-check-circle text-green-500 mr-2"></i>
+          <span class="font-semibold text-lg"
+            >The Standard aka Free Profile</span
+          >
+          <span
+            class="ml-2 bg-green-100 text-green-600 text-xs px-2 py-0.5 rounded-full font-semibold"
+            >FREE</span
+          >
+        </div>
+        <p class="text-gray-500 text-sm mb-3">
+          What every Rezuu user gets for free
+        </p>
+        <ul class="list-none pl-0 space-y-1">
+          <li
+            *ngFor="let feature of freeFeatures"
+            class="flex items-center text-gray-700"
+          >
+            <i class="pi pi-check text-green-400 mr-2"></i> {{ feature }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- Dollar Menu -->
+      <div class="bg-white border rounded-xl p-6">
+        <div class="font-semibold text-lg mb-2">Dollar Menu</div>
+        <p class="text-gray-500 text-xs mb-4">
+          Individual features at just $1 each
+        </p>
+        <!-- Video Section Add-on -->
+        <div
+          class="flex items-center justify-between py-2 border-b last:border-b-0"
+        >
+          <div class="flex items-center gap-2">
+            <p class="font-medium">Video Section</p>
+            <p class="text-xs text-gray-400">
+              {{
+                videoSectionPrice() | currency : "CAD" : "symbol" : "1.0-1"
+              }}/{{ pricingPlan() === "monthly" ? "mo" : "yr" }}
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-minus"
+              class="p-button-text p-1"
+              [disabled]="
+                !isBuyingVideoSection() || videoSectionQuantity() === 1
+              "
+              (click)="videoSectionQuantity.set(videoSectionQuantity() - 1)"
+            ></button>
+            <input
+              type="number"
+              class="w-12 text-center border rounded"
+              [value]="videoSectionQuantity()"
+              readonly
+            />
+            <button
+              pButton
+              type="button"
+              icon="pi pi-plus"
+              class="p-button-text p-1"
+              [disabled]="!isBuyingVideoSection()"
+              (click)="videoSectionQuantity.set(videoSectionQuantity() + 1)"
+            ></button>
+            <p-inputSwitch
+              [(ngModel)]="isBuyingVideoSection"
+              (onChange)="isBuyingValueBundle.set(false)"
+            ></p-inputSwitch>
+          </div>
+        </div>
+        <!-- Who Viewed my Profile Add-on -->
+        <div
+          class="flex items-center justify-between py-2 border-b last:border-b-0 mt-2"
+        >
+          <div class="flex items-center gap-2">
+            <i class="pi pi-user"></i>
+            <p class="font-medium">Who Viewed my Profile?</p>
+            <p class="text-xs text-gray-400">
+              {{
+                whoViewedProfilePrice() | currency : "CAD" : "symbol" : "1.0-1"
+              }}/{{ pricingPlan() === "monthly" ? "mo" : "yr" }}
+            </p>
+            <i
+              class="pi pi-question-circle text-gray-400 ml-1"
+              pTooltip="See who viewed your profile"
+              tooltipPosition="top"
+            ></i>
+          </div>
+          <div>
+            <p-inputSwitch
+              [(ngModel)]="isBuyingWhoViewedProfile"
+              (onChange)="isBuyingValueBundle.set(false)"
+            ></p-inputSwitch>
+          </div>
+        </div>
+      </div>
+
+      <!-- Value Deals -->
+      <div class="bg-white border rounded-xl p-6">
+        <div class="font-semibold text-lg mb-2">Value Deals</div>
+        <p class="text-gray-500 text-xs mb-4">
+          Bundle and save with our value packages
+        </p>
+        <div class="flex items-center justify-between py-2">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-medium">Value Bundle</span>
+              <span
+                class="bg-green-100 text-green-600 text-xs px-2 py-0.5 rounded-full font-semibold"
+                >Save 50%</span
+              >
+            </div>
+            <ul class="text-xs text-gray-500 list-disc ml-5 mt-1">
+              <li *ngFor="let feat of bundles[0].features">{{ feat }}</li>
+            </ul>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="font-semibold text-gray-700"
+              >{{
+                valueBundlePrice() | currency : "CAD" : "symbol" : "1.0-1"
+              }}/{{ pricingPlan() === "monthly" ? "mo" : "yr" }}</span
+            >
+            <p-inputSwitch
+              [(ngModel)]="isBuyingValueBundle"
+              (onChange)="
+                isBuyingVideoSection.set(false);
+                isBuyingWhoViewedProfile.set(false)
+              "
+            ></p-inputSwitch>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Plan Summary Sidebar -->
+    <div class="w-full lg:w-80 flex-shrink-0">
+      <div class="bg-white border rounded-xl p-6 sticky top-10">
+        <div class="font-semibold text-lg mb-2">Your Plan Summary</div>
+        <p class="text-xs text-gray-500 mb-4">
+          Base plan plus selected add-ons
+        </p>
+        <div class="mb-4">
+          <div class="flex items-center justify-between">
+            <span class="font-medium">Standard Profile</span>
+            <span
+              class="bg-green-100 text-green-600 text-xs px-2 py-0.5 rounded-full font-semibold"
+              >FREE</span
+            >
+          </div>
+          <p class="text-xs text-gray-500 mt-1">
+            Includes profile picture, contact info, external links, resume
+            showcase, and 2 video sections
+          </p>
+        </div>
+
+        <div *ngIf="bundles[0].selected" class="mb-2">
+          <div class="flex items-center justify-between text-sm mb-1">
+            <span>{{ bundles[0].name }}</span>
+            <span>${{ bundles[0].price }}.00/mo</span>
+          </div>
+        </div>
+        <div
+          class="border-t pt-4 mt-4 flex items-center justify-between font-semibold text-lg"
+        >
+          <span>Total</span>
+          <span
+            >${{ totalPrice() | currency : "CAD" : "symbol" : "1.0-1" }}/{{
+              pricingPlan() === "monthly" ? "mo" : "yr"
+            }}</span
+          >
+        </div>
+        <button
+          [loading]="isPaymentProcessing()"
+          (click)="makePayment()"
+          pButton
+          type="button"
+          class="w-full mt-6 bg-gray-900 text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition"
+          [disabled]="!isBuyingVideoSection() && !isBuyingWhoViewedProfile() && !isBuyingValueBundle()"
+        >
+          Proceed to Payment
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

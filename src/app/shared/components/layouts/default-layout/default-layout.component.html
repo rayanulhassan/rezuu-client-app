@@ -1,35 +1,62 @@
 <!-- Header -->
 <p-toast />
 <header class="fixed top-0 left-0 right-0 h-16 bg-white shadow-md z-50">
-    <div class="flex items-center justify-between h-full px-4">
-        <!-- Logo and Toggle Button -->
-        <div class="flex items-center space-x-4">
-            <a [routerLink]="['/']" class="text-xl font-bold text-gray-800">Rezuu</a>
-        </div>
-
-        <!-- Navigation Links -->
-        <nav class="hidden md:flex space-x-8">
-            <a [routerLink]="['/my/analytics']" class="text-gray-600 hover:text-gray-900">Analytics</a>
-            <!-- <a [routerLink]="['/dashboard']" class="text-gray-600 hover:text-gray-900">Dashboard</a> -->
-            <a [routerLink]="['/my/profile']"   class="text-gray-600 hover:text-gray-900">Profile</a>
-        </nav>
-
-        <!-- User Menu -->
-        <div class="flex items-center space-x-4">
-            <button (click)="logout()" class="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                </svg>
-                <span>Logout</span>
-            </button>
-        </div>
+  <div class="flex items-center justify-between h-full px-4">
+    <!-- Logo and Toggle Button -->
+    <div class="flex items-center space-x-4">
+      <a [routerLink]="['/']" class="text-xl font-bold text-gray-800">Rezuu</a>
     </div>
+
+    <!-- Navigation Links -->
+    <nav class="hidden md:flex space-x-8">
+      <a
+        [routerLink]="['/my/analytics']"
+        class="text-gray-600 hover:text-gray-900"
+        >Analytics</a
+      >
+      <!-- <a [routerLink]="['/dashboard']" class="text-gray-600 hover:text-gray-900">Dashboard</a> -->
+      <a
+        [routerLink]="['/my/profile']"
+        class="text-gray-600 hover:text-gray-900"
+        >Profile</a
+      >
+      <a
+        [routerLink]="['/my/pricing-management']"
+        class="text-gray-600 hover:text-gray-900"
+        >Pricing Menu</a
+      >
+    </nav>
+
+    <!-- User Menu -->
+    <div class="flex items-center space-x-4">
+      <button
+        (click)="logout()"
+        class="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+          />
+        </svg>
+        <span>Logout</span>
+      </button>
+    </div>
+  </div>
 </header>
 
 <!-- Main Content -->
 <main class="pt-16 transition-all duration-300 ml-0">
-    <div class="p-4">
-        <router-outlet></router-outlet>
-    </div>
-    <app-footer></app-footer>
+  <div class="p-4">
+    <router-outlet></router-outlet>
+  </div>
+  <app-footer></app-footer>
 </main>
