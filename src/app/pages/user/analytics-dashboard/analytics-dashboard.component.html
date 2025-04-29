@@ -69,24 +69,37 @@
     <!-- Profile Viewers -->
     <div class="mb-8">
       <h2 class="text-xl font-semibold mb-4">Profile Viewers</h2>
-      <p-table [value]="profileViewers" styleClass="p-datatable-sm">
-        <ng-template pTemplate="header">
-          <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email Address</th>
-            <th class="w-48">Last Viewed</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-viewer>
-          <tr>
-            <td>{{ viewer.firstName }}</td>
-            <td>{{ viewer.lastName }}</td>
-            <td>{{ viewer.email }}</td>
-            <td>{{ viewer.viewedAt | date:'MMM d, y, h:mm a' }}</td>
-          </tr>
-        </ng-template>
-      </p-table>
+      @if (hasWhoViewedProfileAccess) {
+        <p-table [value]="profileViewers" styleClass="p-datatable-sm">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Email Address</th>
+              <th class="w-48">Last Viewed</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-viewer>
+            <tr>
+              <td>{{ viewer.firstName }}</td>
+              <td>{{ viewer.lastName }}</td>
+              <td>{{ viewer.email }}</td>
+              <td>{{ viewer.viewedAt | date:'MMM d, y, h:mm a' }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      } @else {
+        <div class="upgrade-message">
+          <i class="pi pi-lock"></i>
+          <span>Upgrade your plan to see who viewed your profile. This feature is available with our premium plans.</span>
+          <button 
+            pButton 
+            label="View Plans" 
+            (click)="navigateToPricing()" 
+            class="p-button-primary p-button-sm ml-4"
+          ></button>
+        </div>
+      }
     </div>
   }
 </div>

@@ -8,6 +8,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-payment-success',
@@ -54,6 +55,22 @@ export class PaymentSuccessComponent {
   isSuccess = false;
   errorMessage = '';
 
+  // Get price IDs from environment
+  readonly videoSectionPriceIds = {
+    monthly: environment.stripe.products.videoSection.monthly.priceId,
+    yearly: environment.stripe.products.videoSection.yearly.priceId
+  };
+
+  readonly whoViewedProfilePriceIds = {
+    monthly: environment.stripe.products.whoViewedProfile.monthly.priceId,
+    yearly: environment.stripe.products.whoViewedProfile.yearly.priceId
+  };
+
+  readonly valueBundlePriceIds = {
+    monthly: environment.stripe.products.valueBundle.monthly.priceId,
+    yearly: environment.stripe.products.valueBundle.yearly.priceId
+  };
+
   navigateToProfile() {
     this.#router.navigate(['/my/profile']);
   }
@@ -86,15 +103,15 @@ export class PaymentSuccessComponent {
               const quantity = item.quantity;
 
               // Check for video section price
-              if (priceId === 'price_1RIx6pBA9N9fUzabWuxgodmx' || priceId === 'price_1RIx6pBA9N9fUzabeNqGl0h9') {
+              if (priceId === this.videoSectionPriceIds.monthly || priceId === this.videoSectionPriceIds.yearly) {
                 planOptions.videoSection = quantity;
               }
               // Check for who viewed profile price
-              else if (priceId === 'price_1RIx7WBA9N9fUzabEx5niB8w' || priceId === 'price_1RIx7vBA9N9fUzabqLSeuw7c') {
+              else if (priceId === this.whoViewedProfilePriceIds.monthly || priceId === this.whoViewedProfilePriceIds.yearly) {
                 planOptions.whoViewedProfile = true;
               }
               // Check for value bundle price
-              else if (priceId === 'price_1RIx9YBA9N9fUzabuBspp8Vn' || priceId === 'price_1RIx9YBA9N9fUzabZQqagozR') {
+              else if (priceId === this.valueBundlePriceIds.monthly || priceId === this.valueBundlePriceIds.yearly) {
                 planOptions.videoSection = 4;
                 planOptions.whoViewedProfile = true;
               }

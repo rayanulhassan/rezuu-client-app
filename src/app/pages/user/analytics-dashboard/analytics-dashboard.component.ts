@@ -4,6 +4,8 @@ import { TableModule } from 'primeng/table';
 import { CardModule } from 'primeng/card';
 import { AnalyticsService } from '../../../shared/services/analytics.service';
 import { AuthService } from '../../../shared/services/auth.service';
+import { UserService } from '../../../shared/services/user.service';
+import { Router } from '@angular/router';
 import { ProfileAnalytics } from '../../../shared/interfaces/analytics.interface';
 import { Timestamp } from 'firebase/firestore';
 import { Subscription } from 'rxjs';
@@ -29,16 +31,31 @@ interface ProfileViewer {
     CardModule
   ],
   templateUrl: './analytics-dashboard.component.html',
-  styles: ``
+  styles: [`
+    .upgrade-message {
+      background-color: #fef2f2;
+      border: 1px solid #fee2e2;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      color: #991b1b;
+    }
+    .upgrade-message i {
+      margin-right: 0.5rem;
+    }
+  `]
 })
 export class AnalyticsDashboardComponent implements OnInit, OnDestroy {
   private analyticsService = inject(AnalyticsService);
   private authService = inject(AuthService);
+  private userService = inject(UserService);
+  private router = inject(Router);
   private analyticsSubscription?: Subscription;
 
   analytics: ProfileAnalytics | null = null;
   isLoading = true;
   error: string | null = null;
+  hasWhoViewedProfileAccess = false;
 
   // Computed properties for the dashboard
   totalProfileViews = 0;
@@ -57,6 +74,10 @@ export class AnalyticsDashboardComponent implements OnInit, OnDestroy {
       this.isLoading = false;
       return;
     }
+
+    // Check if user has access to who viewed profile feature
+    const userDetails = this.userService.userDetails();
+    this.hasWhoViewedProfileAccess = !!(userDetails?.isPayingUser && userDetails?.planOptions?.whoViewedProfile);
 
     // Subscribe to real-time analytics updates
     this.analyticsSubscription = this.analyticsService.watchProfileAnalytics(currentUser.uid)
@@ -81,6 +102,10 @@ export class AnalyticsDashboardComponent implements OnInit, OnDestroy {
     if (this.analyticsSubscription) {
       this.analyticsSubscription.unsubscribe();
     }
+  }
+
+  navigateToPricing() {
+    this.router.navigate(['/pricing']);
   }
 
   private processAnalytics() {
@@ -108,33 +133,36 @@ export class AnalyticsDashboardComponent implements OnInit, OnDestroy {
     this.certificateDownloads = Object.values(this.analytics.certificateDownloads || {})
       .reduce((sum, cert) => sum + cert.totalDownloads, 0);
 
-    // Process profile viewers (unique visitors with latest timestamp)
-    const visitorMap = new Map<string, ProfileViewer>();
-    
-    (this.analytics.visitors || []).forEach(visitor => {
-      const visitorKey = visitor.email; // Using email as unique identifier
-      const existingVisitor = visitorMap.get(visitorKey);
+    // Only process profile viewers if user has access
+    if (this.hasWhoViewedProfileAccess) {
+      // Process profile viewers (unique visitors with latest timestamp)
+      const visitorMap = new Map<string, ProfileViewer>();
       
-      // Convert Firestore Timestamp to JavaScript Date
-      const viewedAt = visitor.timestamp instanceof Timestamp 
-        ? visitor.timestamp.toDate() 
-        : new Date(visitor.timestamp);
+      (this.analytics.visitors || []).forEach(visitor => {
+        const visitorKey = visitor.email; // Using email as unique identifier
+        const existingVisitor = visitorMap.get(visitorKey);
+        
+        // Convert Firestore Timestamp to JavaScript Date
+        const viewedAt = visitor.timestamp instanceof Timestamp 
+          ? visitor.timestamp.toDate() 
+          : new Date(visitor.timestamp);
 
-      const newVisitor: ProfileViewer = {
-        firstName: visitor.name.split(' ')[0] || '',
-        lastName: visitor.name.split(' ')[1] || '',
-        email: visitor.email,
-        viewedAt
-      };
+        const newVisitor: ProfileViewer = {
+          firstName: visitor.name.split(' ')[0] || '',
+          lastName: visitor.name.split(' ')[1] || '',
+          email: visitor.email,
+          viewedAt
+        };
 
-      // Only update if this is a new visitor or if this visit is more recent
-      if (!existingVisitor || newVisitor.viewedAt > existingVisitor.viewedAt) {
-        visitorMap.set(visitorKey, newVisitor);
-      }
-    });
+        // Only update if this is a new visitor or if this visit is more recent
+        if (!existingVisitor || newVisitor.viewedAt > existingVisitor.viewedAt) {
+          visitorMap.set(visitorKey, newVisitor);
+        }
+      });
 
-    // Convert map to array and sort by most recent first
-    this.profileViewers = Array.from(visitorMap.values())
-      .sort((a, b) => b.viewedAt.getTime() - a.viewedAt.getTime());
+      // Convert map to array and sort by most recent first
+      this.profileViewers = Array.from(visitorMap.values())
+        .sort((a, b) => b.viewedAt.getTime() - a.viewedAt.getTime());
+    }
   }
 }
