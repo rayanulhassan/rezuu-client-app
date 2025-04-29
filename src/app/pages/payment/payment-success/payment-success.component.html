@@ -1,1 +1,32 @@
-<p>payment-success works!</p>
+<div class="payment-container">
+  <p-card styleClass="shadow-2">
+    <ng-container *ngIf="isLoading">
+      <p-progressSpinner 
+        [style]="{width: '50px', height: '50px'}" 
+        styleClass="custom-spinner" 
+        strokeWidth="8" 
+        fill="var(--surface-ground)" 
+        animationDuration=".5s">
+      </p-progressSpinner>
+      <p class="loading-text">Processing your payment...</p>
+    </ng-container>
+
+    <ng-container *ngIf="!isLoading && isSuccess">
+      <i class="pi pi-check-circle success-icon"></i>
+      <h2>Payment Successful!</h2>
+      <p>Your account has been upgraded successfully.</p>
+      <div class="action-buttons">
+        <button pButton label="Go to Profile" (click)="navigateToProfile()" class="p-button-primary"></button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="!isLoading && !isSuccess && errorMessage">
+      <i class="pi pi-times-circle" style="color: #ef4444; font-size: 4rem; margin-bottom: 1rem;"></i>
+      <h2>Payment Error</h2>
+      <p>{{ errorMessage }}</p>
+      <div class="action-buttons">
+        <button pButton label="Try Again" (click)="ngOnInit()" class="p-button-primary"></button>
+      </div>
+    </ng-container>
+  </p-card>
+</div>

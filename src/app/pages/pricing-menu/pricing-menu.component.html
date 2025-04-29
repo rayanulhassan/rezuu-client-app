@@ -8,6 +8,12 @@
     </p>
   </div>
 
+  <!-- Subscription Message -->
+  <div *ngIf="isPayingUser()" class="subscription-message max-w-6xl w-full mb-8">
+    <i class="pi pi-exclamation-triangle"></i>
+    <span>You already have an active subscription. Please cancel your existing subscription before purchasing a new one.</span>
+  </div>
+
   <!-- Plan Type Toggle -->
   <div class="flex justify-center mb-8">
     <p-selectbutton
@@ -15,6 +21,7 @@
       [(ngModel)]="pricingPlan"
       optionLabel="label"
       optionValue="value"
+      [disabled]="isPayingUser()"
     >
       <ng-template #item let-item>
         <div class="flex items-center gap-2">
@@ -82,7 +89,7 @@
               icon="pi pi-minus"
               class="p-button-text p-1"
               [disabled]="
-                !isBuyingVideoSection() || videoSectionQuantity() === 1
+                !isBuyingVideoSection() || videoSectionQuantity() === 1 || isPayingUser()
               "
               (click)="videoSectionQuantity.set(videoSectionQuantity() - 1)"
             ></button>
@@ -97,12 +104,13 @@
               type="button"
               icon="pi pi-plus"
               class="p-button-text p-1"
-              [disabled]="!isBuyingVideoSection()"
+              [disabled]="!isBuyingVideoSection() || isPayingUser()"
               (click)="videoSectionQuantity.set(videoSectionQuantity() + 1)"
             ></button>
             <p-inputSwitch
               [(ngModel)]="isBuyingVideoSection"
               (onChange)="isBuyingValueBundle.set(false)"
+              [disabled]="isPayingUser()"
             ></p-inputSwitch>
           </div>
         </div>
@@ -128,6 +136,7 @@
             <p-inputSwitch
               [(ngModel)]="isBuyingWhoViewedProfile"
               (onChange)="isBuyingValueBundle.set(false)"
+              [disabled]="isPayingUser()"
             ></p-inputSwitch>
           </div>
         </div>
@@ -164,6 +173,7 @@
                 isBuyingVideoSection.set(false);
                 isBuyingWhoViewedProfile.set(false)
               "
+              [disabled]="isPayingUser()"
             ></p-inputSwitch>
           </div>
         </div>
@@ -213,9 +223,9 @@
           pButton
           type="button"
           class="w-full mt-6 bg-gray-900 text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition"
-          [disabled]="!isBuyingVideoSection() && !isBuyingWhoViewedProfile() && !isBuyingValueBundle()"
+          [disabled]="(!isBuyingVideoSection() && !isBuyingWhoViewedProfile() && !isBuyingValueBundle()) || isPayingUser()"
         >
-          Proceed to Payment
+          {{ isPayingUser() ? 'Active Subscription' : 'Proceed to Payment' }}
         </button>
       </div>
     </div>

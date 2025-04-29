@@ -6,6 +6,9 @@ import { PricingService } from '../../shared/services/pricing.service';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { ButtonModule } from 'primeng/button';
 import { finalize } from 'rxjs/operators';
+import { UserService } from '../../shared/services/user.service';
+import { MessageService } from 'primeng/api';
+
 interface AddOn {
   name: string;
   description?: string;
@@ -34,22 +37,35 @@ interface Bundle {
     ButtonModule,
   ],
   templateUrl: './pricing-menu.component.html',
-  styles: ``,
+  styles: [`
+    .subscription-message {
+      background-color: #fef2f2;
+      border: 1px solid #fee2e2;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      color: #991b1b;
+    }
+    .subscription-message i {
+      margin-right: 0.5rem;
+    }
+  `],
 })
 export class PricingMenuComponent {
   #pricingService = inject(PricingService);
+  #userService = inject(UserService);
+  #messageService = inject(MessageService);
   #videoSectionProduct = this.#pricingService.videoSectionProduct;
   #whoViewedProfileProduct = this.#pricingService.whoViewedProfileProduct;
   #valueBundleProduct = this.#pricingService.valueBundleProduct;
-
 
   readonly pricingPlanOptions = [
     { label: 'Monthly', value: 'monthly' },
     { label: 'Yearly', value: 'yearly' },
   ];
   isPaymentProcessing = signal(false);
+  isPayingUser = signal(false);
 
-  
   pricingPlan = signal<'monthly' | 'yearly'>('monthly');
 
   videoSectionPrice = computed(() =>
@@ -124,8 +140,23 @@ export class PricingMenuComponent {
     },
   ];
 
+  ngOnInit() {
+    const user = this.#userService.userDetails();
+    if (user) {
+      this.isPayingUser.set(user.isPayingUser);
+    }
+  }
 
   makePayment() {
+    if (this.isPayingUser()) {
+      this.#messageService.add({
+        severity: 'warn',
+        summary: 'Active Subscription',
+        detail: 'Please cancel your existing subscription before purchasing a new one.'
+      });
+      return;
+    }
+
     const items = [];
     if (this.isBuyingVideoSection()) {
       items.push({
@@ -162,7 +193,11 @@ export class PricingMenuComponent {
         window.location.href = res.sessionUrl;
       },
       error: (err: any) => {
-        alert('Error making payment');
+        this.#messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error processing payment. Please try again.'
+        });
       },
     });
   }

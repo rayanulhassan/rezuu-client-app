@@ -339,4 +339,34 @@ export class UserService {
       throw error;
     }
   }
+
+  async updateUserAfterPayment(data: { 
+    stripeCustomerId: string; 
+    isPayingUser: boolean; 
+    planOptions: { 
+      videoSection: number; 
+      whoViewedProfile: boolean; 
+    }; 
+  }): Promise<void> {
+    const currentUser = this.userDetails();
+    if (!currentUser) {
+      this.#messageService.add({ severity: 'error', summary: 'Error', detail: 'No authenticated user found' });
+      throw new Error('No authenticated user found');
+    }
+
+    const userDocRef = doc(this.#firestore, 'users', currentUser.uid);
+    
+    try {
+      await updateDoc(userDocRef, {
+        stripeCustomerId: data.stripeCustomerId,
+        isPayingUser: data.isPayingUser,
+        planOptions: data.planOptions
+      });
+      this.#messageService.add({ severity: 'success', summary: 'Success', detail: 'User data updated successfully' });
+    } catch (error) {
+      console.error('Error updating user data:', error);
+      this.#messageService.add({ severity: 'error', summary: 'Error', detail: 'Error updating user data' });
+      throw error;
+    }
+  }
 }
