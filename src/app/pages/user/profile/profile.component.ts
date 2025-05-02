@@ -14,6 +14,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 type UploadType = 'profile' | 'resume' | 'certificates' | 'video';
 
@@ -29,7 +30,8 @@ type UploadType = 'profile' | 'resume' | 'certificates' | 'video';
     TooltipModule,
     ReactiveFormsModule,
     CheckboxModule,
-    FormsModule
+    FormsModule,
+    RouterLink
   ],
   templateUrl: './profile.component.html',
   styles: ``,
@@ -64,6 +66,24 @@ export class ProfileComponent {
   isSavingVideo = signal<string | null>(null);
   isRemovingVideo = signal<string | null>(null);
   isEditingVideoDescription = signal<string | null>(null);
+
+  // Calculate maximum allowed videos based on plan
+  getMaxAllowedVideos(): number {
+    const userData = this.user();
+    if (!userData) return 2; // Default to 2 free videos
+    
+    // 2 free videos + number of paid sections
+    return 2 + (userData.planOptions?.videoSection || 0);
+  }
+
+  // Check if user can upload more videos
+  canUploadMoreVideos(): boolean {
+    const userData = this.user();
+    if (!userData) return false;
+    
+    const currentVideos = userData.videos?.length || 0;
+    return currentVideos < this.getMaxAllowedVideos();
+  }
 
   // user info form
   userInfoForm = this.fb.group({
@@ -136,14 +156,24 @@ export class ProfileComponent {
       },
       video: {
         title: 'Upload Videos',
-        description: 'Upload your videos (max 2)',
+        description: `Upload your videos (max ${this.getMaxAllowedVideos()})`,
         accept: 'video/*',
-        maxFiles: 2,
+        maxFiles: type === 'video' ? this.getRemainingVideoSlots() : this.getMaxAllowedVideos(),
         allowMultiple: true,
       },
     };
 
     return configs[type];
+  }
+
+  // Calculate remaining video slots
+  private getRemainingVideoSlots(): number {
+    const userData = this.user();
+    if (!userData) return 0;
+    
+    const currentVideos = userData.videos?.length || 0;
+    const maxAllowed = this.getMaxAllowedVideos();
+    return Math.max(0, maxAllowed - currentVideos);
   }
 
   private showUploadModal(type: UploadType) {
@@ -170,6 +200,14 @@ export class ProfileComponent {
   }
 
   onVideoUpload() {
+    if (!this.canUploadMoreVideos()) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Video Limit Reached',
+        detail: `You can upload up to ${this.getMaxAllowedVideos()} videos. Please upgrade your plan to upload more videos.`
+      });
+      return;
+    }
     this.showUploadModal('video');
   }
 
@@ -214,7 +252,21 @@ export class ProfileComponent {
       case 'video':
         if (files.length > 0) {
           const currentVideos = this.user()?.videos || [];
-          const newVideos = files.map(url => ({ url, description: null }));
+          const maxAllowed = this.getMaxAllowedVideos();
+          const remainingSlots = maxAllowed - currentVideos.length;
+          
+          // Only add videos up to the allowed limit
+          const videosToAdd = files.slice(0, remainingSlots);
+          const newVideos = videosToAdd.map(url => ({ url, description: null }));
+          
+          if (videosToAdd.length < files.length) {
+            this.messageService.add({
+              severity: 'warn',
+              summary: 'Video Limit Reached',
+              detail: `Only ${videosToAdd.length} videos were added. You can upload up to ${maxAllowed} videos.`
+            });
+          }
+          
           this.userService.updateVideos([...currentVideos, ...newVideos]);
         }
         break;
@@ -376,4 +428,5 @@ export class ProfileComponent {
       this.isUpdatingPublicProfile.set(false);
     }
   }
+
 }

@@ -459,7 +459,14 @@
 
   <!-- Video Section -->
   <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
-    <h2 class="text-xl font-semibold mb-6">Videos</h2>
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-semibold">Videos</h2>
+      <div class="text-sm text-gray-600">
+        @if (user()?.videos) {
+          <span>{{ user()?.videos?.length || 0 }} / {{ getMaxAllowedVideos() }} videos used</span>
+        }
+      </div>
+    </div>
     
     <div class="space-y-6">
       @if (user()?.videos && (user()?.videos?.length ?? 0) > 0) {
@@ -539,10 +546,16 @@
         </div>
       }
 
-      @if (!user()?.videos || (user()?.videos?.length ?? 0) < 2) {
+      @if (canUploadMoreVideos()) {
         <div class="text-center p-6 border-2 border-dashed rounded-lg">
           <i class="pi pi-video text-4xl text-gray-400 mb-3"></i>
-          <p class="text-gray-500 mb-4">Upload up to 2 videos to showcase your experience</p>
+          <p class="text-gray-500 mb-4">
+            @if (user()?.videos?.length === 0) {
+              Upload up to {{ getMaxAllowedVideos() }} videos to showcase your experience
+            } @else {
+              You can upload {{ getMaxAllowedVideos() - (user()?.videos?.length || 0) }} more video(s)
+            }
+          </p>
           <button 
             pButton
             type="button"
@@ -550,6 +563,19 @@
             icon="pi pi-upload"
             class="p-button-secondary"
             (click)="onVideoUpload()"
+          ></button>
+        </div>
+      } @else {
+        <div class="text-center p-6 border-2 border-dashed rounded-lg bg-gray-50">
+          <i class="pi pi-lock text-4xl text-gray-400 mb-3"></i>
+          <p class="text-gray-500 mb-4">You've reached the maximum number of videos ({{ getMaxAllowedVideos() }})</p>
+          <button 
+            pButton
+            type="button"
+            label="Upgrade Plan"
+            icon="pi pi-arrow-up"
+            class="p-button-primary"
+            routerLink="/my/pricing-management"
           ></button>
         </div>
       }
