@@ -7,10 +7,11 @@ import { AuthService } from '../../services/auth.service';
 import { Credentials } from '../../interfaces/auth.interface';
 import { switchMap } from 'rxjs';
 import { Router, RouterLink } from '@angular/router';
+import { InputIconModule } from 'primeng/inputicon';
 
 @Component({
   selector: 'app-sign-up',
-  imports: [ButtonModule, InputTextModule, ReactiveFormsModule, FormsModule, CheckboxModule, RouterLink],
+  imports: [ButtonModule, InputTextModule, ReactiveFormsModule, FormsModule, CheckboxModule, RouterLink , InputIconModule],
   templateUrl: './sign-up.component.html',
   styles: ``
 })

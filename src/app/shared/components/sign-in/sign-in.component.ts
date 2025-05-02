@@ -11,6 +11,8 @@ import {
 import { AuthService } from '../../services/auth.service';
 import { Credentials } from '../../interfaces/auth.interface';
 import { Router, RouterLink } from '@angular/router';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 
 @Component({
   selector: 'app-sign-in',
@@ -20,6 +22,8 @@ import { Router, RouterLink } from '@angular/router';
     ReactiveFormsModule,
     FormsModule,
     RouterLink,
+    IconFieldModule,
+    InputIconModule,
   ],
   templateUrl: './sign-in.component.html',
   styles: ``,
@@ -29,7 +33,7 @@ export class SignInComponent {
   #router = inject(Router);
 
   isLoading = signal(false);
-
+  showPassword = signal(false);
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required]),

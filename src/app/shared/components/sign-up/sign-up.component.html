@@ -1,7 +1,7 @@
-<div class="flex flex-col items-center justify-center gap-4">
+<div class="flex flex-col gap-4">
   <h1 class="text-xl font-bold">Sign Up</h1>
   <form
-    class="flex flex-col items-center justify-center gap-4"
+    class="flex flex-col gap-4"
     [formGroup]="form"
     (ngSubmit)="signUp()"
   >
@@ -55,6 +55,7 @@
     <div class="flex flex-col gap-2">
       <div class="relative">
         <input
+          class="w-full"
           pInputText
           [type]="showPassword ? 'text' : 'password'"
           placeholder="Password"
@@ -64,7 +65,11 @@
           class="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
           (click)="showPassword = !showPassword"
         >
-          {{ showPassword ? "👁️" : "👁️‍🗨️" }}
+          @if (showPassword) {
+          <span class="pi pi-eye-slash"></span>
+          } @else {
+          <span class="pi pi-eye"></span>
+          }
         </span>
       </div>
       @if (form.get('password')?.touched && form.get('password')?.errors?.['required']) {
@@ -82,16 +87,22 @@
     <div class="flex flex-col gap-2">
       <div class="relative">
         <input
+          class="w-full"
           pInputText
           [type]="showConfirmPassword ? 'text' : 'password'"
           placeholder="Confirm Password"
           formControlName="confirmPassword"
+          
         />
         <span
           class="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
           (click)="showConfirmPassword = !showConfirmPassword"
         >
-          {{ showConfirmPassword ? "👁️" : "👁️‍🗨️" }}
+          @if (showConfirmPassword) {
+          <span class="pi pi-eye-slash"></span>
+          } @else {
+          <span class="pi pi-eye"></span>
+          }
         </span>
       </div>
       @if (form.get('confirmPassword')?.touched && form.get('confirmPassword')?.errors?.['required']) {
@@ -125,6 +136,7 @@
     }
 
     <p-button
+      styleClass="w-full"
       [disabled]="!form.valid || isLoading()"
       label="Sign Up"
       type="submit"
@@ -134,6 +146,6 @@
   </form>
   <p>
     Already have an account?
-    <a class="text-primary font-semibold" [routerLink]="['/auth/login']">Sign In</a>
+    <a class="text-secondary font-semibold" [routerLink]="['/auth/login']">Sign In</a>
   </p>
 </div>

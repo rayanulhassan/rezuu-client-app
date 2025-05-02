@@ -5,11 +5,11 @@ import { ReactiveFormsModule, FormGroup, FormControl, Validators, AbstractContro
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { AUTH } from '../../../app.config';
 import { confirmPasswordReset } from 'firebase/auth';
-
+import { InputIconModule } from 'primeng/inputicon';
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [ButtonModule, InputTextModule, ReactiveFormsModule, RouterLink],
+  imports: [ButtonModule, InputTextModule, ReactiveFormsModule, RouterLink, InputIconModule],
   templateUrl: './reset-password.component.html',
   styles: ``
 })

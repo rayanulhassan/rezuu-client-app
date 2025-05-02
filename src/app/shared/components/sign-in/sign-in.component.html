@@ -1,40 +1,72 @@
-<div class="flex flex-col items-center justify-center gap-4">
-    <h1 class="text-xl font-bold">Sign In</h1>
+<div class="flex flex-col gap-4">
+  <h1 class="text-xl font-bold">Login</h1>
 
-    <form class="flex flex-col items-center justify-center gap-4" [formGroup]="form" (ngSubmit)="signIn()">
-        <div class="flex flex-col gap-2">
-            <input pInputText type="email" placeholder="Email" formControlName="email" />
-            @if (form.get('email')?.touched && form.get('email')?.errors?.['required']) {
-                <small class="text-red-500">
-                    Email is required
-                </small>
-            }
-            @if (form.get('email')?.touched && form.get('email')?.errors?.['email']) {
-                <small class="text-red-500">
-                    Please enter a valid email
-                </small>
-            }
-        </div>
-
-        <div class="flex flex-col gap-2">
-            <input pInputText type="password" placeholder="Password" formControlName="password" />
-            @if (form.get('password')?.touched && form.get('password')?.errors?.['required']) {
-                <small class="text-red-500">
-                    Password is required
-                </small>
-            }
-        </div>
-
-        <p-button 
-            [disabled]="!form.valid || isLoading()" 
-            label="Sign In" 
-            type="submit"
-            [loading]="isLoading()"
-        >
-        </p-button>
-    </form>
-    <div class="flex flex-col items-center gap-2">
-        <p>Don't have an account? <a class="text-primary font-semibold" [routerLink]="['/auth/register']">Register</a></p>
-        <p>Forgot your password? <a class="text-primary font-semibold" [routerLink]="['/auth/forgot-password']">Reset Password</a></p>
+  <form class="flex flex-col gap-4" [formGroup]="form" (ngSubmit)="signIn()">
+    <div class="flex flex-col gap-2">
+      <input
+        pInputText
+        type="email"
+        placeholder="Email"
+        formControlName="email"
+      />
+      @if (form.get('email')?.touched &&
+      form.get('email')?.errors?.['required']) {
+      <small class="text-red-500"> Email is required </small>
+      } @if (form.get('email')?.touched && form.get('email')?.errors?.['email'])
+      {
+      <small class="text-red-500"> Please enter a valid email </small>
+      }
     </div>
+
+    <div class="flex flex-col gap-2">
+      <div class="relative">
+        <input
+          class="w-full"
+          pInputText
+          [type]="showPassword() ? 'text' : 'password'"
+          placeholder="Password"
+          formControlName="password"
+        />
+        <span
+          class="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+          (click)="showPassword.set(!showPassword())"
+        >
+          @if (showPassword()) {
+          <span class="pi pi-eye-slash"></span>
+          } @else {
+          <span class="pi pi-eye"></span>
+          }
+        </span>
+      </div>
+      @if (form.get('password')?.touched &&
+      form.get('password')?.errors?.['required']) {
+      <small class="text-red-500"> Password is required </small>
+      }
+    </div>
+
+    <p-button
+      styleClass="w-full"
+      [disabled]="!form.valid || isLoading()"
+      label="Sign In"
+      type="submit"
+      [loading]="isLoading()"
+    >
+    </p-button>
+  </form>
+  <div class="flex flex-col items-center gap-2">
+    <p>
+      Don't have an account?
+      <a class="text-secondary font-semibold" [routerLink]="['/auth/register']"
+        >Register</a
+      >
+    </p>
+    <p>
+      Forgot your password?
+      <a
+        class="text-secondary font-semibold"
+        [routerLink]="['/auth/forgot-password']"
+        >Reset Password</a
+      >
+    </p>
+  </div>
 </div>
