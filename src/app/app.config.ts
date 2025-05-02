@@ -1,5 +1,5 @@
 import { ApplicationConfig, InjectionToken, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
@@ -41,14 +41,11 @@ export const FIRESTORE = new InjectionToken('Firebase firestore', {
   },
 });
 
-
-
-
 export const appConfig: ApplicationConfig = {
   providers: [
     MessageService,
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
+    provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'enabled' })),
     provideHttpClient(),
     provideAnimationsAsync(),
     providePrimeNG({

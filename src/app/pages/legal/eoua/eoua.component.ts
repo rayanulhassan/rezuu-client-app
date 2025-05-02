@@ -15,5 +15,5 @@ import { Component } from '@angular/core';
   `]
 })
 export class EouaComponent {
-  lastUpdated = 'January 1, 2024';
+  lastUpdated = 'April 24, 2025';
 } 

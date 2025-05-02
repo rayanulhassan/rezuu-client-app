@@ -15,5 +15,5 @@ import { Component } from '@angular/core';
   `]
 })
 export class TermsComponent {
-  lastUpdated = 'January 1, 2024';
+  lastUpdated = 'April 24, 2025';
 } 
