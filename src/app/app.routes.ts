@@ -15,7 +15,8 @@ import { PrivacyComponent } from './pages/legal/privacy/privacy.component';
 import { PricingMenuComponent } from './pages/pricing-menu/pricing-menu.component';
 import { PaymentSuccessComponent } from './pages/payment/payment-success/payment-success.component';
 import { PaymentCancelComponent } from './pages/payment/payment-cancel/payment-cancel.component';
-
+import { HowItWorksComponent } from './pages/how-it-works/how-it-works.component';
+import { PricingComponent } from './pages/pricing/pricing.component';
 export const routes: Routes = [
     {
         path: '',
@@ -25,14 +26,20 @@ export const routes: Routes = [
     {
         path: 'auth',
         component: LayoutsComponent,
+        title: 'Rezuu ~ Your experience matters',
         data:{
-            layout: 'empty'
+            layout: 'public'
         },
         children: [
             {
                 path: '',
                 component: AuthComponent,
                 children: [
+                    {
+                        path: '',
+                        redirectTo: 'register',
+                        pathMatch: 'full'
+                    },
                     {
                         path: 'register',
                         component: SignUpComponent
@@ -64,22 +71,27 @@ export const routes: Routes = [
             {
                 path: 'profile',
                 component: ProfileComponent,
+                title: 'Profile - Rezuu'
             },
             {
                 path: 'analytics',
                 component: AnalyticsDashboardComponent,
+                title: 'Analytics - Rezuu'
             },
             {
                 path: 'pricing-management',
                 component: PricingMenuComponent,
+                title: 'Pricing Management - Rezuu'
             },
             {
                 path: 'payment/success',
-                component: PaymentSuccessComponent
+                component: PaymentSuccessComponent,
+                title: 'Payment Success'
             },
             {
                 path: 'payment/cancel',
-                component: PaymentCancelComponent
+                component: PaymentCancelComponent,
+                title: 'Payment Cancel'
             },
 
         ]
@@ -94,22 +106,56 @@ export const routes: Routes = [
         children: [ 
             {
                 path: 'terms',
-                component: TermsComponent
+                component: TermsComponent,
+                title: 'Terms of Service - Rezuu'
             },
             {
                 path: 'eoua',
-                component: EouaComponent
+                component: EouaComponent,
+                title: 'End User Agreement - Rezuu'
             },
             {
                 path: 'privacy',
-                component: PrivacyComponent
+                component: PrivacyComponent,
+                title: 'Privacy Policy - Rezuu'
             }
         ]
     },
 
     {
+        path: 'how-it-works',
+        component: LayoutsComponent,
+        data: {
+            layout: 'public'
+        },
+        children: [ 
+            {
+                path: '',
+                component: HowItWorksComponent,
+                title: 'How It Works - Rezuu'
+            },
+        ]
+    },
+    {
+        path: 'pricing',
+        component: LayoutsComponent,
+        data: {
+            layout: 'public'
+        },
+        children: [ 
+            {
+                path: '',
+                component: PricingComponent,
+                title: 'Pricing - Rezuu',
+                
+            },
+        ]
+    },
+
+    {
         path: ':uid',
-        component: PublicProfileComponent
+        component: PublicProfileComponent,
+        title: 'Profile - Rezuu'
     },
     
 ];

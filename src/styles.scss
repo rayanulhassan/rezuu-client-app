@@ -44,6 +44,17 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+.container {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+}
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1400px;
+  }
+}
+
 .inter-font {
   font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
@@ -56,7 +67,7 @@ body {
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
-  font-variation-settings: "width" 100;  
+  font-variation-settings: "width" 100;
 }
 
 .ngx-file-drop__drop-zone {

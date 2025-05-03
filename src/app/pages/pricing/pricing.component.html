@@ -1,1 +1,91 @@
-<p>pricing works!</p>
+<main class="flex-1 container mx-auto py-12 px-4">
+  <h1 class="text-4xl font-bold text-center mb-12">Rezuu Pricing</h1>
+  <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+    <div class="border border-gray-200 rounded-lg shadow-lg p-6 flex flex-col">
+      <h2 class="text-2xl font-bold mb-4">Free</h2>
+      <p class="text-gray-600 mb-4">
+        Perfect for individuals just starting out
+      </p>
+      <div class="text-3xl font-bold mb-6">$0</div>
+      <ul class="mb-8 flex-1 space-y-2">
+        <li class="flex items-center">2 Documents Stored</li>
+        <li class="flex items-center">2 Video Sections</li>
+        <li class="flex items-center">Limited Dashboard Analytics</li>
+      </ul>
+      <button
+        routerLink="/auth"
+        class="bg-secondary text-white py-2 px-4 rounded hover:bg-opacity-90 transition-colors w-full cursor-pointer"
+      >
+        Get Started
+      </button>
+    </div>
+    <div
+      class="border border-gray-200 rounded-lg shadow-2xl p-6 flex flex-col bg-primary text-white transform scale-105 z-10 -mt-4 -mb-4"
+    >
+      <div class="absolute -mt-10 ml-auto mr-auto left-0 right-0 text-center">
+        <span class="bg-secondary text-white text-sm py-1 px-3 rounded-full"
+          >MOST POPULAR</span
+        >
+      </div>
+      <h2 class="text-2xl font-bold mb-4">Premium</h2>
+      <p class="text-gray-100 mb-4">
+        Because your Experiences deserves more than Freemium
+      </p>
+      <div class="text-3xl font-bold mb-6">
+        $5<span class="text-lg text-gray-200">/month</span>
+      </div>
+      <ul class="mb-8 flex-1 space-y-2">
+        <li class="flex items-center">10 Documents Stored</li>
+        <li class="flex items-center">4 Additional Video Sections</li>
+        <li class="flex items-center">Advanced Dashboard Analytics</li>
+        <li class="flex items-center">Who Viewed my Profile</li>
+        <li
+          class="flex items-center mt-4 text-sm italic border-t border-white/30 pt-3"
+        >
+          We offer discounts to New Grads and Students.
+        </li>
+      </ul>
+      <button
+        routerLink="/auth"
+        class="bg-white text-primary py-2 px-4 rounded hover:bg-gray-100 transition-colors w-full font-medium cursor-pointer"
+      >
+
+        Premium Is the Way
+      </button>
+    </div>
+    <div class="border border-gray-200 rounded-lg shadow-lg p-6 flex flex-col">
+      <h2 class="text-2xl font-bold mb-4">Dollar Menu</h2>
+      <p class="text-gray-600 mb-4">
+        Bite-sized features, wallet-friendly pricing
+      </p>
+      <div class="text-3xl font-bold mb-6">
+        $1<span class="text-lg text-gray-500">/Month Each</span>
+      </div>
+      <ul class="mb-8 flex-1 space-y-2">
+        <li class="flex items-center">
+          Choose what you want to add to your profile for only a Dollar.
+        </li>
+        <li class="flex items-center">$1- Individual Video Sections</li>
+        <li class="flex items-center">$1- Who Viewed My Profile</li>
+      </ul>
+      <button
+        routerLink="/auth"
+        class="bg-secondary text-white py-2 px-4 rounded hover:bg-opacity-90 transition-colors w-full cursor-pointer"
+      >
+        Profile Level Up
+      </button>
+    </div>
+  </div>
+  <div class="mt-16 text-center">
+    <h2 class="text-2xl font-bold mb-4">Need a custom solution?</h2>
+    <p class="mb-6 max-w-2xl mx-auto">
+      We offer tailored solutions for larger organizations and special use
+      cases. Contact our sales team to discuss your specific requirements.
+    </p>
+    <button
+      class="bg-primary text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors"
+    >
+      Contact Us
+    </button>
+  </div>
+</main>

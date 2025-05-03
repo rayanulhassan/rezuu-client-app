@@ -10,7 +10,7 @@ import { AuthService } from '../../../shared/services/auth.service';
 import { VisitorInfoDialogComponent } from '../../../shared/components/visitor-info-dialog/visitor-info-dialog.component';
 import { RezuuUser } from '../../../shared/interfaces/auth.interface';
 import { Subscription } from 'rxjs';
-
+import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-public-profile',
   standalone: true,
@@ -25,11 +25,11 @@ import { Subscription } from 'rxjs';
 })
 export class PublicProfileComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
-  private router = inject(Router);
   private userService = inject(UserService);
   private analyticsService = inject(AnalyticsService);
   private authService = inject(AuthService);
   private dialogService = inject(DialogService);
+  private titleService = inject(Title);
   private subscription = new Subscription();
 
   user: RezuuUser | null = null;
@@ -77,6 +77,7 @@ export class PublicProfileComponent implements OnInit, OnDestroy {
       if (currentUser) {
         // Get current user details
         const currentUserDetails = await this.userService.getUserByUid(currentUser.uid);
+        this.titleService.setTitle(`${currentUserDetails?.firstName} ${currentUserDetails?.lastName}`);
         if (currentUserDetails) {
           // Track profile view with user info
           await this.analyticsService.trackProfileView(uid, {

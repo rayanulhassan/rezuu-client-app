@@ -4,11 +4,10 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 import { EmptyLayoutComponent } from "./empty-layout/empty-layout.component";
 import { DefaultLayoutComponent } from "./default-layout/default-layout.component";
-
-
+import { PublicLayoutComponent } from "./public-layout/public-layout.component";
 @Component({
   selector: 'app-layouts',
-  imports: [EmptyLayoutComponent, DefaultLayoutComponent],
+  imports: [EmptyLayoutComponent, DefaultLayoutComponent, PublicLayoutComponent],
   templateUrl: './layouts.component.html',
   styles: ``
 })
