@@ -15,6 +15,7 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 
 type UploadType = 'profile' | 'resume' | 'certificates' | 'video';
 
@@ -31,10 +32,18 @@ type UploadType = 'profile' | 'resume' | 'certificates' | 'video';
     ReactiveFormsModule,
     CheckboxModule,
     FormsModule,
-    RouterLink
+    RouterLink,
+    ToggleSwitchModule
   ],
   templateUrl: './profile.component.html',
-  styles: ``,
+  styles: `
+  ::ng-deep .p-button {
+    // background-color: var(--color-secondary);
+    // border: var(--color-secondary);
+    // color: #fff;
+    // border-radius: 6px
+  }
+  `,
 })
 export class ProfileComponent {
   userService = inject(UserService);
