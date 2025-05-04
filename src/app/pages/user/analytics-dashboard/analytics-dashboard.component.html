@@ -1,102 +1,125 @@
-<div class="max-w-7xl mx-auto p-6">
+<div class="max-w-7xl mx-auto p-6 min-h-screen">
   @if (isLoading) {
     <div class="flex justify-center items-center h-64">
       <i class="pi pi-spin pi-spinner text-4xl text-primary"></i>
     </div>
   } @else if (error) {
-    <div class="text-center p-6">
-      <i class="pi pi-exclamation-circle text-4xl text-red-500 mb-3"></i>
+    <div class="text-center p-8 bg-white rounded-lg shadow-sm">
+      <i class="pi pi-exclamation-circle text-5xl text-red-500 mb-4"></i>
       <p class="text-xl text-gray-700">{{ error }}</p>
     </div>
   } @else {
     <!-- Key Metrics Section -->
-    <div class="mb-8">
-      <h2 class="text-xl font-semibold mb-4">Key Metrics</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="mb-10">
+      <h2 class="text-2xl font-bold mb-6 text-gray-800 flex items-center">
+        <i class="pi pi-chart-line mr-2 text-primary"></i>
+        Key Metrics
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Most Popular Video -->
-        <p-card>
-          <div class="space-y-2">
-            <div class="text-gray-500 text-sm">Most Popular Video</div>
-            <div class="font-medium">{{ mostPopularVideo }}</div>
+        <p-card class="hover:shadow-lg transition-shadow duration-300" styleClass="bg-secondary/80 text-white hover:bg-secondary/90">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="text-white text-sm font-medium">Most Popular Video</div>
+              <i class="pi pi-video text-white"></i>
+            </div>
+            <div class="text-2xl font-bold text-white">{{ mostPopularVideo }}</div>
           </div>
         </p-card>
 
         <!-- Profile Views -->
-        <p-card>
-          <div class="space-y-2">
-            <div class="text-gray-500 text-sm">Profile Views</div>
-            <div class="font-medium">{{ totalProfileViews }}</div>
+        <p-card class="hover:shadow-lg transition-shadow duration-300" styleClass="bg-secondary/80 text-white hover:bg-secondary/90">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="text-white text-sm font-medium">Profile Views</div>
+              <i class="pi pi-eye text-white"></i>
+            </div>
+            <div class="text-2xl font-bold text-white">{{ totalProfileViews }}</div>
           </div>
         </p-card>
 
         <!-- Resume Downloads -->
-        <p-card>
-          <div class="space-y-2">
-            <div class="text-gray-500 text-sm">Resume Downloads</div>
-            <div class="font-medium">{{ resumeDownloads }}</div>
+        <p-card class="hover:shadow-lg transition-shadow duration-300" styleClass="bg-secondary/80 text-white hover:bg-secondary/90">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="text-white text-sm font-medium">Resume Downloads</div>
+              <i class="pi pi-file text-white"></i>
+            </div>
+            <div class="text-2xl font-bold text-white">{{ resumeDownloads }}</div>
           </div>
         </p-card>
 
         <!-- Certificate Downloads -->
-        <p-card>
-          <div class="space-y-2">
-            <div class="text-gray-500 text-sm">Certificate Downloads</div>
-            <div class="font-medium">{{ certificateDownloads }}</div>
+        <p-card class="hover:shadow-lg transition-shadow duration-300" styleClass="bg-secondary/80 text-white hover:bg-secondary/90">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="text-white text-sm font-medium">Certificate Downloads</div>
+              <i class="pi pi-star text-white"></i>
+            </div>
+            <div class="text-2xl font-bold text-white">{{ certificateDownloads }}</div>
           </div>
         </p-card>
       </div>
     </div>
 
     <!-- Most Popular Video Details -->
-    <div class="mb-8">
-      <h2 class="text-xl font-semibold mb-4">Most Popular Video Details</h2>
+    <div class="mb-10 bg-white rounded-lg shadow-sm p-6">
+      <h2 class="text-2xl font-bold mb-6 text-gray-800 flex items-center">
+        <i class="pi pi-list mr-2 text-primary"></i>
+        Most Popular Video Details
+      </h2>
       <p-table [value]="videoAnalytics" styleClass="p-datatable-sm">
         <ng-template pTemplate="header">
-          <tr>
-            <th>Video Name</th>
-            <th class="w-32">Clicks</th>
+          <tr class="bg-gray-50">
+            <th class="p-4 text-left font-semibold text-gray-700">Video Name</th>
+            <th class="p-4 text-left font-semibold text-gray-700 w-32">Clicks</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-video>
-          <tr>
-            <td>{{ video.name }}</td>
-            <td>{{ video.clicks }}</td>
+          <tr class="border-b border-gray-100 hover:bg-gray-50">
+            <td class="p-4">{{ video.name }}</td>
+            <td class="p-4 font-medium text-primary">{{ video.clicks }}</td>
           </tr>
         </ng-template>
       </p-table>
     </div>
 
     <!-- Profile Viewers -->
-    <div class="mb-8">
-      <h2 class="text-xl font-semibold mb-4">Profile Viewers</h2>
+    <div class="mb-10 bg-white rounded-lg shadow-sm p-6">
+      <h2 class="text-2xl font-bold mb-6 text-gray-800 flex items-center">
+        <i class="pi pi-users mr-2 text-primary"></i>
+        Profile Viewers
+      </h2>
       @if (hasWhoViewedProfileAccess) {
         <p-table [value]="profileViewers" styleClass="p-datatable-sm">
           <ng-template pTemplate="header">
-            <tr>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Email Address</th>
-              <th class="w-48">Last Viewed</th>
+            <tr class="bg-gray-50">
+              <th class="p-4 text-left font-semibold text-gray-700">First Name</th>
+              <th class="p-4 text-left font-semibold text-gray-700">Last Name</th>
+              <th class="p-4 text-left font-semibold text-gray-700">Email Address</th>
+              <th class="p-4 text-left font-semibold text-gray-700 w-48">Last Viewed</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-viewer>
-            <tr>
-              <td>{{ viewer.firstName }}</td>
-              <td>{{ viewer.lastName }}</td>
-              <td>{{ viewer.email }}</td>
-              <td>{{ viewer.viewedAt | date:'MMM d, y, h:mm a' }}</td>
+            <tr class="border-b border-gray-100 hover:bg-gray-50">
+              <td class="p-4">{{ viewer.firstName }}</td>
+              <td class="p-4">{{ viewer.lastName }}</td>
+              <td class="p-4 text-gray-600">{{ viewer.email }}</td>
+              <td class="p-4 text-gray-600">{{ viewer.viewedAt | date:'MMM d, y, h:mm a' }}</td>
             </tr>
           </ng-template>
         </p-table>
       } @else {
-        <div class="upgrade-message">
-          <i class="pi pi-lock"></i>
-          <span>Upgrade your plan to see who viewed your profile. This feature is available with our premium plans.</span>
+        <div class="upgrade-message bg-gray-50 rounded-lg p-6 flex items-center justify-between">
+          <div class="flex items-center">
+            <i class="pi pi-lock text-2xl text-primary mr-4"></i>
+            <span class="text-gray-700">Upgrade your plan to see who viewed your profile. This feature is available with our premium plans.</span>
+          </div>
           <button 
             pButton 
             label="View Plans" 
             (click)="navigateToPricing()" 
-            class="p-button-primary p-button-sm ml-4"
+            class="p-button-primary p-button-sm"
           ></button>
         </div>
       }
