@@ -43,7 +43,7 @@ export const environment = {
         },
         yearly: {
           priceId: 'price_1RIx9YBA9N9fUzabZQqagozR',
-          price: 38.4,
+          price: 48,
         },
       },
     },
