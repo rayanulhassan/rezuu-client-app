@@ -129,6 +129,90 @@
             </div>
           </div>
 
+          <!-- Certificates Section -->
+          <div class="bg-white rounded-lg shadow-sm p-6">
+            <h2 class="text-xl font-semibold mb-6">Certificates</h2>
+            
+            <div class="space-y-4">
+              @if (user()?.certificates && (user()?.certificates?.length ?? 0) > 0) {
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  @for (certificate of user()?.certificates; track certificate) {
+                    <div class="border rounded-lg overflow-hidden bg-gray-50">
+                      <!-- Preview Area -->
+                      <div class="aspect-[4/3] relative">
+                        @if (certificate.url.toLowerCase().endsWith('.pdf')) {
+                          <div class="w-full h-full flex items-center justify-center bg-gray-100">
+                            <i class="pi pi-file-pdf text-4xl text-primary"></i>
+                          </div>
+                        } @else {
+                          <img 
+                            [src]="userService.getFullAssetUrl(certificate.url)" 
+                            [alt]="certificate.name"
+                            class="w-full h-full object-cover"
+                          />
+                        }
+                        
+                        <!-- Action Buttons Overlay -->
+                        <div class="absolute top-2 right-2 flex gap-2">
+                          <a 
+                            [href]="userService.getFullAssetUrl(certificate.url)"
+                            target="_blank"
+                            pButton
+                            type="button"
+                            icon="pi pi-eye"
+                            class="p-button-rounded p-button-secondary hover:bg-primary hover:text-white"
+                            pTooltip="View Certificate"
+                          ></a>
+                          <button
+                            pButton
+                            type="button"
+                            icon="pi pi-trash"
+                            class="p-button-rounded p-button-danger"
+                            pTooltip="Remove Certificate"
+                            (click)="onRemoveCertificate(certificate.url)"
+                            [loading]="isRemovingCertificate() === certificate.url"
+                            [disabled]="isRemovingCertificate() !== null"
+                          ></button>
+                        </div>
+                      </div>
+
+                      <!-- Certificate Info -->
+                      <div class="p-4">
+                        <h3 class="font-medium text-gray-900 truncate" [pTooltip]="certificate.name">
+                          {{ certificate.name }}
+                        </h3>
+                      </div>
+                    </div>
+                  }
+                </div>
+
+                <div class="flex justify-end">
+                  <button 
+                    pButton
+                    type="button"
+                    label="Add More Certificates"
+                    icon="pi pi-plus"
+                    class="bg-secondary border-secondary"
+                    (click)="onCertificatesUpload()"
+                  ></button>
+                </div>
+              } @else {
+                <div class="text-center p-6 border-2 border-dashed rounded-lg">
+                  <i class="pi pi-images text-4xl text-gray-400 mb-3"></i>
+                  <p class="text-gray-500 mb-4">No certificates uploaded yet</p>
+                  <button 
+                    pButton
+                    type="button"
+                    label="Upload Certificates"
+                    icon="pi pi-upload"
+                    class="bg-secondary border-secondary"
+                    (click)="onCertificatesUpload()"
+                  ></button>
+                </div>
+              }
+            </div>
+          </div>
+
           <!-- User Information -->
           <div class="bg-white rounded-lg shadow-sm p-6">
             <h2 class="text-xl font-semibold mb-6">Personal Information</h2>
@@ -404,90 +488,6 @@
 
         <!-- Right Column -->
         <div class="space-y-8">
-          <!-- Certificates Section -->
-          <div class="bg-white rounded-lg shadow-sm p-6">
-            <h2 class="text-xl font-semibold mb-6">Certificates</h2>
-            
-            <div class="space-y-4">
-              @if (user()?.certificates && (user()?.certificates?.length ?? 0) > 0) {
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  @for (certificate of user()?.certificates; track certificate) {
-                    <div class="border rounded-lg overflow-hidden bg-gray-50">
-                      <!-- Preview Area -->
-                      <div class="aspect-[4/3] relative">
-                        @if (certificate.url.toLowerCase().endsWith('.pdf')) {
-                          <div class="w-full h-full flex items-center justify-center bg-gray-100">
-                            <i class="pi pi-file-pdf text-4xl text-primary"></i>
-                          </div>
-                        } @else {
-                          <img 
-                            [src]="userService.getFullAssetUrl(certificate.url)" 
-                            [alt]="certificate.name"
-                            class="w-full h-full object-cover"
-                          />
-                        }
-                        
-                        <!-- Action Buttons Overlay -->
-                        <div class="absolute top-2 right-2 flex gap-2">
-                          <a 
-                            [href]="userService.getFullAssetUrl(certificate.url)"
-                            target="_blank"
-                            pButton
-                            type="button"
-                            icon="pi pi-eye"
-                            class="p-button-rounded p-button-secondary hover:bg-primary hover:text-white"
-                            pTooltip="View Certificate"
-                          ></a>
-                          <button
-                            pButton
-                            type="button"
-                            icon="pi pi-trash"
-                            class="p-button-rounded p-button-danger"
-                            pTooltip="Remove Certificate"
-                            (click)="onRemoveCertificate(certificate.url)"
-                            [loading]="isRemovingCertificate() === certificate.url"
-                            [disabled]="isRemovingCertificate() !== null"
-                          ></button>
-                        </div>
-                      </div>
-
-                      <!-- Certificate Info -->
-                      <div class="p-4">
-                        <h3 class="font-medium text-gray-900 truncate" [pTooltip]="certificate.name">
-                          {{ certificate.name }}
-                        </h3>
-                      </div>
-                    </div>
-                  }
-                </div>
-
-                <div class="flex justify-end">
-                  <button 
-                    pButton
-                    type="button"
-                    label="Add More Certificates"
-                    icon="pi pi-plus"
-                    class="bg-secondary border-secondary"
-                    (click)="onCertificatesUpload()"
-                  ></button>
-                </div>
-              } @else {
-                <div class="text-center p-6 border-2 border-dashed rounded-lg">
-                  <i class="pi pi-images text-4xl text-gray-400 mb-3"></i>
-                  <p class="text-gray-500 mb-4">No certificates uploaded yet</p>
-                  <button 
-                    pButton
-                    type="button"
-                    label="Upload Certificates"
-                    icon="pi pi-upload"
-                    class="bg-secondary border-secondary"
-                    (click)="onCertificatesUpload()"
-                  ></button>
-                </div>
-              }
-            </div>
-          </div>
-
           <!-- Video Section -->
           <div class="bg-white rounded-lg shadow-sm p-6">
             <div class="flex justify-between items-center mb-6">
