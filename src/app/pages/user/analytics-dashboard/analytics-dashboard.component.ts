@@ -174,7 +174,8 @@ export class AnalyticsDashboardComponent implements OnInit, OnDestroy {
     };
 
     this.options = {
-      maintainAspectRatio: false,
+      maintainAspectRatio: true,
+      aspectRatio: 1.5,
 
       plugins: {
         legend: {
