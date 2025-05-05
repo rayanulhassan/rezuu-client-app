@@ -8,6 +8,7 @@ import { ButtonModule } from 'primeng/button';
 import { finalize } from 'rxjs/operators';
 import { UserService } from '../../shared/services/user.service';
 import { MessageService } from 'primeng/api';
+import { InputTextModule } from 'primeng/inputtext';
 
 interface AddOn {
   name: string;
@@ -35,6 +36,7 @@ interface Bundle {
     FormsModule,
     SelectButtonModule,
     ButtonModule,
+    InputTextModule
   ],
   templateUrl: './pricing-menu.component.html',
   styles: [`
@@ -65,6 +67,9 @@ export class PricingMenuComponent {
   ];
   isPaymentProcessing = signal(false);
   isPayingUser = signal(false);
+  isPromoCodeLoading = signal(false);
+  promoCode = signal('');
+  promoCodeDiscount = signal(0);
 
   pricingPlan = signal<'monthly' | 'yearly'>('monthly');
 
@@ -101,6 +106,12 @@ export class PricingMenuComponent {
     if (this.isBuyingValueBundle()) {
       sum += this.valueBundlePrice();
     }
+    
+    // Apply promo code discount if exists
+    if (this.promoCodeDiscount() > 0) {
+      sum = sum * (1 - this.promoCodeDiscount() / 100);
+    }
+    
     return sum;
   });
 
@@ -147,6 +158,49 @@ export class PricingMenuComponent {
     }
   }
 
+  validatePromoCode() {
+    if (!this.promoCode()) {
+      this.#messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Please enter a promo code'
+      });
+      return;
+    }
+
+    this.isPromoCodeLoading.set(true);
+    this.#pricingService.getPromoCodeDetails(this.promoCode()).subscribe({
+      next: (response: any) => {
+        if (response.valid) {
+          this.promoCodeDiscount.set(response.discountPercentage);
+          this.#messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: `Promo code applied! ${response.discountPercentage}% discount`
+          });
+        } else {
+          this.promoCodeDiscount.set(0);
+          this.#messageService.add({
+            severity: 'error',
+            summary: 'Invalid Code',
+            detail: response.message || 'Invalid promo code'
+          });
+        }
+      },
+      error: () => {
+        this.promoCodeDiscount.set(0);
+        this.#messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error validating promo code'
+        });
+      },
+      complete: () => {
+        this.isPromoCodeLoading.set(false);
+      }
+    });
+  }
+
   makePayment() {
     if (this.isPayingUser()) {
       this.#messageService.add({
@@ -186,7 +240,10 @@ export class PricingMenuComponent {
       });
     }
     this.isPaymentProcessing.set(true);
-    this.#pricingService.makePayment(items).pipe(
+    this.#pricingService.makePayment(
+      items,
+      this.promoCodeDiscount() > 0 ? this.promoCode() : null
+    ).pipe(
       finalize(() => this.isPaymentProcessing.set(false))
     ).subscribe({
       next: (res: any) => {

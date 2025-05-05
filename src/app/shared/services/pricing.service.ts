@@ -16,11 +16,12 @@ export class PricingService {
   valueBundleProduct = environment.stripe.products.valueBundle;
 
 
-  makePayment(items: {price: string, quantity: number}[]) {
+  makePayment(items: {price: string, quantity: number}[], promoCode: string | null) {
     return this.#http.post(`${this.#couldFunctionUrl}/createCheckoutSession`, {
       items: items,
       successUrl: `${window.location.origin}/my/payment/success?session_id={CHECKOUT_SESSION_ID}`,
       cancelUrl: `${window.location.origin}/my/payment/cancel`,
+      promoCode: promoCode,
     })
   }
 
@@ -28,5 +29,9 @@ export class PricingService {
     return this.#http.post(`${this.#couldFunctionUrl}/handlePaymentSuccess`, {
       sessionId: sessionId,
     })
+  }
+
+  getPromoCodeDetails(promoCode: string) {
+    return this.#http.get(`${this.#couldFunctionUrl}/validatePromoCode?code=${promoCode}`);
   }
 }
