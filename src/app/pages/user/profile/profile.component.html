@@ -408,30 +408,35 @@
               </div>
 
               @if (user()?.isPublicProfile) {
-                <div class="flex flex-col md:flex-row items-center justify-between gap-4 p-4 bg-gray-50 rounded-lg">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-2 p-2 bg-gray-50 rounded-md shadow-sm transition-all duration-300 ease-in-out max-w-md mx-auto">
                   <div>
-                    <p class="text-gray-600">Share your professional profile with others</p>
+                    <p class="text-xs text-gray-600 font-medium">Share your professional profile</p>
                   </div>
-                  <div class="flex gap-2 w-full md:w-auto">
+                  <div class="flex gap-1 w-full md:w-auto">
                     <a 
                       [href]="publicProfileLink()"
                       target="_blank"
                       pButton
                       type="button"
-                      label="View Public Profile"
+                      label="View"
                       icon="pi pi-external-link"
-                      class="p-button-secondary flex-1 md:flex-none"
+                      class="p-button-secondary p-button-sm flex-1 md:flex-none"
+                      style="min-width: 90px;"
                     ></a>
                     <button 
                       pButton
                       type="button"
-                      [label]="isCopying() ? 'Copied!' : 'Copy Link'"
+                      [label]="isCopying() ? 'Copied!' : 'Copy'"
                       [icon]="isCopying() ? 'pi pi-check' : 'pi pi-copy'"
-                      class="p-button-outlined p-button-secondary flex-1 md:flex-none"
+                      class="p-button-outlined p-button-secondary p-button-sm flex-1 md:flex-none relative overflow-hidden animate-copy"
                       (click)="copyPublicProfileLink()"
                       [disabled]="isCopying()"
                       pTooltip="Copy public profile link"
-                    ></button>
+                      [ngClass]="{'animate-bounce': isCopying()}"
+                      style="min-width: 90px;"
+                    >
+                      <span *ngIf="isCopying()" class="absolute inset-0 bg-green-100 opacity-60 animate-fade rounded-md"></span>
+                    </button>
                   </div>
                 </div>
               }
@@ -634,3 +639,20 @@
   (onCancel)="onModalCancel()"
   (onFilesUploaded)="onModalFilesUploaded($event)"
 ></app-files-upload>
+
+<style>
+@keyframes fade {
+  0% { opacity: 0.6; }
+  100% { opacity: 0; }
+}
+.animate-fade {
+  animation: fade 1s linear;
+}
+.animate-bounce {
+  animation: bounce 0.5s;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+</style>
