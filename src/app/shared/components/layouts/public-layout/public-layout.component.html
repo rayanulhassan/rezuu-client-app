@@ -1,9 +1,14 @@
 <main>
   <div class="flex flex-col min-h-screen">
-    <nav class="bg-white shadow-sm">
-      <div class="container mx-auto flex justify-between items-center px-2 lg:px-0">
+    <nav class="bg-white shadow-sm lg:shadow-none">
+      <div
+        class="container mx-auto flex justify-between items-center px-2 lg:px-0"
+      >
+        
         <a routerLink="/" class="py-2"
-          ><img
+          >
+          @if(!isAuthRoute){
+            <img
             alt="Rezuu Logo"
             loading="lazy"
             width="50"
@@ -12,7 +17,10 @@
             class="h-12 w-auto"
             src="images/rezuu-logo-without-slogan.png"
             style="color: transparent"
-        /></a>
+        />
+          }
+          </a>
+        
         <div class="flex">
           <a
             routerLink="/how-it-works"
