@@ -13,23 +13,28 @@
   <div class="mb-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
     <!-- Most Popular Video -->
     <p-card
-      class="hover:shadow-lg transition-shadow duration-300"
+      class="h-40"
       styleClass="bg-secondary/80 text-white hover:bg-secondary/90"
     >
-      <div class="space-y-3">
+      <div class="space-y-3 h-full flex flex-col justify-between">
         <div class="flex items-center justify-between">
           <div class="text-white text-sm font-medium">Most Popular Video</div>
           <i class="pi pi-video text-white"></i>
         </div>
-        <div class="text-2xl font-bold text-white">{{ mostPopularVideo }}</div>
+        <div 
+          class="text-2xl font-bold text-white overflow-hidden ellipsis-2" 
+          [attr.title]="mostPopularVideo"
+        >
+          {{ mostPopularVideo }}
+        </div>
       </div>
     </p-card>
     <!-- Profile Views -->
     <p-card
-      class="hover:shadow-lg transition-shadow duration-300"
+      class="h-40"
       styleClass="bg-secondary/80 text-white hover:bg-secondary/90"
     >
-      <div class="space-y-3">
+      <div class="space-y-3 h-full flex flex-col justify-between">
         <div class="flex items-center justify-between">
           <div class="text-white text-sm font-medium">Profile Views</div>
           <i class="pi pi-eye text-white"></i>
@@ -39,10 +44,10 @@
     </p-card>
     <!-- Resume Downloads -->
     <p-card
-      class="hover:shadow-lg transition-shadow duration-300"
+      class="h-40"
       styleClass="bg-secondary/80 text-white hover:bg-secondary/90"
     >
-      <div class="space-y-3">
+      <div class="space-y-3 h-full flex flex-col justify-between">
         <div class="flex items-center justify-between">
           <div class="text-white text-sm font-medium">Resume Downloads</div>
           <i class="pi pi-file text-white"></i>
@@ -52,10 +57,10 @@
     </p-card>
     <!-- Certificate Downloads -->
     <p-card
-      class="hover:shadow-lg transition-shadow duration-300"
+      class="h-40"
       styleClass="bg-secondary/80 text-white hover:bg-secondary/90"
     >
-      <div class="space-y-3">
+      <div class="space-y-3 h-full flex flex-col justify-between">
         <div class="flex items-center justify-between">
           <div class="text-white text-sm font-medium">
             Certificate Downloads
