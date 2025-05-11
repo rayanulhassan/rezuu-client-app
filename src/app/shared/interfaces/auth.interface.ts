@@ -23,4 +23,5 @@ export interface RezuuUser {
     whoViewedProfile: boolean;
   };
   stripeCustomerId: string | null;
+  stripeSubscriptionId: string | null;
 }

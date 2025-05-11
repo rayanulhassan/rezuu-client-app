@@ -347,6 +347,7 @@ export class UserService {
       videoSection: number; 
       whoViewedProfile: boolean; 
     }; 
+    stripeSubscriptionId: string | null;
   }): Promise<void> {
     const currentUser = this.userDetails();
     if (!currentUser) {
@@ -360,7 +361,8 @@ export class UserService {
       await updateDoc(userDocRef, {
         stripeCustomerId: data.stripeCustomerId,
         isPayingUser: data.isPayingUser,
-        planOptions: data.planOptions
+        planOptions: data.planOptions,
+        stripeSubscriptionId: data.stripeSubscriptionId
       });
       this.#messageService.add({ severity: 'success', summary: 'Success', detail: 'User data updated successfully' });
     } catch (error) {

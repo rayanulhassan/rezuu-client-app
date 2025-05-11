@@ -90,6 +90,7 @@ export class PaymentSuccessComponent {
 
             const items = res.items || [];
             const customerId = res.customerId;
+            const subscriptionId = res.session.subscription || null;
 
             // Initialize plan options
             const planOptions = {
@@ -122,7 +123,8 @@ export class PaymentSuccessComponent {
               await this.#userService.updateUserAfterPayment({
                 stripeCustomerId: customerId,
                 isPayingUser: true,
-                planOptions
+                planOptions,
+                stripeSubscriptionId: subscriptionId
               });
 
               this.isSuccess = true;

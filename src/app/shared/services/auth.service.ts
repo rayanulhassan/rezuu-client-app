@@ -143,6 +143,7 @@ export class AuthService {
               whoViewedProfile: false,
             },
             stripeCustomerId: null,
+            stripeSubscriptionId: null,
           })
         );
       }),
