@@ -1,5 +1,5 @@
 import { CommonModule, NgClass } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, effect } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { PricingService } from '../../shared/services/pricing.service';
@@ -151,11 +151,14 @@ export class PricingMenuComponent {
     },
   ];
 
-  ngOnInit() {
-    const user = this.#userService.userDetails();
-    if (user) {
-      this.isPayingUser.set(!!user.stripeSubscriptionId);
-    }
+  constructor() {
+    // Create an effect to watch user details changes
+    effect(() => {
+      const userDetails = this.#userService.userDetails();
+      if (userDetails) {
+        this.isPayingUser.set(!!userDetails.stripeSubscriptionId);
+      }
+    });
   }
 
   validatePromoCode() {

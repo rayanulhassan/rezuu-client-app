@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { CardModule } from 'primeng/card';
@@ -68,6 +68,19 @@ export class AnalyticsDashboardComponent implements OnInit, OnDestroy {
   data: any;
   options: any;
 
+  constructor() {
+    // Create an effect to watch user details changes
+    effect(() => {
+      const userDetails = this.userService.userDetails();
+      if (userDetails) {
+        this.hasWhoViewedProfileAccess = !!(
+          userDetails.isPayingUser && userDetails.planOptions?.whoViewedProfile
+        );
+        this.loadAnalytics();
+      }
+    });
+  }
+
   ngOnInit() {
     const currentUser = this.authService.authUser();
     if (!currentUser) {
@@ -75,12 +88,11 @@ export class AnalyticsDashboardComponent implements OnInit, OnDestroy {
       this.isLoading = false;
       return;
     }
+  }
 
-    // Check if user has access to who viewed profile feature
-    const userDetails = this.userService.userDetails();
-    this.hasWhoViewedProfileAccess = !!(
-      userDetails?.isPayingUser && userDetails?.planOptions?.whoViewedProfile
-    );
+  private loadAnalytics() {
+    const currentUser = this.authService.authUser();
+    if (!currentUser) return;
 
     // Subscribe to real-time analytics updates
     this.analyticsSubscription = this.analyticsService
