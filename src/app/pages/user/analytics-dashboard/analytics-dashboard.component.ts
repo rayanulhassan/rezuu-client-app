@@ -166,9 +166,9 @@ export class AnalyticsDashboardComponent implements OnInit, OnDestroy {
           label: 'Profile Views',
           data: months.map((month) => monthlyViews.get(month) || 0),
           fill: false,
-          borderColor: '#6366f1', // Indigo color to match the UI theme
+          borderColor: '#4e949d',
           tension: 0.4,
-          backgroundColor: 'rgba(99, 102, 241, 0.1)',
+          backgroundColor: '#4e949d',
         },
       ],
     };
