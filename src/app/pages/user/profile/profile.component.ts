@@ -104,8 +104,7 @@ export class ProfileComponent {
 
   // external link form
   externalLinkForm = this.fb.group({
-    platform: ['', [Validators.required]],
-    url: ['', [Validators.required, Validators.pattern('https?://.+')]]
+    url: ['', [Validators.required]]
   });
 
   // Public profile link
