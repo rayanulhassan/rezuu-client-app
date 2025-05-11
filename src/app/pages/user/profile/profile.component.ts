@@ -145,7 +145,7 @@ export class ProfileComponent {
       profile: {
         title: 'Upload Profile Picture',
         description: 'Upload your profile picture',
-        accept: 'image/*',
+        accept: 'image/png, image/jpeg, image/jpg, image/webp',
         maxFiles: 1,
         allowMultiple: false,
       },
