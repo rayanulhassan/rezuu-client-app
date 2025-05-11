@@ -274,7 +274,7 @@ export class PricingMenuComponent {
     }
 
     this.isCancellingSubscription.set(true);
-    this.#pricingService.cancelSubscription(user.stripeSubscriptionId).subscribe({
+    this.#pricingService.cancelSubscription(user.stripeSubscriptionId, user.uid).subscribe({
       next: () => {
         this.#messageService.add({
           severity: 'success',

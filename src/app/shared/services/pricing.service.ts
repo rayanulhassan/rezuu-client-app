@@ -35,9 +35,10 @@ export class PricingService {
     return this.#http.get(`${this.#couldFunctionUrl}/validatePromoCode?code=${promoCode}`);
   }
 
-  cancelSubscription(subscriptionId: string) {
+  cancelSubscription(subscriptionId: string, userId: string) {
     return this.#http.post(`${this.#couldFunctionUrl}/cancelSubscription`, {
-      subscriptionId: subscriptionId
+      subscriptionId: subscriptionId,
+      userId: userId
     });
   }
 }
