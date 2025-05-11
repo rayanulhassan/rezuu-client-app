@@ -68,6 +68,7 @@ export class PricingMenuComponent {
   isPaymentProcessing = signal(false);
   isPayingUser = signal(false);
   isPromoCodeLoading = signal(false);
+  isCancellingSubscription = signal(false);
   promoCode = signal('');
   promoCodeDiscount = signal(0);
 
@@ -147,14 +148,13 @@ export class PricingMenuComponent {
       features: ['4 Video Sections', 'Who Viewed my Profile'],
       price: 5,
       selected: false,
-      discountLabel: 'Save 50%',
     },
   ];
 
   ngOnInit() {
     const user = this.#userService.userDetails();
     if (user) {
-      this.isPayingUser.set(user.isPayingUser);
+      this.isPayingUser.set(!!user.stripeSubscriptionId);
     }
   }
 
@@ -256,6 +256,42 @@ export class PricingMenuComponent {
           detail: 'Error processing payment. Please try again.'
         });
       },
+    });
+  }
+
+  cancelSubscription() {
+    const user = this.#userService.userDetails();
+    if (!user?.stripeSubscriptionId) {
+      this.#messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'No active subscription found'
+      });
+      return;
+    }
+
+    this.isCancellingSubscription.set(true);
+    this.#pricingService.cancelSubscription(user.stripeSubscriptionId).subscribe({
+      next: () => {
+        this.#messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Subscription cancelled successfully'
+        });
+        this.isPayingUser.set(false);
+      },
+      error: (error) => {
+        console.error('Error cancelling subscription:', error);
+        this.#messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error cancelling subscription'
+        });
+        this.isCancellingSubscription.set(false);
+      },
+      complete: () => {
+        this.isCancellingSubscription.set(false);
+      }
     });
   }
 }

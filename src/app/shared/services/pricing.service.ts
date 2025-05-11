@@ -34,4 +34,10 @@ export class PricingService {
   getPromoCodeDetails(promoCode: string) {
     return this.#http.get(`${this.#couldFunctionUrl}/validatePromoCode?code=${promoCode}`);
   }
+
+  cancelSubscription(subscriptionId: string) {
+    return this.#http.post(`${this.#couldFunctionUrl}/cancelSubscription`, {
+      subscriptionId: subscriptionId
+    });
+  }
 }

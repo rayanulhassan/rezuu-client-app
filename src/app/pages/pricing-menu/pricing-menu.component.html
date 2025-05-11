@@ -13,13 +13,20 @@
   <!-- Subscription Message -->
   <div
     *ngIf="isPayingUser()"
-    class="subscription-message max-w-6xl w-full mb-8 bg-orange-50 border border-orange-200 text-orange-700 p-4 rounded-lg flex items-center gap-2"
+    class="subscription-message max-w-6xl w-full mb-8 bg-orange-50 border border-orange-200 text-orange-700 p-4 rounded-lg flex flex-col sm:flex-row items-start sm:items-center gap-4"
   >
-    <i class="pi pi-exclamation-triangle"></i>
-    <span
-      >You already have an active subscription. Please cancel your existing
-      subscription before purchasing a new one.</span
-    >
+    <div class="flex items-center gap-2 flex-1">
+      <i class="pi pi-exclamation-triangle"></i>
+      <span>You already have an active subscription. Please cancel your existing subscription before purchasing a new one.</span>
+    </div>
+    <button
+      pButton
+      type="button"
+      label="Cancel Subscription"
+      class="p-button-danger p-button-outlined w-full sm:w-auto whitespace-nowrap"
+      [loading]="isCancellingSubscription()"
+      (click)="cancelSubscription()"
+    ></button>
   </div>
 
   <!-- Plan Type Toggle -->
@@ -178,9 +185,7 @@
           <div>
             <div class="flex items-center gap-2">
               <span class="font-medium text-surface-700">Value Bundle</span>
-              <span
-                class="bg-green-100 text-green-600 text-xs px-2 py-0.5 rounded-full font-semibold"
-                >Save 50%</span
+            
               >
             </div>
             <ul class="text-xs text-surface-500 list-disc ml-5 mt-1">
