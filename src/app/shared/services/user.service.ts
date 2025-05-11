@@ -371,4 +371,27 @@ export class UserService {
       throw error;
     }
   }
+
+  async onSubscriptionCancel(): Promise<void> {
+    const currentUser = this.userDetails();
+    if (!currentUser) {
+      this.#messageService.add({ severity: 'error', summary: 'Error', detail: 'No authenticated user found' });
+      throw new Error('No authenticated user found');
+    }
+
+    const userDocRef = doc(this.#firestore, 'users', currentUser.uid);
+    
+    try {
+      await updateDoc(userDocRef, {
+        stripeSubscriptionId: null,
+        isPayingUser: false,
+        planOptions: null,
+        stripeCustomerId: null
+      });
+    } catch (error) {
+      console.error('Error updating user after subscription cancellation:', error);
+      this.#messageService.add({ severity: 'error', summary: 'Error', detail: 'Error updating subscription status' });
+      throw error;
+    }
+  }
 }
