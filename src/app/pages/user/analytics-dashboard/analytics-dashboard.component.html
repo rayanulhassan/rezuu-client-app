@@ -10,11 +10,10 @@
   </div>
   } @else {
   <!-- Key Metrics Row -->
-  <div class="mb-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+  <div class="mb-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
     <!-- Most Popular Video -->
     <p-card
-      class="h-40"
-      styleClass="bg-secondary/80 text-white hover:bg-secondary/90"
+      styleClass="bg-secondary/80 text-white hover:bg-secondary/90 h-28"
     >
       <div class="space-y-3 h-full flex flex-col justify-between">
         <div class="flex items-center justify-between">
@@ -22,7 +21,7 @@
           <i class="pi pi-video text-white"></i>
         </div>
         <div 
-          class="text-2xl font-bold text-white overflow-hidden ellipsis-2" 
+          class="text-lg font-bold text-white overflow-hidden ellipsis-2" 
           [attr.title]="mostPopularVideo"
         >
           {{ mostPopularVideo }}
@@ -31,8 +30,7 @@
     </p-card>
     <!-- Profile Views -->
     <p-card
-      class="h-40"
-      styleClass="bg-secondary/80 text-white hover:bg-secondary/90"
+      styleClass="bg-secondary/80 text-white hover:bg-secondary/90 h-28"
     >
       <div class="space-y-3 h-full flex flex-col justify-between">
         <div class="flex items-center justify-between">
@@ -44,8 +42,7 @@
     </p-card>
     <!-- Resume Downloads -->
     <p-card
-      class="h-40"
-      styleClass="bg-secondary/80 text-white hover:bg-secondary/90"
+      styleClass="bg-secondary/80 text-white hover:bg-secondary/90 h-28"
     >
       <div class="space-y-3 h-full flex flex-col justify-between">
         <div class="flex items-center justify-between">
@@ -57,8 +54,7 @@
     </p-card>
     <!-- Certificate Downloads -->
     <p-card
-      class="h-40"
-      styleClass="bg-secondary/80 text-white hover:bg-secondary/90"
+      styleClass="bg-secondary/80 text-white hover:bg-secondary/90 h-28"
     >
       <div class="space-y-3 h-full flex flex-col justify-between">
         <div class="flex items-center justify-between">
