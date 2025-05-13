@@ -420,7 +420,8 @@
                       type="button"
                       label="View"
                       icon="pi pi-external-link"
-                      class="p-button-secondary p-button-sm flex-1 md:flex-none"
+                      pTooltip="Preview your Profile, this is what people will see if you choose to share your profile link"
+                      class="bg-secondary border-secondary p-button-sm flex-1 md:flex-none text-white"
                       style="min-width: 90px;"
                     ></a>
                     <button 
@@ -428,10 +429,10 @@
                       type="button"
                       [label]="isCopying() ? 'Copied!' : 'Copy'"
                       [icon]="isCopying() ? 'pi pi-check' : 'pi pi-copy'"
-                      class="p-button-outlined p-button-secondary p-button-sm flex-1 md:flex-none relative overflow-hidden animate-copy"
+                      class="bg-secondary border-secondary p-button-outlined p-button-sm flex-1 md:flex-none relative overflow-hidden animate-copy text-white"
                       (click)="copyPublicProfileLink()"
                       [disabled]="isCopying()"
-                      pTooltip="Copy public profile link"
+                      pTooltip="Copy the link to your profile and share it with whoever you want"
                       [ngClass]="{'animate-bounce': isCopying()}"
                       style="min-width: 90px;"
                     >
