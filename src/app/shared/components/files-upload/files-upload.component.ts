@@ -6,7 +6,6 @@ import { FileUploadService } from '../../services/file-upload.service';
 import { lastValueFrom } from 'rxjs';
 import { HttpEventType } from '@angular/common/http';
 import { ProgressBarModule } from 'primeng/progressbar';
-
 interface FileItem {
   file: File;
   name: string;
@@ -137,7 +136,7 @@ export class FilesUploadComponent {
               errorMessage:
                 this.files.length >= this.maxFiles()
                   ? `Only ${this.maxFiles()} file(s) is allowed`
-                  : `File size is too large`,
+                  : `Max file size is ${(this.maxSize() ?? 0) / 1024 / 1024} MB`,
               progress: 0,
               uploaded: false,
               isUploading: false

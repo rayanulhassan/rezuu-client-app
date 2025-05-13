@@ -58,6 +58,7 @@ export class ProfileComponent {
   uploadModalAllowMultiple = signal(false);
   uploadModalAccept = signal('');
   uploadModalMaxFiles = signal(1);
+  uploadModalMaxSize = signal(1024 * 1024 * 150); // 150MB
   currentUploadType = signal<UploadType>('profile');
 
   // description signals
@@ -148,6 +149,7 @@ export class ProfileComponent {
         accept: 'image/png, image/jpeg, image/jpg, image/webp',
         maxFiles: 1,
         allowMultiple: false,
+        maxSize: 1024 * 1024 * 5, // 5MB
       },
       resume: {
         title: 'Upload Resume',
@@ -155,6 +157,7 @@ export class ProfileComponent {
         accept: '.pdf,.doc,.docx',
         maxFiles: 1,
         allowMultiple: false,
+        maxSize: 1024 * 1024 * 10, // 10MB
       },
       certificates: {
         title: 'Upload Certificates',
@@ -162,6 +165,7 @@ export class ProfileComponent {
         accept: 'image/*,.pdf',
         maxFiles: 5,
         allowMultiple: true,
+        maxSize: 1024 * 1024 * 10, // 10MB
       },
       video: {
         title: 'Upload Videos',
@@ -169,6 +173,7 @@ export class ProfileComponent {
         accept: 'video/*',
         maxFiles: type === 'video' ? this.getRemainingVideoSlots() : this.getMaxAllowedVideos(),
         allowMultiple: true,
+        maxSize: 1024 * 1024 * 150, // 150MB
       },
     };
 
@@ -194,6 +199,7 @@ export class ProfileComponent {
     this.uploadModalAllowMultiple.set(config.allowMultiple);
     this.uploadModalAccept.set(config.accept);
     this.uploadModalMaxFiles.set(config.maxFiles);
+    this.uploadModalMaxSize.set(config.maxSize);
   }
 
   onProfileImageUpload() {
