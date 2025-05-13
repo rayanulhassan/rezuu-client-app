@@ -10,18 +10,18 @@
   </div>
   } @else {
   <!-- Key Metrics Row -->
-  <div class="mb-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+  <div
+    class="mb-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch"
+  >
     <!-- Most Popular Video -->
-    <p-card
-      styleClass="bg-secondary/80 text-white hover:bg-secondary/90 h-28"
-    >
+    <p-card styleClass="bg-secondary/80 text-white hover:bg-secondary/90 h-28">
       <div class="space-y-3 h-full flex flex-col justify-between">
         <div class="flex items-center justify-between">
           <div class="text-white text-sm font-medium">Most Popular Video</div>
           <i class="pi pi-video text-white"></i>
         </div>
-        <div 
-          class="text-lg font-bold text-white overflow-hidden ellipsis-2" 
+        <div
+          class="text-lg font-bold text-white overflow-hidden ellipsis-2"
           [attr.title]="mostPopularVideo"
         >
           {{ mostPopularVideo }}
@@ -29,9 +29,7 @@
       </div>
     </p-card>
     <!-- Profile Views -->
-    <p-card
-      styleClass="bg-secondary/80 text-white hover:bg-secondary/90 h-28"
-    >
+    <p-card styleClass="bg-secondary/80 text-white hover:bg-secondary/90 h-28">
       <div class="space-y-3 h-full flex flex-col justify-between">
         <div class="flex items-center justify-between">
           <div class="text-white text-sm font-medium">Profile Views</div>
@@ -41,9 +39,7 @@
       </div>
     </p-card>
     <!-- Resume Downloads -->
-    <p-card
-      styleClass="bg-secondary/80 text-white hover:bg-secondary/90 h-28"
-    >
+    <p-card styleClass="bg-secondary/80 text-white hover:bg-secondary/90 h-28">
       <div class="space-y-3 h-full flex flex-col justify-between">
         <div class="flex items-center justify-between">
           <div class="text-white text-sm font-medium">Resume Downloads</div>
@@ -53,9 +49,7 @@
       </div>
     </p-card>
     <!-- Certificate Downloads -->
-    <p-card
-      styleClass="bg-secondary/80 text-white hover:bg-secondary/90 h-28"
-    >
+    <p-card styleClass="bg-secondary/80 text-white hover:bg-secondary/90 h-28">
       <div class="space-y-3 h-full flex flex-col justify-between">
         <div class="flex items-center justify-between">
           <div class="text-white text-sm font-medium">
@@ -116,9 +110,14 @@
 
   <!-- Profile Viewers -->
   <div class="mb-10 bg-white rounded-lg shadow-sm p-6">
-    <h2 class="text-2xl font-bold mb-6 text-gray-800 flex items-center">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-2">
       <i class="pi pi-users mr-2 text-primary"></i>
       Profile Viewers
+      <div
+        class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent text-white hover:bg-secondary/80 bg-secondary uppercase"
+      >
+        Premium
+      </div>
     </h2>
     @if (hasWhoViewedProfileAccess) {
     <p-table [value]="profileViewers" styleClass="p-datatable-sm">
