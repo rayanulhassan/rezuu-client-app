@@ -5,6 +5,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MessageModule } from 'primeng/message';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
   selector: 'app-visitor-info-dialog',
@@ -15,6 +16,7 @@ import { MessageModule } from 'primeng/message';
     InputTextModule,
     ButtonModule,
     MessageModule,
+    CheckboxModule,
   ],
   template: `
     <div class="">
@@ -34,6 +36,7 @@ import { MessageModule } from 'primeng/message';
             [(ngModel)]="visitorInfo.name"
             class="w-full"
             placeholder="Enter your name"
+            [disabled]="isAnonymous"
           />
         </div>
 
@@ -50,7 +53,18 @@ import { MessageModule } from 'primeng/message';
             [(ngModel)]="visitorInfo.email"
             class="w-full"
             placeholder="Enter your email"
+            [disabled]="isAnonymous"
           />
+        </div>
+
+        <div class="field-checkbox">
+          <p-checkbox
+            inputId="anonymous"
+            [(ngModel)]="isAnonymous"
+            [binary]="true"
+            (onChange)="handleAnonymousChange()"
+          ></p-checkbox>
+          <label for="anonymous" class="ml-2 text-sm text-gray-600">I wish to remain Anonymous</label>
         </div>
       </div>
 
@@ -92,10 +106,24 @@ export class VisitorInfoDialogComponent {
     name: '',
     email: '',
   };
+  isAnonymous = false;
 
   constructor(public ref: DynamicDialogRef) {}
 
+  handleAnonymousChange() {
+    if (this.isAnonymous) {
+      this.visitorInfo.name = 'Anonymous user';
+      this.visitorInfo.email = 'anonymous@email.com';
+    } else {
+      this.visitorInfo.name = '';
+      this.visitorInfo.email = '';
+    }
+  }
+
   isFormValid(): boolean {
+    if (this.isAnonymous) {
+      return true;
+    }
     return (
       this.visitorInfo.name.trim() !== '' &&
       this.visitorInfo.email.trim() !== '' &&

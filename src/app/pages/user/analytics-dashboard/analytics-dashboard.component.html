@@ -137,7 +137,7 @@
         <tr class="border-b border-gray-100 hover:bg-gray-50">
           <td class="p-4">{{ viewer.firstName }}</td>
           <td class="p-4">{{ viewer.lastName }}</td>
-          <td class="p-4 text-gray-600">{{ viewer.email }}</td>
+          <td class="p-4 text-gray-600">{{ viewer.email === 'anonymous@email.com' ? '-' : viewer.email }}</td>
           <td class="p-4 text-gray-600">
             {{ viewer.viewedAt | date : "MMM d, y, h:mm a" }}
           </td>
