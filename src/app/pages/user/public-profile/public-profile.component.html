@@ -46,6 +46,30 @@
               </div>
             </div>
 
+             <!-- Personal Information Section -->
+             <div class="bg-white rounded-lg shadow-sm p-6">
+              <h2 class="text-xl font-semibold mb-6">Personal Information</h2>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-1">
+                  <p class="text-sm text-gray-500">Name</p>
+                  <p class="font-medium">{{ user.firstName }} {{ user.lastName }}</p>
+                </div>
+
+                <div class="space-y-1">
+                  <p class="text-sm text-gray-500">Email</p>
+                  <p class="font-medium">{{ user.email }}</p>
+                </div>
+
+                @if (user.contactNumber) {
+                  <div class="space-y-1">
+                    <p class="text-sm text-gray-500">Contact Number</p>
+                    <p class="font-medium">{{ user.contactNumber }}</p>
+                  </div>
+                }
+              </div>
+            </div>
+
             <!-- Resume Section -->
             @if (user.resume) {
               <div class="bg-white rounded-lg shadow-sm p-6">
@@ -119,29 +143,7 @@
               </div>
             }
 
-            <!-- Personal Information Section -->
-            <div class="bg-white rounded-lg shadow-sm p-6">
-              <h2 class="text-xl font-semibold mb-6">Personal Information</h2>
-              
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="space-y-1">
-                  <p class="text-sm text-gray-500">Name</p>
-                  <p class="font-medium">{{ user.firstName }} {{ user.lastName }}</p>
-                </div>
-
-                <div class="space-y-1">
-                  <p class="text-sm text-gray-500">Email</p>
-                  <p class="font-medium">{{ user.email }}</p>
-                </div>
-
-                @if (user.contactNumber) {
-                  <div class="space-y-1">
-                    <p class="text-sm text-gray-500">Contact Number</p>
-                    <p class="font-medium">{{ user.contactNumber }}</p>
-                  </div>
-                }
-              </div>
-            </div>
+           
 
             <!-- External Links Section -->
             @if (user.externalLinks && user.externalLinks.length > 0) {
