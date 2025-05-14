@@ -1,7 +1,7 @@
 <div class="min-h-screen bg-gradient-to-br from-[#f8f9fa] to-[#e9f5f9] flex flex-col">
   <div class="relative z-10 flex flex-col min-h-screen">
     <main class="flex-1 container mx-auto p-6">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="grid grid-cols-1 gap-8 px-0 md:px-32" [ngClass]="{'md:grid-cols-2': user()?.videos?.length || 0 > 0}">
         <!-- Left Column -->
         <div class="space-y-8">
           <!-- About Me Section -->
@@ -10,7 +10,7 @@
 
             <div class="flex flex-col items-center mb-6">
               <div
-                class="w-32 h-32 bg-white rounded-sm border-2 border-primary flex items-center justify-center mb-4 overflow-hidden"
+                class="w-44 h-44 bg-white rounded-sm border-2 border-primary flex items-center justify-center mb-4 overflow-hidden"
               >
                 @if(user()?.profileImage) {
                 <img
