@@ -17,6 +17,7 @@ import { PaymentSuccessComponent } from './pages/payment/payment-success/payment
 import { PaymentCancelComponent } from './pages/payment/payment-cancel/payment-cancel.component';
 import { HowItWorksComponent } from './pages/how-it-works/how-it-works.component';
 import { PricingComponent } from './pages/pricing/pricing.component';
+import { TipsAndTricksComponent } from './pages/tips-and-tricks/tips-and-tricks.component';
 export const routes: Routes = [
     {
         path: '',
@@ -136,6 +137,22 @@ export const routes: Routes = [
             },
         ]
     },
+    {
+        path: 'tips-and-tricks',
+        component: LayoutsComponent,
+        data: {
+            layout: 'public'
+        },
+        children: [ 
+            {
+                path: '',
+                component: TipsAndTricksComponent,
+                title: 'Tips and Tricks - Rezuu'
+            },
+        ]
+    },
+
+
     {
         path: 'pricing',
         component: LayoutsComponent,
