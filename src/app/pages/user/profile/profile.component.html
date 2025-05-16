@@ -1,7 +1,12 @@
-<div class="min-h-screen bg-gradient-to-br from-[#f8f9fa] to-[#e9f5f9] flex flex-col">
+<div
+  class="min-h-screen bg-gradient-to-br from-[#f8f9fa] to-[#e9f5f9] flex flex-col"
+>
   <div class="relative z-10 flex flex-col min-h-screen">
     <main class="flex-1 container mx-auto p-6">
-      <div class="grid grid-cols-1 gap-8 px-0 md:px-32" [ngClass]="{'md:grid-cols-2': user()?.videos?.length || 0 > 0}">
+      <div
+        class="grid grid-cols-1 gap-8 px-0 md:px-32"
+        [ngClass]="{ 'md:grid-cols-2': user()?.videos?.length || 0 > 0 }"
+      >
         <!-- Left Column -->
         <div class="space-y-8">
           <!-- About Me Section -->
@@ -84,77 +89,108 @@
           <!-- User Information -->
           <div class="bg-white rounded-lg shadow-sm p-6">
             <h2 class="text-xl font-semibold mb-6">Personal Information</h2>
-            
-            <form [formGroup]="userInfoForm" (ngSubmit)="onSaveUserInfo()" class="space-y-4">
+
+            <form
+              [formGroup]="userInfoForm"
+              (ngSubmit)="onSaveUserInfo()"
+              class="space-y-4"
+            >
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="flex flex-col">
                   <span class="p-float-label">
-                    <input 
-                      pInputText 
-                      id="firstName" 
+                    <input
+                      pInputText
+                      id="firstName"
                       formControlName="firstName"
                       class="w-full"
-                      [ngClass]="{'p-invalid': userInfoForm.get('firstName')?.invalid && userInfoForm.get('firstName')?.touched}"
+                      [ngClass]="{
+                        'p-invalid':
+                          userInfoForm.get('firstName')?.invalid &&
+                          userInfoForm.get('firstName')?.touched
+                      }"
                     />
-                    <label for="firstName" class="text-sm text-gray-600">First Name</label>
+                    <label for="firstName" class="text-sm text-gray-600"
+                      >First Name</label
+                    >
                   </span>
-                  @if (userInfoForm.get('firstName')?.invalid && userInfoForm.get('firstName')?.touched) {
-                    <small class="text-red-500">First name is required</small>
+                  @if (userInfoForm.get('firstName')?.invalid &&
+                  userInfoForm.get('firstName')?.touched) {
+                  <small class="text-red-500">First name is required</small>
                   }
                 </div>
 
                 <div class="flex flex-col">
                   <span class="p-float-label">
-                    <input 
-                      pInputText 
-                      id="lastName" 
+                    <input
+                      pInputText
+                      id="lastName"
                       formControlName="lastName"
                       class="w-full"
-                      [ngClass]="{'p-invalid': userInfoForm.get('lastName')?.invalid && userInfoForm.get('lastName')?.touched}"
+                      [ngClass]="{
+                        'p-invalid':
+                          userInfoForm.get('lastName')?.invalid &&
+                          userInfoForm.get('lastName')?.touched
+                      }"
                     />
-                    <label for="lastName" class="text-sm text-gray-600">Last Name</label>
+                    <label for="lastName" class="text-sm text-gray-600"
+                      >Last Name</label
+                    >
                   </span>
-                  @if (userInfoForm.get('lastName')?.invalid && userInfoForm.get('lastName')?.touched) {
-                    <small class="text-red-500">Last name is required</small>
+                  @if (userInfoForm.get('lastName')?.invalid &&
+                  userInfoForm.get('lastName')?.touched) {
+                  <small class="text-red-500">Last name is required</small>
                   }
                 </div>
               </div>
 
               <div class="flex flex-col">
                 <span class="p-float-label">
-                  <input 
-                    pInputText 
-                    id="email" 
+                  <input
+                    pInputText
+                    id="email"
                     formControlName="email"
                     class="w-full"
                   />
-                  <label for="email" class="text-sm text-gray-600">Email Address</label>
+                  <label for="email" class="text-sm text-gray-600"
+                    >Email Address</label
+                  >
                 </span>
               </div>
 
               <div class="flex flex-col">
                 <span class="p-float-label">
-                  <input 
-                    pInputText 
-                    id="contactNumber" 
+                  <input
+                    pInputText
+                    id="contactNumber"
                     formControlName="contactNumber"
                     class="w-full"
-                    [ngClass]="{'p-invalid': userInfoForm.get('contactNumber')?.invalid && userInfoForm.get('contactNumber')?.touched}"
+                    [ngClass]="{
+                      'p-invalid':
+                        userInfoForm.get('contactNumber')?.invalid &&
+                        userInfoForm.get('contactNumber')?.touched
+                    }"
                   />
-                  <label for="contactNumber" class="text-sm text-gray-600">Contact Number</label>
+                  <label for="contactNumber" class="text-sm text-gray-600"
+                    >Contact Number</label
+                  >
                 </span>
-                @if (userInfoForm.get('contactNumber')?.invalid && userInfoForm.get('contactNumber')?.touched) {
-                  <small class="text-red-500">Please enter a valid phone number</small>
+                @if (userInfoForm.get('contactNumber')?.invalid &&
+                userInfoForm.get('contactNumber')?.touched) {
+                <small class="text-red-500"
+                  >Please enter a valid phone number</small
+                >
                 }
               </div>
 
               <div class="flex justify-end">
-                <button 
-                  pButton 
-                  type="submit" 
+                <button
+                  pButton
+                  type="submit"
                   [label]="isSaving() ? 'Saving...' : 'Save Changes'"
                   class="bg-secondary border-secondary"
-                  [disabled]="userInfoForm.invalid || userInfoForm.pristine || isSaving()"
+                  [disabled]="
+                    userInfoForm.invalid || userInfoForm.pristine || isSaving()
+                  "
                   [loading]="isSaving()"
                 ></button>
               </div>
@@ -164,47 +200,49 @@
           <!-- Resume Section -->
           <div class="bg-white rounded-lg shadow-sm p-6">
             <h2 class="text-xl font-semibold mb-6">Resume</h2>
-            
+
             <div class="space-y-4">
               @if (user()?.resume) {
-                <div class="flex items-center justify-between p-4 border rounded-lg">
-                  <div class="flex items-center gap-3">
-                    <i class="pi pi-file text-2xl text-primary"></i>
-                    <span class="font-medium">Current Resume</span>
-                  </div>
-                  <div class="flex gap-2">
-                    <a 
-                      [href]="userService.getFullAssetUrl(user()?.resume)"
-                      target="_blank"
-                      pButton
-                      type="button"
-                      icon="pi pi-eye"
-                      class="p-button-secondary p-button-rounded hover:bg-primary hover:text-white"
-                      pTooltip="View Resume"
-                    ></a>
-                    <button 
-                      pButton
-                      type="button"
-                      icon="pi pi-upload"
-                      class="bg-secondary border-secondary p-button-rounded"
-                      pTooltip="Update Resume"
-                      (click)="onResumeUpload()"
-                    ></button>
-                  </div>
+              <div
+                class="flex items-center justify-between p-4 border rounded-lg"
+              >
+                <div class="flex items-center gap-3">
+                  <i class="pi pi-file text-2xl text-primary"></i>
+                  <span class="font-medium">Current Resume</span>
                 </div>
-              } @else {
-                <div class="text-center p-6 border-2 border-dashed rounded-lg">
-                  <i class="pi pi-file text-4xl text-gray-400 mb-3"></i>
-                  <p class="text-gray-500 mb-4">No resume uploaded yet</p>
-                  <button 
+                <div class="flex gap-2">
+                  <a
+                    [href]="userService.getFullAssetUrl(user()?.resume)"
+                    target="_blank"
                     pButton
                     type="button"
-                    label="Upload Resume"
+                    icon="pi pi-eye"
+                    class="p-button-secondary p-button-rounded hover:bg-primary hover:text-white"
+                    pTooltip="View Resume"
+                  ></a>
+                  <button
+                    pButton
+                    type="button"
                     icon="pi pi-upload"
-                    class="bg-secondary border-secondary"
+                    class="bg-secondary border-secondary p-button-rounded"
+                    pTooltip="Update Resume"
                     (click)="onResumeUpload()"
                   ></button>
                 </div>
+              </div>
+              } @else {
+              <div class="text-center p-6 border-2 border-dashed rounded-lg">
+                <i class="pi pi-file text-4xl text-gray-400 mb-3"></i>
+                <p class="text-gray-500 mb-4">No resume uploaded yet</p>
+                <button
+                  pButton
+                  type="button"
+                  label="Upload Resume"
+                  icon="pi pi-upload"
+                  class="bg-secondary border-secondary"
+                  (click)="onResumeUpload()"
+                ></button>
+              </div>
               }
             </div>
           </div>
@@ -212,83 +250,89 @@
           <!-- Certificates Section -->
           <div class="bg-white rounded-lg shadow-sm p-6">
             <h2 class="text-xl font-semibold mb-6">Certificates</h2>
-            
+
             <div class="space-y-4">
-              @if (user()?.certificates && (user()?.certificates?.length ?? 0) > 0) {
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  @for (certificate of user()?.certificates; track certificate) {
-                    <div class="border rounded-lg overflow-hidden bg-gray-50">
-                      <!-- Preview Area -->
-                      <div class="aspect-[4/3] relative">
-                        @if (certificate.url.toLowerCase().endsWith('.pdf')) {
-                          <div class="w-full h-full flex items-center justify-center bg-gray-100">
-                            <i class="pi pi-file-pdf text-4xl text-primary"></i>
-                          </div>
-                        } @else {
-                          <img 
-                            [src]="userService.getFullAssetUrl(certificate.url)" 
-                            [alt]="certificate.name"
-                            class="w-full h-full object-cover"
-                          />
-                        }
-                        
-                        <!-- Action Buttons Overlay -->
-                        <div class="absolute top-2 right-2 flex gap-2">
-                          <a 
-                            [href]="userService.getFullAssetUrl(certificate.url)"
-                            target="_blank"
-                            pButton
-                            type="button"
-                            icon="pi pi-eye"
-                            class="p-button-rounded p-button-secondary hover:bg-primary hover:text-white"
-                            pTooltip="View Certificate"
-                          ></a>
-                          <button
-                            pButton
-                            type="button"
-                            icon="pi pi-trash"
-                            class="p-button-rounded p-button-danger"
-                            pTooltip="Remove Certificate"
-                            (click)="onRemoveCertificate(certificate.url)"
-                            [loading]="isRemovingCertificate() === certificate.url"
-                            [disabled]="isRemovingCertificate() !== null"
-                          ></button>
-                        </div>
-                      </div>
-
-                      <!-- Certificate Info -->
-                      <div class="p-4">
-                        <h3 class="font-medium text-gray-900 truncate" [pTooltip]="certificate.name">
-                          {{ certificate.name }}
-                        </h3>
-                      </div>
+              @if (user()?.certificates && (user()?.certificates?.length ?? 0) >
+              0) {
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                @for (certificate of user()?.certificates; track certificate) {
+                <div class="border rounded-lg overflow-hidden bg-gray-50">
+                  <!-- Preview Area -->
+                  <div class="aspect-[4/3] relative">
+                    @if (certificate.url.toLowerCase().endsWith('.pdf')) {
+                    <div
+                      class="w-full h-full flex items-center justify-center bg-gray-100"
+                    >
+                      <i class="pi pi-file-pdf text-4xl text-primary"></i>
                     </div>
-                  }
-                </div>
+                    } @else {
+                    <img
+                      [src]="userService.getFullAssetUrl(certificate.url)"
+                      [alt]="certificate.name"
+                      class="w-full h-full object-cover"
+                    />
+                    }
 
-                <div class="flex justify-end">
-                  <button 
-                    pButton
-                    type="button"
-                    label="Add More Certificates"
-                    icon="pi pi-plus"
-                    class="bg-secondary border-secondary"
-                    (click)="onCertificatesUpload()"
-                  ></button>
+                    <!-- Action Buttons Overlay -->
+                    <div class="absolute top-2 right-2 flex gap-2">
+                      <a
+                        [href]="userService.getFullAssetUrl(certificate.url)"
+                        target="_blank"
+                        pButton
+                        type="button"
+                        icon="pi pi-eye"
+                        class="p-button-rounded p-button-secondary hover:bg-primary hover:text-white"
+                        pTooltip="View Certificate"
+                      ></a>
+                      <button
+                        pButton
+                        type="button"
+                        icon="pi pi-trash"
+                        class="p-button-rounded p-button-danger"
+                        pTooltip="Remove Certificate"
+                        (click)="onRemoveCertificate(certificate.url)"
+                        [loading]="isRemovingCertificate() === certificate.url"
+                        [disabled]="isRemovingCertificate() !== null"
+                      ></button>
+                    </div>
+                  </div>
+
+                  <!-- Certificate Info -->
+                  <div class="p-4">
+                    <h3
+                      class="font-medium text-gray-900 truncate"
+                      [pTooltip]="certificate.name"
+                    >
+                      {{ certificate.name }}
+                    </h3>
+                  </div>
                 </div>
+                }
+              </div>
+
+              <div class="flex justify-end">
+                <button
+                  pButton
+                  type="button"
+                  label="Add More Certificates"
+                  icon="pi pi-plus"
+                  class="bg-secondary border-secondary"
+                  (click)="onCertificatesUpload()"
+                ></button>
+              </div>
               } @else {
-                <div class="text-center p-6 border-2 border-dashed rounded-lg">
-                  <i class="pi pi-images text-4xl text-gray-400 mb-3"></i>
-                  <p class="text-gray-500 mb-4">No certificates uploaded yet</p>
-                  <button 
-                    pButton
-                    type="button"
-                    label="Upload Certificates"
-                    icon="pi pi-upload"
-                    class="bg-secondary border-secondary"
-                    (click)="onCertificatesUpload()"
-                  ></button>
-                </div>
+              <div class="text-center p-6 border-2 border-dashed rounded-lg">
+                <i class="pi pi-images text-4xl text-gray-400 mb-3"></i>
+                <p class="text-gray-500 mb-4">No certificates uploaded yet</p>
+                <button
+                  pButton
+                  type="button"
+                  label="Upload Certificates"
+                  icon="pi pi-upload"
+                  class="bg-secondary border-secondary"
+                  (click)="onCertificatesUpload()"
+                ></button>
+              </div>
               }
             </div>
           </div>
@@ -296,81 +340,103 @@
           <!-- External Links Section -->
           <div class="bg-white rounded-lg shadow-sm p-6">
             <h2 class="text-xl font-semibold mb-6">External Links</h2>
-            
+
             <div class="space-y-4">
-              @if (user()?.externalLinks && (user()?.externalLinks?.length ?? 0) > 0) {
-                <div class="grid grid-cols-1 gap-4">
-                  @for (link of user()?.externalLinks; track link) {
-                    <div class="flex items-center justify-between p-4 border rounded-lg">
-                      <div class="flex items-center gap-3">
-                        <i class="pi pi-link text-2xl text-primary"></i>
-                        <span class="font-medium">{{link.platform}}</span>
-                      </div>
-                      <div class="flex gap-2">
-                        <a 
-                          [href]="link.url"
-                          target="_blank"
-                          pButton
-                          type="button"
-                          icon="pi pi-external-link"
-                          class="p-button-secondary p-button-rounded hover:bg-primary hover:text-white"
-                          pTooltip="Open Link"
-                        ></a>
-                        <button
-                          pButton
-                          type="button"
-                          icon="pi pi-trash"
-                          class="p-button-danger p-button-rounded"
-                          pTooltip="Remove Link"
-                          (click)="onRemoveExternalLink(link)"
-                          [loading]="isRemovingLink()?.platform === link.platform && isRemovingLink()?.url === link.url"
-                          [disabled]="isRemovingLink() !== null"
-                        ></button>
-                      </div>
-                    </div>
-                  }
+              @if (user()?.externalLinks && (user()?.externalLinks?.length ?? 0)
+              > 0) {
+              <div class="grid grid-cols-1 gap-4">
+                @for (link of user()?.externalLinks; track link) {
+                <div
+                  class="flex items-center justify-between p-4 border rounded-lg"
+                >
+                  <div class="flex items-center gap-3">
+                    <i class="pi pi-link text-2xl text-primary"></i>
+                    <span class="font-medium">{{ link.platform }}</span>
+                  </div>
+                  <div class="flex gap-2">
+                    <a
+                      [href]="link.url"
+                      target="_blank"
+                      pButton
+                      type="button"
+                      icon="pi pi-external-link"
+                      class="p-button-secondary p-button-rounded hover:bg-primary hover:text-white"
+                      pTooltip="Open Link"
+                    ></a>
+                    <button
+                      pButton
+                      type="button"
+                      icon="pi pi-trash"
+                      class="p-button-danger p-button-rounded"
+                      pTooltip="Remove Link"
+                      (click)="onRemoveExternalLink(link)"
+                      [loading]="
+                        isRemovingLink()?.platform === link.platform &&
+                        isRemovingLink()?.url === link.url
+                      "
+                      [disabled]="isRemovingLink() !== null"
+                    ></button>
+                  </div>
                 </div>
+                }
+              </div>
               }
 
-              <form [formGroup]="externalLinkForm" (ngSubmit)="onAddExternalLink()" class="space-y-4">
+              <form
+                [formGroup]="externalLinkForm"
+                (ngSubmit)="onAddExternalLink()"
+                class="space-y-4"
+              >
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="flex flex-col">
                     <span class="p-float-label">
-                      <input 
-                        pInputText 
-                        id="platform" 
+                      <input
+                        pInputText
+                        id="platform"
                         formControlName="platform"
                         class="w-full"
-                        [ngClass]="{'p-invalid': externalLinkForm.get('platform')?.invalid && externalLinkForm.get('platform')?.touched}"
+                        [ngClass]="{
+                          'p-invalid':
+                            externalLinkForm.get('platform')?.invalid &&
+                            externalLinkForm.get('platform')?.touched
+                        }"
                       />
-                      <label for="platform">Platform (e.g. LinkedIn, GitHub)</label>
+                      <label for="platform"
+                        >Platform (e.g. LinkedIn, GitHub)</label
+                      >
                     </span>
-                    @if (externalLinkForm.get('platform')?.invalid && externalLinkForm.get('platform')?.touched) {
-                      <small class="text-red-500">Platform is required</small>
+                    @if (externalLinkForm.get('platform')?.invalid &&
+                    externalLinkForm.get('platform')?.touched) {
+                    <small class="text-red-500">Platform is required</small>
                     }
                   </div>
 
                   <div class="flex flex-col">
                     <span class="p-float-label">
-                      <input 
-                        pInputText 
-                        id="url" 
+                      <input
+                        pInputText
+                        id="url"
                         formControlName="url"
                         class="w-full"
-                        [ngClass]="{'p-invalid': externalLinkForm.get('url')?.invalid && externalLinkForm.get('url')?.touched}"
+                        [ngClass]="{
+                          'p-invalid':
+                            externalLinkForm.get('url')?.invalid &&
+                            externalLinkForm.get('url')?.touched
+                        }"
                       />
                       <label for="url">URL</label>
                     </span>
-                    @if (externalLinkForm.get('url')?.invalid && externalLinkForm.get('url')?.touched) {
-                      <small class="text-red-500">Please enter a valid URL</small>
+                    @if (externalLinkForm.get('url')?.invalid &&
+                    externalLinkForm.get('url')?.touched) {
+                    <small class="text-red-500">Please enter a valid URL</small>
                     }
                   </div>
                 </div>
 
                 <div class="flex justify-end">
-                  <button 
-                    pButton 
-                    type="submit" 
+                  <button
+                    pButton
+                    type="submit"
                     [label]="isAddingLink() ? 'Adding...' : 'Add Link'"
                     class="bg-secondary border-secondary"
                     [disabled]="externalLinkForm.invalid || isAddingLink()"
@@ -398,9 +464,8 @@
                     profile link.
                   </p>
                 </div>
-                <p-toggleSwitch 
+                <p-toggleSwitch
                   inputId="publicProfile"
-                
                   [ngModel]="user()?.isPublicProfile"
                   (onChange)="onPublicProfileChange($event)"
                   [disabled]="isUpdatingPublicProfile()"
@@ -408,38 +473,45 @@
               </div>
 
               @if (user()?.isPublicProfile) {
-                <div class="flex flex-col md:flex-row items-center justify-between gap-2 p-2 bg-gray-50 rounded-md shadow-sm transition-all duration-300 ease-in-out max-w-md mx-auto">
-                  <div>
-                    <p class="text-xs text-gray-600 font-medium">Share your professional profile</p>
-                  </div>
-                  <div class="flex gap-1 w-full md:w-auto">
-                    <a 
-                      [href]="publicProfileLink()"
-                      target="_blank"
-                      pButton
-                      type="button"
-                      label="View"
-                      icon="pi pi-external-link"
-                      pTooltip="Preview your Profile, this is what people will see if you choose to share your profile link"
-                      class="bg-secondary border-secondary p-button-sm flex-1 md:flex-none text-white"
-                      style="min-width: 90px;"
-                    ></a>
-                    <button 
-                      pButton
-                      type="button"
-                      [label]="isCopying() ? 'Copied!' : 'Copy'"
-                      [icon]="isCopying() ? 'pi pi-check' : 'pi pi-copy'"
-                      class="bg-secondary border-secondary p-button-outlined p-button-sm flex-1 md:flex-none relative overflow-hidden animate-copy text-white"
-                      (click)="copyPublicProfileLink()"
-                      [disabled]="isCopying()"
-                      pTooltip="Copy the link to your profile and share it with whoever you want"
-                      [ngClass]="{'animate-bounce': isCopying()}"
-                      style="min-width: 90px;"
-                    >
-                      <span *ngIf="isCopying()" class="absolute inset-0 bg-green-100 opacity-60 animate-fade rounded-md"></span>
-                    </button>
-                  </div>
+              <div
+                class="flex flex-col md:flex-row items-center justify-between gap-2 p-4 bg-gray-300 rounded-md shadow-sm transition-all duration-300 ease-in-out max-w-md mx-auto border-2 border-black"
+              >
+                <div>
+                  <p class="text-white font-semibold">
+                    Share your professional profile
+                  </p>
                 </div>
+                <div class="flex gap-1 w-full md:w-auto">
+                  <a
+                    [href]="publicProfileLink()"
+                    target="_blank"
+                    pButton
+                    type="button"
+                    label="View"
+                    icon="pi pi-external-link"
+                    pTooltip="Preview your Profile, this is what people will see if you choose to share your profile link"
+                    class="bg-secondary border-secondary p-button-sm flex-1 md:flex-none text-white"
+                    style="min-width: 90px"
+                  ></a>
+                  <button
+                    pButton
+                    type="button"
+                    [label]="isCopying() ? 'Copied!' : 'Copy'"
+                    [icon]="isCopying() ? 'pi pi-check' : 'pi pi-copy'"
+                    class="bg-secondary border-secondary p-button-sm flex-1 md:flex-none text-white"
+                    (click)="copyPublicProfileLink()"
+                    [disabled]="isCopying()"
+                    pTooltip="Copy the link to your profile and share it with whoever you want"
+                    [ngClass]="{ 'animate-bounce': isCopying() }"
+                    style="min-width: 90px"
+                  >
+                    <span
+                      *ngIf="isCopying()"
+                      class="absolute inset-0 bg-green-100 opacity-60 animate-fade rounded-md"
+                    ></span>
+                  </button>
+                </div>
+              </div>
               }
 
               <div class="flex items-center justify-between">
@@ -500,125 +572,141 @@
               <h2 class="text-xl font-semibold">Videos</h2>
               <div class="text-sm text-gray-600">
                 @if (user()?.videos) {
-                  <span>{{ user()?.videos?.length || 0 }} / {{ getMaxAllowedVideos() }} videos used</span>
+                <span
+                  >{{ user()?.videos?.length || 0 }} /
+                  {{ getMaxAllowedVideos() }} videos used</span
+                >
                 }
               </div>
             </div>
-            
+
             <div class="space-y-6">
               @if (user()?.videos && (user()?.videos?.length ?? 0) > 0) {
-                <div class="grid grid-cols-1 gap-6">
-                  @for (video of user()?.videos; track video) {
+              <div class="grid grid-cols-1 gap-6">
+                @for (video of user()?.videos; track video) {
+                <div class="space-y-4">
+                  <div
+                    class="relative aspect-video bg-gray-900 rounded-lg overflow-hidden"
+                  >
+                    <video
+                      [src]="userService.getFullAssetUrl(video.url)"
+                      controls
+                      class="w-full h-full"
+                    ></video>
+                    <button
+                      pButton
+                      type="button"
+                      icon="pi pi-trash"
+                      class="p-button-danger p-button-rounded absolute top-2 right-2"
+                      pTooltip="Remove Video"
+                      (click)="onRemoveVideo(video.url)"
+                      [loading]="isRemovingVideo() === video.url"
+                      [disabled]="isRemovingVideo() !== null"
+                    ></button>
+                  </div>
+
+                  <div class="space-y-4">
+                    @if (isEditingVideoDescription() !== video.url) {
                     <div class="space-y-4">
-                      <div class="relative aspect-video bg-gray-900 rounded-lg overflow-hidden">
-                        <video 
-                          [src]="userService.getFullAssetUrl(video.url)"
-                          controls
-                          class="w-full h-full"
-                        ></video>
+                      @if (video.description) {
+                      <h3 class="font-medium text-gray-900">
+                        {{ video.description }}
+                      </h3>
+                      }
+                      <div class="flex justify-end">
                         <button
                           pButton
                           type="button"
-                          icon="pi pi-trash"
-                          class="p-button-danger p-button-rounded absolute top-2 right-2"
-                          pTooltip="Remove Video"
-                          (click)="onRemoveVideo(video.url)"
-                          [loading]="isRemovingVideo() === video.url"
-                          [disabled]="isRemovingVideo() !== null"
+                          label="Update Title"
+                          icon="pi pi-pencil"
+                          class="p-button-secondary"
+                          (click)="onEditVideoDescription(video.url)"
                         ></button>
                       </div>
-                      
-                      <div class="space-y-4">
-                        @if (isEditingVideoDescription() !== video.url) {
-                          <div class="space-y-4">
-                            @if (video.description) {
-                              <h3 class="font-medium text-gray-900">{{ video.description }}</h3>
-                            }
-                            <div class="flex justify-end">
-                              <button
-                                pButton
-                                type="button"
-                                label="Update Title"
-                                icon="pi pi-pencil"
-                                class="p-button-secondary"
-                                (click)="onEditVideoDescription(video.url)"
-                              ></button>
-                            </div>
-                          </div>
-                        } @else {
-                          <div class="space-y-4">
-                            <div class="flex flex-col">
-                              <span class="p-float-label">
-                                <input 
-                                  pInputText
-                                  id="videoTitle"
-                                  class="w-full"
-                                  [value]="videoDescriptions()[video.url]"
-                                  (input)="onVideoDescriptionChange(video.url, $event)"
-                                />
-                               
-                              </span>
-                            </div>
-                            <div class="flex justify-end gap-2">
-                              @if (video.description) {
-                                <button 
-                                  pButton 
-                                  type="button" 
-                                  label="Cancel"
-                                  class="p-button-secondary"
-                                  (click)="onCancelEditVideoDescription(video.url)"
-                                ></button>
-                              }
-                              <button
-                                pButton
-                                type="button"
-                                label="Save Title"
-                                class="p-button-primary"
-                                (click)="onSaveVideoDescription(video.url)"
-                                [loading]="isSavingVideo() === video.url"
-                                [disabled]="isSavingVideo() !== null"
-                              ></button>
-                            </div>
-                          </div>
+                    </div>
+                    } @else {
+                    <div class="space-y-4">
+                      <div class="flex flex-col">
+                        <span class="p-float-label">
+                          <input
+                            pInputText
+                            id="videoTitle"
+                            class="w-full"
+                            [value]="videoDescriptions()[video.url]"
+                            (input)="
+                              onVideoDescriptionChange(video.url, $event)
+                            "
+                          />
+                        </span>
+                      </div>
+                      <div class="flex justify-end gap-2">
+                        @if (video.description) {
+                        <button
+                          pButton
+                          type="button"
+                          label="Cancel"
+                          class="p-button-secondary"
+                          (click)="onCancelEditVideoDescription(video.url)"
+                        ></button>
                         }
+                        <button
+                          pButton
+                          type="button"
+                          label="Save Title"
+                          class="p-button-primary"
+                          (click)="onSaveVideoDescription(video.url)"
+                          [loading]="isSavingVideo() === video.url"
+                          [disabled]="isSavingVideo() !== null"
+                        ></button>
                       </div>
                     </div>
-                  }
-                </div>
-              }
-
-              @if (canUploadMoreVideos()) {
-                <div class="text-center p-6 border-2 border-dashed border-primary rounded-lg">
-                  <i class="pi pi-video text-4xl text-gray-400 mb-3"></i>
-                  <p class="text-gray-500 mb-4">
-                    @if (user()?.videos?.length === 0) {
-                      Upload up to {{ getMaxAllowedVideos() }} videos to showcase your experience
-                    } @else {
-                      You can upload {{ getMaxAllowedVideos() - (user()?.videos?.length || 0) }} more video(s)
                     }
-                  </p>
-                  <button 
-                    pButton
-                    type="button"
-                    label="Upload Videos"
-                    icon="pi pi-upload"
-                    class="bg-secondary border-secondary"
-                    (click)="onVideoUpload()"
-                  ></button>
+                  </div>
                 </div>
+                }
+              </div>
+              } @if (canUploadMoreVideos()) {
+              <div
+                class="text-center p-6 border-2 border-dashed border-primary rounded-lg"
+              >
+                <i class="pi pi-video text-4xl text-gray-400 mb-3"></i>
+                <p class="text-gray-500 mb-4">
+                  @if (user()?.videos?.length === 0) { Upload up to
+                  {{ getMaxAllowedVideos() }} videos to showcase your experience
+                  } @else { You can upload
+                  {{
+                    getMaxAllowedVideos() - (user()?.videos?.length || 0)
+                  }}
+                  more video(s) }
+                </p>
+                <button
+                  pButton
+                  type="button"
+                  label="Upload Videos"
+                  icon="pi pi-upload"
+                  class="bg-secondary border-secondary"
+                  (click)="onVideoUpload()"
+                ></button>
+              </div>
               } @else {
-                <div class="text-center p-6 border-2 border-dashed rounded-lg bg-gray-50">
-                  <i class="pi pi-lock text-4xl text-gray-400 mb-3"></i>
-                  <p class="text-gray-500 mb-4">You've reached the maximum number of videos ({{ getMaxAllowedVideos() }})</p>
-                  <button 
-                    pButton
-                    type="button"
-                    label="Upgrade Plan"
-                    icon="pi pi-arrow-up"
-                    class="p-button-primary"
-                    routerLink="/my/pricing-management"
-                  ></button>
-                </div>
+              <div
+                class="text-center p-6 border-2 border-dashed rounded-lg bg-gray-50"
+              >
+                <i class="pi pi-lock text-4xl text-gray-400 mb-3"></i>
+                <p class="text-gray-500 mb-4">
+                  You've reached the maximum number of videos ({{
+                    getMaxAllowedVideos()
+                  }})
+                </p>
+                <button
+                  pButton
+                  type="button"
+                  label="Upgrade Plan"
+                  icon="pi pi-arrow-up"
+                  class="p-button-primary"
+                  routerLink="/my/pricing-management"
+                ></button>
+              </div>
               }
             </div>
           </div>
@@ -643,18 +731,27 @@
 ></app-files-upload>
 
 <style>
-@keyframes fade {
-  0% { opacity: 0.6; }
-  100% { opacity: 0; }
-}
-.animate-fade {
-  animation: fade 1s linear;
-}
-.animate-bounce {
-  animation: bounce 0.5s;
-}
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
+  @keyframes fade {
+    0% {
+      opacity: 0.6;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  .animate-fade {
+    animation: fade 1s linear;
+  }
+  .animate-bounce {
+    animation: bounce 0.5s;
+  }
+  @keyframes bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+  }
 </style>
