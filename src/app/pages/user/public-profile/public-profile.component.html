@@ -1,207 +1,265 @@
-<div class="min-h-screen bg-gradient-to-br from-[#f8f9fa] to-[#e9f5f9] flex flex-col">
+<div
+  class="min-h-screen bg-gradient-to-br from-[#f8f9fa] to-[#e9f5f9] flex flex-col"
+>
+  <nav class="bg-white shadow-sm lg:shadow-none">
+    <div
+      class="container mx-auto flex justify-between items-center px-2 lg:px-0"
+    >
+      <a routerLink="/" class="py-2">
+        <img
+          alt="Rezuu Logo"
+          loading="lazy"
+          width="50"
+          height="50"
+          decoding="async"
+          class="h-12 w-auto"
+          src="images/rezuu-logo-without-slogan.png"
+          style="color: transparent"
+        />
+        
+      </a>
+
+      <div class="flex">
+        <a
+          routerLink="/tips-and-tricks"
+          class="text-secondary py-6 px-5 text-lg hover:text-primary transition-colors"
+          >Tips and Tricks</a
+        >
+        <a
+          routerLink="/how-it-works"
+          class="text-secondary py-6 px-5 text-lg hover:text-primary transition-colors"
+          >How It Works</a
+        ><a
+          routerLink="/pricing"
+          class="text-secondary py-6 px-5 text-lg hover:text-primary transition-colors"
+          >Pricing</a
+        >
+      </div>
+    </div>
+  </nav>
   <div class="relative z-10 flex flex-col min-h-screen">
     <main class="flex-1 container mx-auto p-6">
       @if (isLoading) {
-        <div class="flex justify-center items-center h-64">
-          <i class="pi pi-spin pi-spinner text-4xl text-primary"></i>
-        </div>
+      <div class="flex justify-center items-center h-64">
+        <i class="pi pi-spin pi-spinner text-4xl text-primary"></i>
+      </div>
       } @else if (error) {
-        <div class="text-center p-6">
-          <i class="pi pi-exclamation-circle text-4xl text-red-500 mb-3"></i>
-          <p class="text-xl text-gray-700 mb-4">{{ error }}</p>
-          @if (error === 'This profile is not publicly visible') {
-            <p class="text-gray-500">The owner of this profile has chosen to keep it private.</p>
+      <div class="text-center p-6">
+        <i class="pi pi-exclamation-circle text-4xl text-red-500 mb-3"></i>
+        <p class="text-xl text-gray-700 mb-4">{{ error }}</p>
+        @if (error === 'This profile is not publicly visible') {
+        <p class="text-gray-500">
+          The owner of this profile has chosen to keep it private.
+        </p>
+        }
+      </div>
+      } @else if (user && showProfile) {
+      <div
+        class="grid grid-cols-1 gap-8 md:px-32"
+        [ngClass]="{ 'md:grid-cols-2': user.videos.length || 0 > 0 }"
+      >
+        <!-- Left Column -->
+        <div class="space-y-8">
+          <!-- About Me Section -->
+          <div class="bg-white rounded-lg shadow-sm p-6">
+            <h2 class="text-xl font-semibold mb-6">About Me</h2>
+
+            <div class="flex flex-col items-center mb-6">
+              <div
+                class="w-44 h-44 bg-white rounded-sm border-2 border-primary flex items-center justify-center mb-4 overflow-hidden"
+              >
+                @if(user.profileImage) {
+                <img
+                  [src]="getFullAssetUrl(user.profileImage)"
+                  alt="Profile"
+                  class="w-full h-full object-cover rounded-sm"
+                />
+                } @else {
+                <i class="pi pi-user text-4xl text-gray-400"></i>
+                }
+              </div>
+            </div>
+
+            <div class="mb-6">
+              @if (user.description) {
+              <p class="text-gray-700 whitespace-pre-line">
+                {{ user.description }}
+              </p>
+              } @else {
+              <p class="text-gray-500 italic">No description provided</p>
+              }
+            </div>
+          </div>
+
+          <!-- Personal Information Section -->
+          <div class="bg-white rounded-lg shadow-sm p-6">
+            <h2 class="text-xl font-semibold mb-6">Personal Information</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <p class="text-sm text-gray-500">Name</p>
+                <p class="font-medium">
+                  {{ user.firstName }} {{ user.lastName }}
+                </p>
+              </div>
+
+              <div class="space-y-1">
+                <p class="text-sm text-gray-500">Email</p>
+                <p class="font-medium">{{ user.email }}</p>
+              </div>
+
+              @if (user.contactNumber) {
+              <div class="space-y-1">
+                <p class="text-sm text-gray-500">Contact Number</p>
+                <p class="font-medium">{{ user.contactNumber }}</p>
+              </div>
+              }
+            </div>
+          </div>
+
+          <!-- Resume Section -->
+          @if (user.resume) {
+          <div class="bg-white rounded-lg shadow-sm p-6">
+            <h2 class="text-xl font-semibold mb-6">Resume</h2>
+
+            <div
+              class="flex items-center justify-between p-4 border rounded-lg"
+            >
+              <div class="flex items-center gap-3">
+                <i class="pi pi-file text-2xl text-primary"></i>
+                <span class="font-medium">View Resume</span>
+              </div>
+              <a
+                [href]="getFullAssetUrl(user.resume)"
+                target="_blank"
+                pButton
+                type="button"
+                icon="pi pi-eye"
+                class="p-button-secondary p-button-rounded hover:bg-primary hover:text-white"
+                pTooltip="View Resume"
+                (click)="trackResumeDownload()"
+              ></a>
+            </div>
+          </div>
+          }
+
+          <!-- Certificates Section -->
+          @if (user.certificates && user.certificates.length > 0) {
+          <div class="bg-white rounded-lg shadow-sm p-6">
+            <h2 class="text-xl font-semibold mb-6">Certificates</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              @for (certificate of user.certificates; track certificate) {
+              <div class="border rounded-lg overflow-hidden bg-gray-50">
+                <!-- Preview Area -->
+                <div class="aspect-[4/3] relative">
+                  @if (certificate.url.toLowerCase().endsWith('.pdf')) {
+                  <div
+                    class="w-full h-full flex items-center justify-center bg-gray-100"
+                  >
+                    <i class="pi pi-file-pdf text-4xl text-primary"></i>
+                  </div>
+                  } @else {
+                  <img
+                    [src]="getFullAssetUrl(certificate.url)"
+                    [alt]="certificate.name"
+                    class="w-full h-full object-cover"
+                  />
+                  }
+
+                  <!-- View Button -->
+                  <div class="absolute top-2 right-2">
+                    <a
+                      [href]="getFullAssetUrl(certificate.url)"
+                      target="_blank"
+                      pButton
+                      type="button"
+                      icon="pi pi-eye"
+                      class="p-button-rounded p-button-secondary hover:bg-primary hover:text-white"
+                      pTooltip="View Certificate"
+                      (click)="trackCertificateDownload(certificate)"
+                    ></a>
+                  </div>
+                </div>
+
+                <!-- Certificate Info -->
+                <div class="p-4">
+                  <h3
+                    class="font-medium text-gray-900 truncate"
+                    [pTooltip]="certificate.name"
+                  >
+                    {{ certificate.name }}
+                  </h3>
+                </div>
+              </div>
+              }
+            </div>
+          </div>
+          }
+
+          <!-- External Links Section -->
+          @if (user.externalLinks && user.externalLinks.length > 0) {
+          <div class="bg-white rounded-lg shadow-sm p-6">
+            <h2 class="text-xl font-semibold mb-6">External Links</h2>
+
+            <div class="grid grid-cols-1 gap-4">
+              @for (link of user.externalLinks; track link) {
+              <div
+                class="flex items-center justify-between p-4 border rounded-lg"
+              >
+                <div class="flex items-center gap-3">
+                  <i class="pi pi-link text-2xl text-primary"></i>
+                  <span class="font-medium">{{ link.platform }}</span>
+                </div>
+                <a
+                  [href]="link.url"
+                  target="_blank"
+                  pButton
+                  type="button"
+                  icon="pi pi-external-link"
+                  class="p-button-secondary p-button-rounded hover:bg-primary hover:text-white"
+                  pTooltip="Open Link"
+                ></a>
+              </div>
+              }
+            </div>
+          </div>
           }
         </div>
-      } @else if (user && showProfile) {
-        <div class="grid grid-cols-1 gap-8 md:px-32" [ngClass]="{'md:grid-cols-2': user.videos.length || 0 > 0}">
-          <!-- Left Column -->
-          <div class="space-y-8">
-            <!-- About Me Section -->
-            <div class="bg-white rounded-lg shadow-sm p-6">
-              <h2 class="text-xl font-semibold mb-6">About Me</h2>
 
-              <div class="flex flex-col items-center mb-6">
-                <div class="w-44 h-44 bg-white rounded-sm border-2 border-primary flex items-center justify-center mb-4 overflow-hidden">
-                  @if(user.profileImage) {
-                    <img
-                      [src]="getFullAssetUrl(user.profileImage)"
-                      alt="Profile"
-                      class="w-full h-full object-cover rounded-sm"
-                    />
-                  } @else {
-                    <i class="pi pi-user text-4xl text-gray-400"></i>
-                  }
+        <!-- Right Column -->
+        <div class="space-y-8">
+          <!-- Video Section -->
+          @if (user.videos && user.videos.length > 0) {
+          <div class="bg-white rounded-lg shadow-sm p-6">
+            <h2 class="text-xl font-semibold mb-6">Videos</h2>
+
+            <div class="grid grid-cols-1 gap-6">
+              @for (video of user.videos; track video) {
+              <div class="space-y-4">
+                <div
+                  class="relative aspect-video bg-gray-900 rounded-lg overflow-hidden"
+                >
+                  <video
+                    [src]="getFullAssetUrl(video.url)"
+                    controls
+                    class="w-full h-full"
+                    (play)="trackVideoView(video)"
+                  ></video>
                 </div>
-              </div>
 
-              <div class="mb-6">
-                @if (user.description) {
-                  <p class="text-gray-700 whitespace-pre-line">
-                    {{ user.description }}
-                  </p>
-                } @else {
-                  <p class="text-gray-500 italic">No description provided</p>
+                @if (video.description) {
+                <p class="text-gray-700 whitespace-pre-line">
+                  {{ video.description }}
+                </p>
                 }
               </div>
+              }
             </div>
-
-             <!-- Personal Information Section -->
-             <div class="bg-white rounded-lg shadow-sm p-6">
-              <h2 class="text-xl font-semibold mb-6">Personal Information</h2>
-              
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="space-y-1">
-                  <p class="text-sm text-gray-500">Name</p>
-                  <p class="font-medium">{{ user.firstName }} {{ user.lastName }}</p>
-                </div>
-
-                <div class="space-y-1">
-                  <p class="text-sm text-gray-500">Email</p>
-                  <p class="font-medium">{{ user.email }}</p>
-                </div>
-
-                @if (user.contactNumber) {
-                  <div class="space-y-1">
-                    <p class="text-sm text-gray-500">Contact Number</p>
-                    <p class="font-medium">{{ user.contactNumber }}</p>
-                  </div>
-                }
-              </div>
-            </div>
-
-            <!-- Resume Section -->
-            @if (user.resume) {
-              <div class="bg-white rounded-lg shadow-sm p-6">
-                <h2 class="text-xl font-semibold mb-6">Resume</h2>
-                
-                <div class="flex items-center justify-between p-4 border rounded-lg">
-                  <div class="flex items-center gap-3">
-                    <i class="pi pi-file text-2xl text-primary"></i>
-                    <span class="font-medium">View Resume</span>
-                  </div>
-                  <a 
-                    [href]="getFullAssetUrl(user.resume)"
-                    target="_blank"
-                    pButton
-                    type="button"
-                    icon="pi pi-eye"
-                    class="p-button-secondary p-button-rounded hover:bg-primary hover:text-white"
-                    pTooltip="View Resume"
-                    (click)="trackResumeDownload()"
-                  ></a>
-                </div>
-              </div>
-            }
-
-            <!-- Certificates Section -->
-            @if (user.certificates && user.certificates.length > 0) {
-              <div class="bg-white rounded-lg shadow-sm p-6">
-                <h2 class="text-xl font-semibold mb-6">Certificates</h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  @for (certificate of user.certificates; track certificate) {
-                    <div class="border rounded-lg overflow-hidden bg-gray-50">
-                      <!-- Preview Area -->
-                      <div class="aspect-[4/3] relative">
-                        @if (certificate.url.toLowerCase().endsWith('.pdf')) {
-                          <div class="w-full h-full flex items-center justify-center bg-gray-100">
-                            <i class="pi pi-file-pdf text-4xl text-primary"></i>
-                          </div>
-                        } @else {
-                          <img 
-                            [src]="getFullAssetUrl(certificate.url)" 
-                            [alt]="certificate.name"
-                            class="w-full h-full object-cover"
-                          />
-                        }
-                        
-                        <!-- View Button -->
-                        <div class="absolute top-2 right-2">
-                          <a 
-                            [href]="getFullAssetUrl(certificate.url)"
-                            target="_blank"
-                            pButton
-                            type="button"
-                            icon="pi pi-eye"
-                            class="p-button-rounded p-button-secondary hover:bg-primary hover:text-white"
-                            pTooltip="View Certificate"
-                            (click)="trackCertificateDownload(certificate)"
-                          ></a>
-                        </div>
-                      </div>
-
-                      <!-- Certificate Info -->
-                      <div class="p-4">
-                        <h3 class="font-medium text-gray-900 truncate" [pTooltip]="certificate.name">
-                          {{ certificate.name }}
-                        </h3>
-                      </div>
-                    </div>
-                  }
-                </div>
-              </div>
-            }
-
-           
-
-            <!-- External Links Section -->
-            @if (user.externalLinks && user.externalLinks.length > 0) {
-              <div class="bg-white rounded-lg shadow-sm p-6">
-                <h2 class="text-xl font-semibold mb-6">External Links</h2>
-                
-                <div class="grid grid-cols-1 gap-4">
-                  @for (link of user.externalLinks; track link) {
-                    <div class="flex items-center justify-between p-4 border rounded-lg">
-                      <div class="flex items-center gap-3">
-                        <i class="pi pi-link text-2xl text-primary"></i>
-                        <span class="font-medium">{{link.platform}}</span>
-                      </div>
-                      <a 
-                        [href]="link.url"
-                        target="_blank"
-                        pButton
-                        type="button"
-                        icon="pi pi-external-link"
-                        class="p-button-secondary p-button-rounded hover:bg-primary hover:text-white"
-                        pTooltip="Open Link"
-                      ></a>
-                    </div>
-                  }
-                </div>
-              </div>
-            }
           </div>
-
-          <!-- Right Column -->
-          <div class="space-y-8">
-            <!-- Video Section -->
-            @if (user.videos && user.videos.length > 0) {
-              <div class="bg-white rounded-lg shadow-sm p-6">
-                <h2 class="text-xl font-semibold mb-6">Videos</h2>
-                
-                <div class="grid grid-cols-1 gap-6">
-                  @for (video of user.videos; track video) {
-                    <div class="space-y-4">
-                      <div class="relative aspect-video bg-gray-900 rounded-lg overflow-hidden">
-                        <video 
-                          [src]="getFullAssetUrl(video.url)"
-                          controls
-                          class="w-full h-full"
-                          (play)="trackVideoView(video)"
-                        ></video>
-                      </div>
-                      
-                      @if (video.description) {
-                        <p class="text-gray-700 whitespace-pre-line">{{ video.description }}</p>
-                      }
-                    </div>
-                  }
-                </div>
-              </div>
-            }
-          </div>
+          }
         </div>
+      </div>
       }
     </main>
   </div>
