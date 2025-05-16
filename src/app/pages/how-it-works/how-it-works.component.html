@@ -4,7 +4,7 @@
     <div class="aspect-video bg-gray-100 rounded-lg mb-4">
       <div class="">
         <!-- Rezuu CEO message video -->
-        <video src="https://rezuu-assets.tor1.cdn.digitaloceanspaces.com/app-assets/Rezzu%20CEO%20Message.mp4" controls></video>
+        <video autoplay [muted]="true" src="https://rezuu-assets.tor1.cdn.digitaloceanspaces.com/app-assets/Rezzu%20CEO%20Message.mp4" controls></video>
       </div>
     </div>
     <div class="text-center text-gray-600">
@@ -32,8 +32,11 @@
             class="bg-[#f5f5f5] rounded-lg h-full w-full flex items-center justify-center shadow-lg overflow-hidden"
           >
             <video
+              [muted]="true"
+              [autoplay]="true"
+              [controls]="false"
+              [loop]="true"
               [src]="videoUrls[0]"
-              controls
               class="h-full w-full object-cover rounded-lg"
             >
               Your browser does not support the video tag.
@@ -59,7 +62,10 @@
           >
             <video
               [src]="videoUrls[1]"
-              controls
+              [muted]="true"
+              [autoplay]="true"
+              [controls]="false"
+              [loop]="true"
               class="h-full w-full object-cover rounded-lg"
             >
               Your browser does not support the video tag.
@@ -88,7 +94,10 @@
           >
             <video
               [src]="videoUrls[2]"
-              controls
+              [muted]="true"
+              [autoplay]="true"
+              [controls]="false"
+              [loop]="true"
               class="h-full w-full object-cover rounded-lg"
             >
               Your browser does not support the video tag.
@@ -115,7 +124,10 @@
           >
             <video
               [src]="videoUrls[3]"
-              controls
+              [muted]="true"
+              [autoplay]="true"
+              [controls]="false"
+              [loop]="true"
               class="h-full w-full object-cover rounded-lg"
             >
               Your browser does not support the video tag.
