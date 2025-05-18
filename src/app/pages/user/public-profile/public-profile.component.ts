@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, RouterModule  } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
@@ -17,7 +17,8 @@ import { Title } from '@angular/platform-browser';
   imports: [
     CommonModule,
     ButtonModule,
-    TooltipModule
+    TooltipModule,
+    RouterModule
   ],
   templateUrl: './public-profile.component.html',
   styles: ``,
