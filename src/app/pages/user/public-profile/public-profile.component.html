@@ -56,7 +56,7 @@
       } @else if (user && showProfile) {
       <div
         class="grid grid-cols-1 gap-8 md:px-32"
-        [ngClass]="{ 'md:grid-cols-2': user.videos.length || 0 > 0 }"
+        [ngClass]="{ 'md:grid-cols-2': user.videos?.length || 0 > 0 }"
       >
         <!-- Left Column -->
         <div class="space-y-8">
