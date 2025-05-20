@@ -38,6 +38,6 @@ export class PaymentCancelComponent {
   #router = inject(Router);
 
   navigateToPricing() {
-    this.#router.navigate(['/pricing']);
+    this.#router.navigate(['/my/pricing-management']);
   }
 }
