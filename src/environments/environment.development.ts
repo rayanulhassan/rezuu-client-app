@@ -15,35 +15,35 @@ export const environment = {
   bucketUrl: 'https://rezuu-assets.tor1.cdn.digitaloceanspaces.com/',
   stripe: {
     publicKey:
-      'pk_test_51GsMuoBA9N9fUzabjY3YQmznUSetBEO8xRx2B2Q3KatWZtwtTQIYAAA96ewZqn0RMuzeLS7AufGL9PaQsfVGMnZl004tQaaFpQ',
+      'pk_live_YLhiTzd8d8TLBoLfQzCs3sQX00Ebeo3vMe',
     products: {
       videoSection: {
         monthly: {
-          priceId: 'price_1RIx6pBA9N9fUzabWuxgodmx',
+          priceId: 'price_1RQzFTBA9N9fUzabXhk4xsAU',
           price: 1,
         },
         yearly: {
-          priceId: 'price_1RIx6pBA9N9fUzabeNqGl0h9',
+          priceId: 'price_1RQzFTBA9N9fUzabC9ZK57QQ',
           price: 9.6,
         },
       },
       whoViewedProfile: {
         monthly: {
-          priceId: 'price_1RIx7WBA9N9fUzabEx5niB8w',
+          priceId: 'price_1RQzFPBA9N9fUzaby6K3ZqpQ',
           price: 1,
         },
         yearly: {
-          priceId: 'price_1RIx7vBA9N9fUzabqLSeuw7c',
+          priceId: 'price_1RQzFPBA9N9fUzabPlHBWsHI',
           price: 9.6,
         },
       },
       valueBundle: {
         monthly: {
-          priceId: 'price_1RIx9YBA9N9fUzabuBspp8Vn',
+          priceId: 'price_1RQzFLBA9N9fUzabBkhnwkGO',
           price: 5,
         },
         yearly: {
-          priceId: 'price_1RIx9YBA9N9fUzabZQqagozR',
+          priceId: 'price_1RQzFLBA9N9fUzabAYILZFEf',
           price: 48,
         },
       },
