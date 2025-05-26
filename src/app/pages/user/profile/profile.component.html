@@ -460,8 +460,9 @@
                     ><i class="pi pi-info-circle h-4 w-4 text-gray-400"></i>
                   </div>
                   <p class="text-sm text-gray-500">
-                    Your profile is currently visible to anyone with your
-                    profile link.
+                    @if (user()?.isPublicProfile) {Your profile is currently
+                    visible to anyone with your profile link.} @else{Your
+                    Profile Share Is Curtrently not ACTIVE}
                   </p>
                 </div>
                 <p-toggleSwitch
@@ -674,9 +675,7 @@
                   @if (user()?.videos?.length === 0) { Upload up to
                   {{ getMaxAllowedVideos() }} videos to showcase your experience
                   } @else { You can upload
-                  {{
-                    getMaxAllowedVideos() - (user()?.videos?.length || 0)
-                  }}
+                  {{ getMaxAllowedVideos() - (user()?.videos?.length || 0) }}
                   more video(s) }
                 </p>
                 <button
